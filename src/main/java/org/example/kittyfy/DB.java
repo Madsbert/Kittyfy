@@ -1,0 +1,60 @@
+package org.example.kittyfy;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class DB {
+
+    private static final String URL = "jdbc:sqlserver://localhost;databaseName=KittyfyDB";
+    private static final String USERNAME = "sa"; // replace with your username
+    private static final String PASSWORD = "Kittyfy1234"; // replace with your password
+    private static Connection conn;
+
+    /**
+     * Establishes connection to the Database.
+     * @return
+     */
+    public static Connection getConnection() {
+        if (conn == null) {
+            try
+            {
+                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                System.out.println("Connected to the database.");
+            }
+            catch (Exception e)
+            {
+                System.out.println("Failed to connect to database.");
+            }
+
+        }
+
+        return conn;
+    }
+
+
+    /**
+     * Updates a playlist in the database.
+     * @param playlist
+     * @throws Exception
+     */
+    public void updatePlaylist(Playlist playlist) throws Exception {
+        String sql = "UPDATE dbo.tblDogs SET " +
+                "fldPlaylistName = ?," +
+                "fldLastPlayed = ? WHERE fldID = ?";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, playlist.getName());
+        pstmt.setLong(2, playlist.getLastPlayed());
+        pstmt.setInt(3, playlist.getPlaylistId());
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows > 0) {
+            System.out.println("Playlist updated successfully.");
+        } else {
+            System.out.println("Failed to update the playlist.");
+        }
+    }
+
+
+}

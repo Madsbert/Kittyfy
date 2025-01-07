@@ -10,6 +10,7 @@ module org.example.kittyfy {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
 
     opens org.example.kittyfy to javafx.fxml;
     exports org.example.kittyfy;
