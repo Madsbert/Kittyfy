@@ -90,9 +90,9 @@
                <font>
                   <Font name="Berlin Sans FB Demi Bold" size="18.0" />
                </font></Label>
-                <ScrollPane prefHeight="510.0" prefWidth="210.0" style="-fx-background-color: #FF8000; -fx-background-radius: 15;">
+                <ScrollPane fx:id="playlistPane" prefHeight="510.0" prefWidth="210.0" style="-fx-background-color: #FF8000; -fx-background-radius: 15;">
                     <content>
-                        <AnchorPane fx:id="playlistPane" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
                     </content>
                <VBox.margin>
                   <Insets left="20.0" right="20.0" />

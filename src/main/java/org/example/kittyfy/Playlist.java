@@ -1,5 +1,6 @@
 package org.example.kittyfy;
 
+
 import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Time;
@@ -13,6 +14,8 @@ public class Playlist {
     private String name;
     private long lastPlayed;
     private ArrayList<Song> songs;
+
+
 
     public long getLastPlayed() {
         return lastPlayed;
@@ -54,4 +57,6 @@ public class Playlist {
     public void setPlaylistId(int playlistId) {
         this.playlistId = playlistId;
     }
+
+
 }
