@@ -7,8 +7,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 
-
+import java.util.Objects;
 
 
 public class HelloController {
@@ -27,6 +28,13 @@ public class HelloController {
 
     @FXML
     private ScrollPane songsPane;
+
+
+    public void initialize() {
+        Image defaultImage = new Image(getClass().getResource("/Pictures/MusicCat.png").toExternalForm());
+        pictures.setImage(defaultImage);
+    }
+
 
     public void reset() {
     }
