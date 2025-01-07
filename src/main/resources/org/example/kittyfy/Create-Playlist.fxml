@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.CreatePlaylistController">
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" BorderPane.alignment="CENTER">
+         <children>
+            <TextField prefHeight="40.0" prefWidth="405.0" promptText="Playlist name">
+               <VBox.margin>
+                  <Insets left="130.0" right="114.0" top="30.0" />
+               </VBox.margin>
+            </TextField>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <ComboBox prefHeight="40.0" prefWidth="343.0" promptText="Song/Artist">
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="130.0" top="30.0" />
+                     </HBox.margin></ComboBox>
+                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="63.0" text="+">
+                     <HBox.margin>
+                        <Insets top="30.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <ChoiceBox prefHeight="40.0" prefWidth="408.0">
+               <VBox.margin>
+                  <Insets bottom="30.0" left="130.0" />
+               </VBox.margin>
+            </ChoiceBox>
+            <HBox prefHeight="71.0" prefWidth="650.0">
+               <children>
+                  <Button minHeight="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" text="Cancel ">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="130.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" text="Create">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="215.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <ImageView fx:id="createPlaylistImage" fitHeight="288.0" fitWidth="405.0" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets left="130.0" />
+               </VBox.margin>
+            </ImageView>
+         </children></VBox>
+   </center>
+   <right>
+      <ScrollPane prefHeight="616.0" prefWidth="248.0" BorderPane.alignment="CENTER">
+         <content>
+            <Label alignment="CENTER" prefHeight="102.0" prefWidth="246.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" text="Songs">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </content></ScrollPane>
+   </right>
+</BorderPane>

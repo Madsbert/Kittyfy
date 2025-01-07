@@ -2,6 +2,7 @@ package org.example.kittyfy;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -13,6 +14,9 @@ import javafx.scene.layout.AnchorPane;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.event.ActionEvent;
 
 import java.util.Objects;
 
@@ -57,7 +61,13 @@ public class HelloController {
     public void skip(){
     }
 
-    public void createPlaylist(){
+    public void createPlaylist(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(CreatePlaylistController.class.getResource("Create-Playlist.fxml"));
+        Stage stage = new Stage();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Create Playlist");
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void stop(){
