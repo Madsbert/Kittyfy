@@ -1,9 +1,5 @@
 package org.example.kittyfy;
 
-import java.math.BigInteger;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 
@@ -21,6 +17,8 @@ public class Playlist {
     public void updateLastPlayed() {
         this.lastPlayed = Instant.now().getEpochSecond();
     }
+
+    public void setLastPlayed(long lastPlayed) {}
 
     public Playlist(String name, ArrayList<Song> songs) {
         this.name = name;

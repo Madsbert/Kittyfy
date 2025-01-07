@@ -3,6 +3,8 @@ package org.example.kittyfy;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class DB {
 
@@ -40,7 +42,7 @@ public class DB {
      * @throws Exception
      */
     public void updatePlaylist(Playlist playlist) throws Exception {
-        String sql = "UPDATE dbo.tblDogs SET " +
+        String sql = "UPDATE dbo.tblPlaylist SET " +
                 "fldPlaylistName = ?," +
                 "fldLastPlayed = ? WHERE fldID = ?";
         Connection conn = DB.getConnection();
@@ -56,5 +58,88 @@ public class DB {
         }
     }
 
+    /**
+     * Removes all songs from the playlist and adds them and new songs again.
+     * @param playlist
+     * @throws Exception
+     */
+    public void updateSongsInPlaylist(Playlist playlist) throws Exception {
+        String sql = "Delete from dbo.tblPlaylistSong WHERE fldPlaylistID = ?";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, playlist.getPlaylistId());
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows > 0) {
+            System.out.println("Cleared old playlist songs.");
+        }
+        else {
+            System.out.println("Failed to delete old playlist songs.");
+        }
 
+        addSongsToPlaylist(playlist); // re adds all songs to the playlist.
+    }
+
+    /**
+     * Adds all songs from the object to the playlist.
+     * @param playlist
+     * @throws Exception
+     */
+    public void addSongsToPlaylist(Playlist playlist) throws Exception {
+        String sql = "INSERT INTO dbo.tblPlaylistSong " +
+                "VALUES(fldPlaylistID = ?, fldSongID = ?)";
+        Connection conn = DB.getConnection();
+
+        PreparedStatement pstmt;
+        int affectedRows = 0;
+
+        for (Song song : playlist.getSongs()) {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, playlist.getPlaylistId());
+            pstmt.setInt(2, song.getSongID());
+            affectedRows += pstmt.executeUpdate();
+        }
+
+        if (affectedRows > 0) {
+            System.out.printf("Set %d songs to playlist.", affectedRows);
+        }
+    }
+
+    public Playlist getPlaylist(int playlistId) throws Exception {
+        String sql = "SELECT * from dbo.tblPlaylist WHERE fldPlaylistID = ?";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, playlistId);
+        ResultSet resultSet = pstmt.executeQuery();
+
+        String playlistName = "Not set Error";
+        long lastPlayed = 0;
+        int playlistID = 0;
+        if (resultSet.next()) {
+            playlistName = resultSet.getString("fldPlaylistName");
+            lastPlayed = resultSet.getLong("fldLastPlayed");
+            playlistID = resultSet.getInt("fldPlaylistID");
+        }
+
+        Playlist newPlaylist = new Playlist(playlistName, getAllSongsInPlaylist());
+        newPlaylist.setLastPlayed(lastPlayed);
+        newPlaylist.setPlaylistId(playlistID);
+
+        return newPlaylist;
+    }
+
+    public ArrayList<Song> getAllSongsInPlaylist() throws Exception
+    {
+        String sql = "Select * from dbo.tblPlaylistSong WHERE fldPlaylistID = ?";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+
+        ArrayList<Integer> songIDs = new ArrayList<Integer>(20);
+
+        ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+            songIDs.add(rs.getInt("fldSongID"));
+        }
+
+        sql = "SELECT * "
+    }
 }

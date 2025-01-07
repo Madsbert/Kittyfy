@@ -6,6 +6,7 @@ public class Song {
     private String artist;
     private int genre;
     private String filePath;
+    private int songID;
 
     public Song(String title, String artist, int genre, String filePath) {
         this.title = title;
@@ -44,5 +45,13 @@ public class Song {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public int getSongID() {
+        return songID;
+    }
+
+    public void setSongID(int songID) {
+        this.songID = songID;
     }
 }
