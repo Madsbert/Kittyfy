@@ -12,12 +12,12 @@
             <children>
                 <HBox alignment="CENTER" prefHeight="73.0" prefWidth="674.0">
                     <children>
-                        <ComboBox editable="true" prefHeight="43.0" prefWidth="394.0" promptText="Song/Artist" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;">
+                        <ComboBox fx:id="searchBar" editable="true" prefHeight="43.0" prefWidth="394.0" promptText="Song/Artist" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;">
                             <opaqueInsets>
                                 <Insets />
                             </opaqueInsets>
                         </ComboBox>
-                        <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="59.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="+">
+                        <Button fx:id="addSong" mnemonicParsing="false" onAction="#addSongClick" prefHeight="42.0" prefWidth="59.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="+">
                             <font>
                                 <Font size="18.0" />
                             </font>
@@ -27,7 +27,7 @@
                         <Insets top="20.0" />
                     </VBox.margin>
                 </HBox>
-                <ScrollPane prefHeight="288.0" prefWidth="674.0" style="-fx-background-color: #FF8000; -fx-background-radius: 15;">
+                <ScrollPane fx:id="songsPane" prefHeight="288.0" prefWidth="674.0" style="-fx-background-color: #FF8000; -fx-background-radius: 15;">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
                     </content>
@@ -50,22 +50,22 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button mnemonicParsing="false" prefHeight="78.0" prefWidth="122.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="&lt;&lt;" GridPane.rowIndex="1">
+                                <Button mnemonicParsing="false" onAction="#reset" prefHeight="78.0" prefWidth="122.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="&lt;&lt;" GridPane.rowIndex="1">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
                                 </Button>
-                                <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="78.0" prefWidth="133.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="▶" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#play" prefHeight="78.0" prefWidth="133.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="▶" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <font>
                                         <Font size="36.0" />
                                     </font>
                                 </Button>
-                                <Button mnemonicParsing="false" prefHeight="78.0" prefWidth="127.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="&gt;&gt;" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                <Button mnemonicParsing="false" onAction="#skip" prefHeight="78.0" prefWidth="127.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="&gt;&gt;" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
                                 </Button>
-                                <Button mnemonicParsing="false" prefHeight="79.0" prefWidth="125.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="■" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Button mnemonicParsing="false" onAction="#stop" prefHeight="79.0" prefWidth="125.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="■" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
@@ -81,7 +81,7 @@
         <VBox prefHeight="616.0" prefWidth="224.0" BorderPane.alignment="CENTER">
             <children>
                 <Label alignment="CENTER" prefHeight="51.0" prefWidth="235.0" style="-fx-text-fill: black; -fx-font-size: 24px; -fx-font-weight: bold;" text="Purrlists" />
-                <ScrollPane prefHeight="510.0" prefWidth="224.0" style="-fx-background-color: #FF8000; -fx-background-radius: 15;">
+                <ScrollPane fx:id="playlistPane" prefHeight="510.0" prefWidth="224.0" style="-fx-background-color: #FF8000; -fx-background-radius: 15;">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
                     </content>
@@ -89,7 +89,7 @@
                   <Insets left="20.0" />
                </VBox.margin>
                 </ScrollPane>
-                <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="225.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="Create Purrlist">
+                <Button mnemonicParsing="false" onAction="#createPlaylist" prefHeight="54.0" prefWidth="225.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="Create Purrlist">
                     <font>
                         <Font size="18.0" />
                     </font>
