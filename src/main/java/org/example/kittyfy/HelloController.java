@@ -48,6 +48,8 @@ public class HelloController {
     private ProgressBar progressBar;
     @FXML
     private Label SongTitleLabel;
+    @FXML
+    private Label durationLabel;
 
     private File directory;
     private File[] files;
@@ -72,6 +74,7 @@ public class HelloController {
         playButton.setText("😿");
         stopButton.setText("\uD83D\uDE40");
 
+
         //initialize Songs
         songs = new ArrayList<File>();
         directory = new File("src/main/resources/Genre/Dansk-Top");
@@ -83,14 +86,12 @@ public class HelloController {
                 System.out.println(file);
             }
         }
+
         //creates a Media Player
         media = new Media(songs.get(currentSongNumber).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         //show the song title of the first song when initialized
         SongTitleLabel.setText(songs.get(currentSongNumber).getName());
-
-
-
     }
 
 
@@ -98,6 +99,7 @@ public class HelloController {
         resetCounter++;
         if (resetCounter == 2) {
             previousSong();
+            displayDuration();
         }
         if (isRunning) {
             mediaPlayer.seek(Duration.seconds(0));
@@ -116,7 +118,6 @@ public class HelloController {
         {
             isRunning = false;
             mediaPlayer.pause();
-            //playButton.setText("▶");
             playButton.setText("😿");
 
         }
@@ -124,36 +125,39 @@ public class HelloController {
         {
             isRunning = true;
             mediaPlayer.play();
-            //playButton.setText("⏸");
             playButton.setText("😹");
-
         }
+        displayDuration();
     }
 
     public void addSongClick() {
     }
 
-    public void skip(){
+    public void skip() throws UnsupportedAudioFileException, IOException {
 
         if(currentSongNumber < files.length-1){
             currentSongNumber++;
-            mediaPlayer.stop();
-
+            stop();
             //creates a Media Player
             media = new Media(songs.get(currentSongNumber).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             //show the song title of the first song when initialized
             SongTitleLabel.setText(songs.get(currentSongNumber).getName());
             //starts the song, and changes the icon.
-            mediaPlayer.play();
-            isRunning = true;
+            play();
+
+            /*isRunning = true;
             mediaPlayer.play();
             playButton.setText("😹");
+            displayDuration();
+
+            */
+
 
         }
         else {
             currentSongNumber = 0;
-            mediaPlayer.stop();
+            stop();
 
             //creates a Media Player
             media = new Media(songs.get(currentSongNumber).toURI().toString());
@@ -165,6 +169,7 @@ public class HelloController {
             isRunning = true;
             mediaPlayer.play();
             playButton.setText("😹");
+            displayDuration();
 
         }
     }
@@ -173,8 +178,6 @@ public class HelloController {
         mediaPlayer.stop();
         playButton.setText("😿");
         isRunning = false;
-
-
     }
 
     public void previousSong(){
@@ -192,6 +195,7 @@ public class HelloController {
             isRunning = true;
             mediaPlayer.play();
             playButton.setText("😹");
+            displayDuration();
 
         }
         else {
@@ -208,10 +212,20 @@ public class HelloController {
             isRunning = true;
             mediaPlayer.play();
             playButton.setText("😹");
+            displayDuration();
 
         }
     }
 
+    public void displayDuration(){
+        double totalSeconds = media.getDuration().toSeconds();
+        int minutes = (int) (totalSeconds / 60); // Extract minutes
+        int seconds = (int) (totalSeconds % 60); // Extract remaining seconds
+
+        // Format as "min:seconds" with two digits for seconds
+        String formattedDuration = String.format("%d:%02d", minutes, seconds);
+        durationLabel.setText(formattedDuration);
+    }
 
 
     public void createPlaylist(ActionEvent actionEvent) throws IOException {
@@ -222,6 +236,7 @@ public class HelloController {
         stage.setScene(scene);
         stage.show();
     }
+
 
 
 
