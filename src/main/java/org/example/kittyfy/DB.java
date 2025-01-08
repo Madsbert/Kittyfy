@@ -55,12 +55,13 @@ public class DB {
             System.out.println("Failed to update the playlist.");
         }
     }
-/**
- * Create a playlist in the database.
- * @param playlist
- * @throws Exception
- */
-public void createPlaylist(Playlist playlist) throws Exception {
+
+    /**
+     * Creates a playlist in the database.
+     * @param playlist
+     * @throws Exception
+     */
+    public void createPlaylist(Playlist playlist) throws Exception {
         String sql = "INSERT INTO dbo.tblPlaylist VALUES (?, ?, ?)";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -76,7 +77,7 @@ public void createPlaylist(Playlist playlist) throws Exception {
 }
 
     /**
-     * Delete playlist from the database.
+     * Deletes playlist from the database.
      * @param playlist
      * @throws Exception
      */
@@ -92,5 +93,14 @@ public void createPlaylist(Playlist playlist) throws Exception {
         }else {
             System.out.println("Failed to delete the playlist.");
         }
+}
+    public void createSong(Song song) throws Exception {
+        String sql = "INSERT INTO dbo.tblSong VALUES (?, ?, ?)";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, song.getTitle());
+        pstmt.setString(2, song.getArtist());
+        //pstmt.setInt(3, song.getGenreID());
+        //pstmt.setInt(4, song.getSongID());
 }
 }
