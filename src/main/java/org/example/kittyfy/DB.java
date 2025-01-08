@@ -155,7 +155,16 @@ public class DB {
             int genreID = resultSet.getInt("fldGenreID");
             String filePath = resultSet.getString("fldFilePath");
 
-            curSong = new Song(name, genreID, filePath);
+            sql = "SELECT fldGenreName FROM dbo.tblGenre Where fldGenreID = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, genreID);
+
+            String genreName = "";
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                genreName = rs.getString(0);
+            }
+            curSong = new Song(name, genreName, filePath);
         }
 
         return curSong;

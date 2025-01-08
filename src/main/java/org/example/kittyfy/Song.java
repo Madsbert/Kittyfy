@@ -8,12 +8,19 @@ public class Song {
 
     private String title;
     private String artist;
-    private int genre;
+    private String genre;
     private String filePath;
     private int songID;
 
-    public Song(String title, int genre, String filePath) {
+    public Song(String title, String genre, String filePath) {
         this.title = title;
+        this.genre = genre;
+        this.filePath = filePath;
+    }
+
+    public Song(String title, String artist, String genre, String filePath) {
+        this.title = title;
+        this.artist = artist;
         this.genre = genre;
         this.filePath = filePath;
     }
@@ -34,11 +41,11 @@ public class Song {
         this.artist = artist;
     }
 
-    public int getGenre() {
+    public String getGenre() {
         return genre;
     }
 
-    public void setGenre(int genre) {
+    public void setGenre(String genre) {
         this.genre = genre;
     }
 
