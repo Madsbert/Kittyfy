@@ -1,5 +1,9 @@
 package org.example.kittyfy;
 
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+
 public class Song {
 
     private String title;
@@ -52,5 +56,17 @@ public class Song {
 
     public void setSongID(int songID) {
         this.songID = songID;
+    }
+
+    public double getDuration() throws UnsupportedAudioFileException, IOException {
+        // Get audio format and frame length
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
+        AudioFormat format = audioInputStream.getFormat();
+        //get amount of frames
+        long frames = audioInputStream.getFrameLength();
+        //get framerate
+        float frameRate = format.getFrameRate();
+        // Calculate the duration of the audio in seconds, and returns it as a double.
+        return frames / frameRate;
     }
 }

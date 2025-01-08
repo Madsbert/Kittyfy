@@ -11,6 +11,7 @@ module org.example.kittyfy {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.sql;
+    requires java.desktop;
 
     opens org.example.kittyfy to javafx.fxml;
     exports org.example.kittyfy;
