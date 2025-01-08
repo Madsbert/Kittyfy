@@ -12,6 +12,7 @@ module org.example.kittyfy {
     requires com.almasb.fxgl.all;
     requires java.sql;
     requires java.desktop;
+    requires javafx.media;
 
     opens org.example.kittyfy to javafx.fxml;
     exports org.example.kittyfy;

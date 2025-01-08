@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.HelloController">
     <center>
         <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <children>
@@ -40,17 +50,19 @@
                         <ImageView fx:id="pictures" fitHeight="232.0" fitWidth="316.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets bottom="10.0" top="10.0" />
-                     </HBox.margin></ImageView>
+                     </HBox.margin>
+                  </ImageView>
                   <VBox prefHeight="253.0" prefWidth="371.0">
                      <children>
-                        <Label alignment="BOTTOM_CENTER" contentDisplay="CENTER" prefHeight="51.0" prefWidth="367.0" text="Song Titel" textAlignment="CENTER">
+                        <Label fx:id="SongTitleLabel" alignment="BOTTOM_CENTER" contentDisplay="CENTER" prefHeight="51.0" prefWidth="367.0" text="Song Titel" textAlignment="CENTER">
                            <font>
                               <Font name="Berlin Sans FB Demi Bold" size="16.0" />
                            </font>
                            <VBox.margin>
                               <Insets left="20.0" />
-                           </VBox.margin></Label>
-                        <Label alignment="CENTER" prefHeight="51.0" prefWidth="359.0" text="Artist Name">
+                           </VBox.margin>
+                        </Label>
+                        <Label fx:id="ArtistNameLabel" alignment="CENTER" prefHeight="51.0" prefWidth="362.0" text="Artist Name">
                            <font>
                               <Font name="Berlin Sans FB Demi Bold" size="14.0" />
                            </font>
@@ -58,6 +70,11 @@
                               <Insets left="20.0" />
                            </VBox.margin>
                         </Label>
+                        <ProgressBar fx:id="ProgressBar" prefHeight="35.0" prefWidth="361.0" progress="0.0" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets left="20.0" />
+                           </VBox.margin>
+                        </ProgressBar>
                               <GridPane alignment="CENTER" prefHeight="199.0" prefWidth="532.0">
                                   <columnConstraints>
                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
@@ -77,7 +94,7 @@
                                     <Insets left="40.0" />
                                  </GridPane.margin>
                                       </Button>
-                                      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#play" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 2;" text="▶" GridPane.columnIndex="1">
+                                      <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#play" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 2;" text="▶" GridPane.columnIndex="1">
                                           <font>
                                               <Font size="36.0" />
                                           </font>
@@ -93,12 +110,12 @@
                                     <Insets />
                                  </GridPane.margin>
                                       </Button>
-                                      <Button alignment="CENTER" mnemonicParsing="false" onAction="#stop" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="■" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                      <Button fx:id="stopButton" alignment="CENTER" mnemonicParsing="false" onAction="#stop" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="■" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                           <font>
                                               <Font size="24.0" />
                                           </font>
                                  <GridPane.margin>
-                                    <Insets bottom="20.0" left="20.0" />
+                                    <Insets bottom="20.0" left="20.0" top="20.0" />
                                  </GridPane.margin>
                                       </Button>
                                   </children>
@@ -124,12 +141,12 @@
                   <Font name="Berlin Sans FB Demi Bold" size="18.0" />
                </font></Label>
                 <ScrollPane fx:id="playlistPane" prefHeight="510.0" prefWidth="210.0" style="-fx-background-color: #FF8000; -fx-background-radius: 15;">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-                    </content>
                <VBox.margin>
                   <Insets left="20.0" right="20.0" />
                </VBox.margin>
+               <content>
+                  <VBox prefHeight="154.0" prefWidth="166.0" />
+               </content>
                 </ScrollPane>
                 <Button mnemonicParsing="false" onAction="#createPlaylist" prefHeight="40.0" prefWidth="225.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="Create Purrlist" textAlignment="CENTER">
                     <font>

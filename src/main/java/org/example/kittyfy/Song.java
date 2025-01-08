@@ -50,6 +50,7 @@ public class Song {
         this.filePath = filePath;
     }
 
+
     public double getDuration() throws UnsupportedAudioFileException, IOException {
         // Get audio format and frame length
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
