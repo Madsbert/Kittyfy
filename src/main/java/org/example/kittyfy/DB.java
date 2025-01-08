@@ -182,4 +182,19 @@ public class DB {
 
         return curSong;
     }
+
+    /**
+     * Converts genre name into the id for the genre.
+     * @param genreName
+     * @return Genre ID.
+     * @throws Exception
+     */
+    public int getGenreID(String genreName) throws Exception {
+        String sql = "SELECT fldGenreID FROM dbo.tblGenre WHERE fldGenreName = ?";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, genreName);
+        ResultSet resultSet = pstmt.executeQuery();
+        return resultSet.getInt("fldGenreID");
+    }
 }
