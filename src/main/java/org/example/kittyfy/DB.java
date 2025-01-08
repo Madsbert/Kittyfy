@@ -55,6 +55,42 @@ public class DB {
             System.out.println("Failed to update the playlist.");
         }
     }
+/**
+ * Create a playlist in the database.
+ * @param playlist
+ * @throws Exception
+ */
+public void createPlaylist(Playlist playlist) throws Exception {
+        String sql = "INSERT INTO dbo.tblPlaylist VALUES (?, ?, ?)";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, playlist.getName());
+        pstmt.setLong(2, playlist.getLastPlayed());
+        pstmt.setInt(3, playlist.getPlaylistId());
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows > 0) {
+            System.out.println("Playlist created successfully.");
+        } else {
+            System.out.println("Failed to update the playlist.");
+        }
+}
 
-
+    /**
+     * Delete playlist from the database.
+     * @param playlist
+     * @throws Exception
+     */
+    public void deletePlaylist(Playlist playlist) throws Exception {
+        String sql = "DELETE FROM dbo.tblPlaylist WHERE fldID = ? and fldPlaylistName = ?";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setLong(1, playlist.getPlaylistId());
+        pstmt.setString(2, playlist.getName());
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows > 0) {
+            System.out.println("Playlist deleted successfully.");
+        }else {
+            System.out.println("Failed to delete the playlist.");
+        }
+}
 }
