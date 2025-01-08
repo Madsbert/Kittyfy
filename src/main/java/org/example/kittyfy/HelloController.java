@@ -51,8 +51,10 @@ public class HelloController {
 
     @FXML
     private ProgressBar progressBar;
+
     @FXML
     private Label SongTitleLabel;
+
     @FXML
     private Label durationLabel;
 
@@ -60,13 +62,13 @@ public class HelloController {
     private File[] files;
 
     private Media media;
-    private MediaPlayer mediaPlayer;
+    private static MediaPlayer mediaPlayer;
 
     private ArrayList<File> songs;
 
     private int currentSongNumber;
 
-    private Timer timer;
+    private static Timer timer;
     private TimerTask timerTask;
     private boolean isRunning = false;
     private int resetCounter;
@@ -97,6 +99,10 @@ public class HelloController {
         mediaPlayer = new MediaPlayer(media);
         //show the song title of the first song when initialized
         SongTitleLabel.setText(songs.get(currentSongNumber).getName());
+
+        //initialize Progressbar
+        progressBar.setStyle("-fx-accent: #FFA500;");
+
     }
 
 
@@ -105,8 +111,10 @@ public class HelloController {
         if (resetCounter == 2) {
             previousSong();
             displayDuration();
+            resetCounter = 0;
         }
         if (isRunning) {
+            progressBar.setProgress(0);
             mediaPlayer.seek(Duration.seconds(0));
         }
 
@@ -121,6 +129,7 @@ public class HelloController {
 
         if (isRunning)
         {
+            cancelTimer();
             isRunning = false;
             mediaPlayer.pause();
             playButton.setText("😿");
@@ -128,6 +137,7 @@ public class HelloController {
         }
         else
         {
+            beginTimer();
             isRunning = true;
             mediaPlayer.play();
             playButton.setText("😹");
@@ -143,6 +153,8 @@ public class HelloController {
         if(currentSongNumber < files.length-1){
             currentSongNumber++;
             stop();
+            if(isRunning){cancelTimer();}
+
             //creates a Media Player
             media = new Media(songs.get(currentSongNumber).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
@@ -163,6 +175,7 @@ public class HelloController {
         else {
             currentSongNumber = 0;
             stop();
+            if(isRunning){cancelTimer();}
 
             //creates a Media Player
             media = new Media(songs.get(currentSongNumber).toURI().toString());
@@ -189,6 +202,7 @@ public class HelloController {
         if(currentSongNumber > 0){
             currentSongNumber--;
             mediaPlayer.stop();
+            if(isRunning){cancelTimer();}
 
             //creates a Media Player
             media = new Media(songs.get(currentSongNumber).toURI().toString());
@@ -206,6 +220,8 @@ public class HelloController {
         else {
             currentSongNumber = songs.size() - 1;
             mediaPlayer.stop();
+            if(isRunning){cancelTimer();}
+
 
             //creates a Media Player
             media = new Media(songs.get(currentSongNumber).toURI().toString());
@@ -230,6 +246,47 @@ public class HelloController {
         // Format as "min:seconds" with two digits for seconds
         String formattedDuration = String.format("%d:%02d", minutes, seconds);
         durationLabel.setText(formattedDuration);
+    }
+    public void beginTimer() {
+        if (mediaPlayer == null || media == null) {
+            System.err.println("MediaPlayer or Media is not initialized.");
+            return;
+        }
+
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            public void run() {
+                if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                    double currentSeconds = mediaPlayer.getCurrentTime().toSeconds();
+                    double end = media.getDuration().toSeconds();
+
+                    // Safely update progress bar
+                    progressBar.setProgress(currentSeconds / end);
+
+                    // Stop the timer if the media has ended
+                    if (currentSeconds / end >= 1) {
+                        cancelTimer();
+                    }
+                }
+            }
+        };
+        timer.schedule(timerTask, 0, 1000);
+    }
+
+    private void cancelTimer() {
+        isRunning = false;
+        timer.cancel();
+    }
+
+    //A method that cancel the timer, and releases the mediaPlayer. (is called when stage is closed)
+    public static void onClose() {
+        if (timer != null) {
+            timer.cancel();
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.dispose();
+        }
     }
 
 
