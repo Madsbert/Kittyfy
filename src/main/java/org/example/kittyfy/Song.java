@@ -10,6 +10,13 @@ public class Song {
     private String artist;
     private String genre;
     private String filePath;
+    private int songID;
+
+    public Song(String title, String genre, String filePath) {
+        this.title = title;
+        this.genre = genre;
+        this.filePath = filePath;
+    }
 
     public Song(String title, String artist, String genre, String filePath) {
         this.title = title;
@@ -50,16 +57,14 @@ public class Song {
         this.filePath = filePath;
     }
 
-
-    public double getDuration() throws UnsupportedAudioFileException, IOException {
-        // Get audio format and frame length
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
-        AudioFormat format = audioInputStream.getFormat();
-        //get amount of frames
-        long frames = audioInputStream.getFrameLength();
-        //get framerate
-        float frameRate = format.getFrameRate();
-        // Calculate the duration of the audio in seconds, and returns it as a double.
-        return frames / frameRate;
+    public int getSongID() {
+        return songID;
     }
+
+    public void setSongID(int songID) {
+        this.songID = songID;
+    }
+
+
 }
+
