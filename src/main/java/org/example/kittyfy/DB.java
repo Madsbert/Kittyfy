@@ -152,12 +152,20 @@ public class DB {
      * @return An Arraylist<Song> that contains all songs of the playlist.
      * @throws Exception
      */
-    public ArrayList<Song> getAllSongsInPlaylist(int id) throws Exception
-    {
+    public ArrayList<Song> getAllSongsInPlaylist(int id) throws Exception {
         String sql = "Select * from dbo.tblPlaylistSong WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, id);
+        ArrayList<Song> songArrayList = new ArrayList<Song>(20);
+
+        ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+            songArrayList.add(getSong(rs.getInt("fldSongID")));
+        }
+
+        return songArrayList;
+    }
 
     /**
      * Deletes playlist from the database.
@@ -185,16 +193,8 @@ public class DB {
         pstmt.setString(2, song.getArtist());
         //pstmt.setInt(3, song.getGenreID());
         //pstmt.setInt(4, song.getSongID());
-}
-        ArrayList<Song> songArrayList = new ArrayList<Song>(20);
-
-        ResultSet rs = pstmt.executeQuery();
-        while (rs.next()) {
-            songArrayList.add(getSong(rs.getInt("fldSongID")));
-        }
-
-        return songArrayList;
     }
+
 
     /**
      * Gets a specific song from the database by ID.
