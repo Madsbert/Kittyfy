@@ -56,6 +56,9 @@ public class CreatePlaylistController {
         shiftScene(event);
     }
 
+    public void addSongPlaylist() {
+    }
+
 
 
 
