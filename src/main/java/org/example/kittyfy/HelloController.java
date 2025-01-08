@@ -3,6 +3,8 @@ package org.example.kittyfy;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -40,6 +42,7 @@ public class HelloController {
 
 
     public void initialize() {
+        //Adding a default picture
         Image defaultImage = new Image(getClass().getResource("/Pictures/MusicCat.png").toExternalForm());
         pictures.setImage(defaultImage);
     }
@@ -63,10 +66,10 @@ public class HelloController {
 
     public void createPlaylist(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(CreatePlaylistController.class.getResource("Create-Playlist.fxml"));
-        Stage stage = new Stage();
-        Scene scene = new Scene(fxmlLoader.load());
+        Parent root = fxmlLoader.load();
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Create Playlist");
-        stage.setScene(scene);
+        stage.setScene(new Scene(root));
         stage.show();
     }
 
