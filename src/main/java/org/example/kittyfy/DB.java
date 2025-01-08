@@ -59,6 +59,25 @@ public class DB {
     }
 
     /**
+     * Creates a playlist in the database.
+     * @param playlist
+     * @throws Exception
+     */
+    public void createPlaylist(Playlist playlist) throws Exception {
+        String sql = "INSERT INTO dbo.tblPlaylist VALUES (?, ?, ?)";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, playlist.getName());
+        pstmt.setLong(2, playlist.getLastPlayed());
+        pstmt.setInt(3, playlist.getPlaylistId());
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows > 0) {
+            System.out.println("Playlist created successfully.");
+        } else {
+            System.out.println("Failed to update the playlist.");
+        }
+}
+    /**
      * Removes all songs from the playlist and adds them and new songs again.
      * @param playlist
      * @throws Exception
@@ -140,6 +159,33 @@ public class DB {
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, id);
 
+    /**
+     * Deletes playlist from the database.
+     * @param playlist
+     * @throws Exception
+     */
+    public void deletePlaylist(Playlist playlist) throws Exception {
+        String sql = "DELETE FROM dbo.tblPlaylist WHERE fldID = ? and fldPlaylistName = ?";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setLong(1, playlist.getPlaylistId());
+        pstmt.setString(2, playlist.getName());
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows > 0) {
+            System.out.println("Playlist deleted successfully.");
+        }else {
+            System.out.println("Failed to delete the playlist.");
+        }
+}
+    public void createSong(Song song) throws Exception {
+        String sql = "INSERT INTO dbo.tblSong VALUES (?, ?, ?)";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, song.getTitle());
+        pstmt.setString(2, song.getArtist());
+        //pstmt.setInt(3, song.getGenreID());
+        //pstmt.setInt(4, song.getSongID());
+}
         ArrayList<Song> songArrayList = new ArrayList<Song>(20);
 
         ResultSet rs = pstmt.executeQuery();
