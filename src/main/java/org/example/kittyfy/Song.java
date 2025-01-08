@@ -8,9 +8,8 @@ public class Song {
     private String filePath;
     private int songID;
 
-    public Song(String title, String artist, int genre, String filePath) {
+    public Song(String title, int genre, String filePath) {
         this.title = title;
-        this.artist = artist;
         this.genre = genre;
         this.filePath = filePath;
     }

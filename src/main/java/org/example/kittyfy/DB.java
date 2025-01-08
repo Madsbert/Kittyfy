@@ -133,13 +133,31 @@ public class DB {
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
-        ArrayList<Integer> songIDs = new ArrayList<Integer>(20);
+        ArrayList<Song> songArrayList = new ArrayList<Song>(20);
 
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
-            songIDs.add(rs.getInt("fldSongID"));
+            songArrayList.add(getSong(rs.getInt("fldSongID")));
         }
 
-        sql = "SELECT * "
+        return songArrayList;
+    }
+
+    public Song getSong(int songID) throws Exception {
+        String sql = "SELECT * FROM dbo.TblSong Where fldSongID = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, songID);
+
+        Song curSong = null;
+        ResultSet resultSet = pstmt.executeQuery();
+        if (resultSet.next()) {
+            String name = resultSet.getString("fldSongName");
+            int genreID = resultSet.getInt("fldGenreID");
+            String filePath = resultSet.getString("fldFilePath");
+
+            curSong = new Song(name, genreID, filePath);
+        }
+
+        return curSong;
     }
 }
