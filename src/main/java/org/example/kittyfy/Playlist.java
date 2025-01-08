@@ -1,10 +1,5 @@
 package org.example.kittyfy;
 
-
-import java.math.BigInteger;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 
@@ -15,14 +10,19 @@ public class Playlist {
     private long lastPlayed;
     private ArrayList<Song> songs;
 
-
-
     public long getLastPlayed() {
         return lastPlayed;
     }
 
+    /**
+     * Updates the lastPlayed time to the current epoch second.
+     */
     public void updateLastPlayed() {
-        this.lastPlayed = Instant.now().getEpochSecond();
+        setLastPlayed(Instant.now().getEpochSecond());
+    }
+
+    public void setLastPlayed(long lastPlayed) {
+        this.lastPlayed = lastPlayed;
     }
 
     public Playlist(String name, ArrayList<Song> songs) {
@@ -57,6 +57,4 @@ public class Playlist {
     public void setPlaylistId(int playlistId) {
         this.playlistId = playlistId;
     }
-
-
 }
