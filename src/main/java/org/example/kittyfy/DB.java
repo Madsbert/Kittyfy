@@ -120,18 +120,25 @@ public class DB {
             playlistID = resultSet.getInt("fldPlaylistID");
         }
 
-        Playlist newPlaylist = new Playlist(playlistName, getAllSongsInPlaylist());
+        Playlist newPlaylist = new Playlist(playlistName, getAllSongsInPlaylist(playlistID));
         newPlaylist.setLastPlayed(lastPlayed);
         newPlaylist.setPlaylistId(playlistID);
 
         return newPlaylist;
     }
 
-    public ArrayList<Song> getAllSongsInPlaylist() throws Exception
+    /**
+     * Gets all songs in a specified playlist
+     * @param id an int representing the id of the wanted playlist.
+     * @return An Arraylist<Song> that contains all songs of the playlist.
+     * @throws Exception
+     */
+    public ArrayList<Song> getAllSongsInPlaylist(int id) throws Exception
     {
         String sql = "Select * from dbo.tblPlaylistSong WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, id);
 
         ArrayList<Song> songArrayList = new ArrayList<Song>(20);
 
@@ -143,6 +150,12 @@ public class DB {
         return songArrayList;
     }
 
+    /**
+     * Gets a specific song from the database by ID.
+     * @param songID of the song.
+     * @return Song with the specification of the song in the Database.
+     * @throws Exception
+     */
     public Song getSong(int songID) throws Exception {
         String sql = "SELECT * FROM dbo.TblSong Where fldSongID = ?";
         PreparedStatement pstmt = conn.prepareStatement(sql);
