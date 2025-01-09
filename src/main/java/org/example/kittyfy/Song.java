@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Song {
 
     private String title;
-    private String artist;
+    private ArrayList<String> artist;
     private String genre;
     private String filePath;
     private int songID;
@@ -18,14 +20,14 @@ public class Song {
     public Song(String title, String genre, String filePath) {
         this.title = title;
         this.genre = genre;
-        this.filePath = filePath;
+        this.filePath = filePath.trim();
     }
 
-    public Song(String title, String artist, String genre, String filePath) {
+    public Song(String title, ArrayList<String> artist, String genre, String filePath) {
         this.title = title;
         this.artist = artist;
         this.genre = genre;
-        this.filePath = filePath;
+        this.filePath = filePath.trim();
     }
 
     public String getTitle() {
@@ -36,11 +38,11 @@ public class Song {
         this.title = title;
     }
 
-    public String getArtist() {
+    public ArrayList<String> getArtist() {
         return artist;
     }
 
-    public void setArtist(String artist) {
+    public void setArtist(ArrayList<String> artist) {
         this.artist = artist;
     }
 
@@ -53,7 +55,7 @@ public class Song {
     }
 
     public String getFilePath() {
-        return filePath;
+        return filePath.trim();
     }
 
     public void setFilePath(String filePath) {
@@ -73,8 +75,8 @@ public class Song {
      * @param song
      * @throws Exception
      */
-    public static void createSong(Song song) throws Exception {
-        String sql = "INSERT INTO dbo.tblSong VALUES (fldSongName = ?, fldGenreID = ?, fldFilepath = ?)";
+    public static int createSong(Song song) throws Exception {
+        String sql = "INSERT INTO dbo.TblSong (fldSongName, fldGenreID, fldFilepath) VALUES (?, ?, ?)";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, song.getTitle());
@@ -83,9 +85,17 @@ public class Song {
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Song created successfully.");
+            sql = "SELECT fldSongID FROM dbo.TblSong WHERE fldSongName = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, song.getTitle());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("fldSongID");
+            }
         }else {
             System.out.println("Failed to update the songs.");
         }
+        return -1;
     }
 
     /**
@@ -121,6 +131,27 @@ public class Song {
 
         return curSong;
     }
+
+    public static boolean doesSongExist(String songName) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM dbo.TblSong Where fldSongName = ?";
+        PreparedStatement pstmt;
+        try {
+            Connection conn = DB.getConnection();
+            pstmt = conn.prepareStatement(sql);
+        }
+        catch (Exception e) {
+            DB.getConnection().rollback();
+            return doesSongExist(songName);
+        }
+
+        pstmt.setString(1, songName);
+        ResultSet result = pstmt.executeQuery();
+        if (result.next()) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Gets a specific song from the database by name.
      * @param songName of the song.
@@ -136,19 +167,19 @@ public class Song {
         ResultSet resultSet = pstmt.executeQuery();
         if (resultSet.next()) {
             int genreID = resultSet.getInt("fldGenreID");
-            String filePath = resultSet.getString("fldFilePath");
+            String filePath = resultSet.getString("fldFilePath").trim();
 
-            sql = "SELECT fldGenreName FROM dbo.tblGenre Where fldGenreID = ?";
-            pstmt = DB.getConnection().prepareStatement(sql);
-            pstmt.setInt(1, genreID);
+            String genreName = Song.getGenreName(genreID).trim();
 
-            String genreName = "";
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                genreName = rs.getString(0);
-            }
             curSong = new Song(songName, genreName, filePath);
-            curSong.setArtist("fldArtistID"); //???
+
+            ArrayList<String> artistNames = new ArrayList<>();
+
+            for (int artistID : BridgeSongArtist.getAllArtistIDsFromSongIDs(resultSet.getInt("fldSongID")))
+            {
+                artistNames.add(BridgeSongArtist.getArtistName(artistID));
+            }
+            curSong.setArtist(artistNames);
             curSong.setSongID (resultSet.getInt("fldSongID"));
         }
 
@@ -203,7 +234,10 @@ public class Song {
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, genreName);
         ResultSet resultSet = pstmt.executeQuery();
-        return resultSet.getInt("fldGenreID");
+        if (resultSet.next()) {
+            return resultSet.getInt("fldGenreID");
+        }
+        return -1;
     }
 }
 
