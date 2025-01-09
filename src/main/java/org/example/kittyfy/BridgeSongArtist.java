@@ -9,15 +9,16 @@ public class BridgeSongArtist {
 
     /**
      * Creates song artist bridge.
-     * @param song
+     * @param songID
+     * @param artistID
      * @throws Exception
      */
-    public static void createSongArtist(Song song) throws Exception {
+    public static void createSongArtist(int songID, int artistID) throws Exception {
         String sql = "INSERT INTO dbo.tblSongArtist VALUES (fldSongID = ?, fldArtistID = ?)";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1, song.getSongID());
-        pstmt.setInt(2, getArtistID(song.getArtist()));
+        pstmt.setInt(1, songID);
+        pstmt.setInt(2, artistID);
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Song artist created successfully.");
@@ -106,14 +107,14 @@ public class BridgeSongArtist {
 
     /**
      * Creates an artist in the database.
-     * @param song
+     * @param artistName
      * @throws Exception
      */
-    public static void createArtist(Song song) throws Exception {
+    public static void createArtist(String artistName) throws Exception {
         String sql = "INSERT INTO dbo.tblArtist VALUES (fldArtistName = ?)";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, song.getArtist());
+        pstmt.setString(1, artistName);
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Artist created successfully.");

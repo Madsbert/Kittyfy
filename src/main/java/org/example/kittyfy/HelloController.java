@@ -64,9 +64,9 @@ public class HelloController {
     private Media media;
     private static MediaPlayer mediaPlayer;
 
-    private ArrayList<File> songs;
+    private ArrayList<Song> songs;
 
-    private int currentSongNumber;
+    private int currentSongNumber = 0;
 
     private static Timer timer;
     private TimerTask timerTask;
@@ -74,7 +74,7 @@ public class HelloController {
     private int resetCounter;
 
 
-    public void initialize() {
+    public void initialize() throws Exception {
         //Adding a default picture
         Image defaultImage = new Image(getClass().getResource("/Pictures/MusicCat.png").toExternalForm());
         pictures.setImage(defaultImage);
@@ -83,22 +83,24 @@ public class HelloController {
 
 
         //initialize Songs
-        songs = new ArrayList<File>();
-        directory = new File("src/main/resources/Genre/Dansk-Top");
-        //this gets all the files from directory and put them into our files array
-        files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                songs.add(file);
-                System.out.println(file);
-            }
+        songs = Reader.readAllSongs();
+
+        for (Song song : songs) {
+            System.out.println(song.getTitle());
         }
 
         //creates a Media Player
-        media = new Media(songs.get(currentSongNumber).toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        //show the song title of the first song when initialized
-        SongTitleLabel.setText(songs.get(currentSongNumber).getName());
+
+        System.out.println(songs.size());
+
+        if (songs.get(currentSongNumber) != null)
+        {
+            media = new Media(new File("src/main/resources/music/" + songs.get(currentSongNumber).getFilePath()).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            //show the song title of the first song when initialized
+            SongTitleLabel.setText(songs.get(currentSongNumber).getTitle());
+        }
+
 
         //initialize Progressbar
         progressBar.setStyle("-fx-accent: #FFA500;");
@@ -125,7 +127,12 @@ public class HelloController {
      * @throws UnsupportedAudioFileException
      * @throws IOException
      */
-    public void play() throws UnsupportedAudioFileException, IOException {
+    public void play() throws Exception {
+        if (mediaPlayer == null)
+        {
+            songs = Reader.readAllSongs();
+            mediaPlayer = new MediaPlayer(new Media("src/main/resources/music/" + songs.get(currentSongNumber).getFilePath()));
+        }
 
         if (isRunning)
         {
@@ -148,18 +155,18 @@ public class HelloController {
     public void addSongClick() {
     }
 
-    public void skip() throws UnsupportedAudioFileException, IOException {
+    public void skip() throws Exception {
 
-        if(currentSongNumber < files.length-1){
+        if(currentSongNumber < songs.size()-1){
             currentSongNumber++;
             stop();
             if(isRunning){cancelTimer();}
 
             //creates a Media Player
-            media = new Media(songs.get(currentSongNumber).toURI().toString());
+            media = new Media(new File("src/main/resources/music/" + songs.get(currentSongNumber).getFilePath()).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             //show the song title of the first song when initialized
-            SongTitleLabel.setText(songs.get(currentSongNumber).getName());
+            SongTitleLabel.setText(songs.get(currentSongNumber).getTitle());
             //starts the song, and changes the icon.
             play();
 
@@ -178,10 +185,10 @@ public class HelloController {
             if(isRunning){cancelTimer();}
 
             //creates a Media Player
-            media = new Media(songs.get(currentSongNumber).toURI().toString());
+            media = new Media(new File("src/main/resources/music/" + songs.get(currentSongNumber).getFilePath()).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             //show the song title of the first song when initialized
-            SongTitleLabel.setText(songs.get(currentSongNumber).getName());
+            SongTitleLabel.setText(songs.get(currentSongNumber).getTitle());
             //starts the song, and changes the icon.
             mediaPlayer.play();
             isRunning = true;
@@ -205,10 +212,10 @@ public class HelloController {
             if(isRunning){cancelTimer();}
 
             //creates a Media Player
-            media = new Media(songs.get(currentSongNumber).toURI().toString());
+            media = new Media(new File("src/main/resources/music/" + songs.get(currentSongNumber).getFilePath()).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             //show the song title of the first song when initialized
-            SongTitleLabel.setText(songs.get(currentSongNumber).getName());
+            SongTitleLabel.setText(songs.get(currentSongNumber).getTitle());
             //starts the song, and changes the icon.
             mediaPlayer.play();
             isRunning = true;
@@ -224,10 +231,10 @@ public class HelloController {
 
 
             //creates a Media Player
-            media = new Media(songs.get(currentSongNumber).toURI().toString());
+            media = new Media(new File("src/main/resources/music/" + songs.get(currentSongNumber).getFilePath()).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             //show the song title of the first song when initialized
-            SongTitleLabel.setText(songs.get(currentSongNumber).getName());
+            SongTitleLabel.setText(songs.get(currentSongNumber).getTitle());
             //starts the song, and changes the icon.
             mediaPlayer.play();
             isRunning = true;
