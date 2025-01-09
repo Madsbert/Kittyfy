@@ -158,15 +158,15 @@ public class DB {
 
     /**
      * Gets all songs in a specified playlist
-     * @param id an int representing the id of the wanted playlist.
+     * @param playlistID
      * @return An Arraylist<Song> that contains all songs of the playlist.
      * @throws Exception
      */
-    public ArrayList<Song> getAllSongsInPlaylist(int id) throws Exception {
+    public ArrayList<Song> getAllSongsInPlaylist(int playlistID) throws Exception {
         String sql = "Select * from dbo.tblPlaylistSong WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1, id);
+        pstmt.setInt(1, playlistID);
         ArrayList<Song> songArrayList = new ArrayList<Song>(20);
 
         ResultSet rs = pstmt.executeQuery();
@@ -193,7 +193,36 @@ public class DB {
         }else {
             System.out.println("Failed to delete the playlist.");
         }
-}
+    }
+
+    /**
+     * Gets all playlists from playlist table.
+     * @return
+     * @throws Exception
+     */
+    public ArrayList<Playlist> getAllPlaylists() throws Exception {
+        String sql = "Select * from dbo.tblPlaylist";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        ResultSet resultSet = pstmt.executeQuery();
+        ArrayList<Playlist> allPlaylists = new ArrayList<>();
+        while (resultSet.next()) {
+            String playlistName = "Not set Error";
+            long lastPlayed = 0;
+            int playlistID = 0;
+            if (resultSet.next()) {
+                playlistName = resultSet.getString("fldPlaylistName");
+                lastPlayed = resultSet.getLong("fldLastPlayed");
+                playlistID = resultSet.getInt("fldPlaylistID");
+
+            }
+            Playlist newPlaylist = new Playlist(playlistName, getAllSongsInPlaylist(playlistID));
+            newPlaylist.setLastPlayed(lastPlayed);
+            newPlaylist.setPlaylistId(playlistID);
+            allPlaylists.add(newPlaylist);
+        }
+        return allPlaylists;
+    }
 
     /**
      * Creates a song in the database.
@@ -235,42 +264,47 @@ public class DB {
     }
 
     /**
-     * Reads song artist bridge.
-     * @param id
+     * Gets arraylist of songIDs from the artistID.
+     * SongArtist table.
+     * @param artistID
      * @return
      * @throws Exception
      */
-    public String getSongArtist(int id) throws Exception {
+    public ArrayList<Integer> getAllSongIDsFromArtistID(int artistID) throws Exception {
         String sql = "SELECT * from dbo.tblSongArtist WHERE fldArtistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1, id);
+        pstmt.setInt(1, artistID);
         ResultSet resultSet = pstmt.executeQuery();
-        String artist = "";
-        if (resultSet.next()) {
-            artist = resultSet.getString("fldArtistName");
+
+        ArrayList<Integer> songIDs = new ArrayList<>(20);
+        while (resultSet.next()) {
+            songIDs.add(resultSet.getInt("fldSongID"));
         }
-        return artist;
+        return songIDs;
     }
 
     /**
-     * Reads song artist ID bridge.???
-     * @param artistName
+     * Reads arraylist of artistIDs from the songID.
+     * SongArtist table.
+     * @param songID
      * @return
      * @throws Exception
      */
-    public int getSongArtistID(String artistName) throws Exception {
-        String sql = "SELECT * from dbo.tblSongArtist WHERE fldArtistID = ?";
+    public ArrayList<Integer> getAllArtistIDsFromSongIDs(int songID) throws Exception {
+        String sql = "SELECT * from dbo.tblSongArtist WHERE fldSongID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1, getArtistID(artistName));
+        pstmt.setInt(1, songID);
         ResultSet resultSet = pstmt.executeQuery();
-        int artist = -1;
-        if (resultSet.next()) {
-            artist = resultSet.getInt("fldArtistID");
+
+        ArrayList<Integer> artistIDs = new ArrayList<>(20);
+        while (resultSet.next()) {
+            artistIDs.add(resultSet.getInt("fldArtistID"));
         }
-        return artist;
+        return artistIDs;
     }
+
 
     /**
      * Reads artist id by artist name.
