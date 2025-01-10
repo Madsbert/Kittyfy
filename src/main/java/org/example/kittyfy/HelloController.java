@@ -24,6 +24,7 @@ import javafx.scene.Scene;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -140,12 +141,27 @@ public class HelloController {
 
     public void playSong(Song song) throws Exception {
         songs = Reader.readAllSongs();
-        mediaPlayer = new MediaPlayer(new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString()));
-        SongTitleLabel.setText(song.getTitle());
-        //starts the song, and changes the icon.
-        mediaPlayer.pause();
-        isRunning = false;
-        play();
+        songsVbox.getChildren().clear();
+        for (Song song1 : songs) {
+            Button newButton = new Button(song1.getTitle() + " by " + song1.getArtist());
+            newButton.setPrefWidth(650);
+            newButton.setPrefHeight(30);
+
+            newButton.setOnAction(event -> {
+                try {
+                    mediaPlayer = new MediaPlayer(new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString()));
+                    SongTitleLabel.setText(song.getTitle());
+                    //starts the song, and changes the icon.
+                    mediaPlayer.pause();
+                    isRunning = false;
+                    play();
+                }catch (Exception e) {
+                    System.out.println("Failed to play song");
+                    e.printStackTrace();
+                }
+            });
+            songsVbox.getChildren().add(newButton);
+        }
     }
 
     /**
