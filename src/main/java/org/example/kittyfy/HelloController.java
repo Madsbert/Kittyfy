@@ -85,10 +85,6 @@ public class HelloController {
         //initialize Songs
         songs = Reader.readAllSongs();
 
-        for (Song song : songs) {
-            System.out.println(song.getTitle());
-        }
-
         //creates a Media Player
 
         System.out.println(songs.size());

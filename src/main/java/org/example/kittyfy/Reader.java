@@ -16,6 +16,7 @@ public class Reader {
         for (File file : files) {
             songsFileNames.add("\"" + file.getName().trim() + "\"");
             //songsFileNames.add(file.getName());
+
         }
 
         ArrayList<Song> songs = new ArrayList<>(songsFileNames.size());
@@ -26,7 +27,6 @@ public class Reader {
             fileName = fileName.trim();
             String[] rows = fileName.split(" - ");
             String songName = rows[0].substring(1);
-
 
             if (Song.doesSongExist(songName)) {
                 songs.add(Song.getSong(songName));
@@ -41,10 +41,6 @@ public class Reader {
             Song curSong = new Song(songName, artists, genre, fileName.substring(1, fileName.length() - 1));
             curSong.setSongID(Song.createSong(curSong));
             songs.add(curSong);
-        }
-
-        for (Song song : songs) {
-            System.out.println(song.getFilePath());
         }
 
         return songs;

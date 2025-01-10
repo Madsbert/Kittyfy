@@ -147,7 +147,7 @@ public class Song {
         pstmt.setString(1, songName);
         ResultSet result = pstmt.executeQuery();
         if (result.next()) {
-            return true;
+            return result.getInt(1) == 1;
         }
         return false;
     }
