@@ -110,11 +110,18 @@ public class HelloController {
         updateSongList();
     }
 
+    /**
+     * Updates songlist in scrollbar and set the buttons to a certain size.
+     * When button pushed the song is played and current song playing stops when a new song button is pushed.
+     */
     public void updateSongList() {
         for (Song song : currentPlaylist.getSongs()) {
             Button newButton = new Button(song.getTitle() + " by " + song.getArtist());
+            newButton.setPrefWidth(650);
+            newButton.setPrefHeight(30);
             newButton.setOnAction((ActionEvent event) -> {
                 try {
+                    stop();
                     playSong(song);
                 } catch (Exception e) {
                     System.out.println("Failed to play song");
@@ -139,15 +146,13 @@ public class HelloController {
 
     }
 
+    /**
+     * Connecting the musicfile to the label and makes the functions work.//uddyb mere og bedre.
+     * @param song
+     * @throws Exception
+     */
     public void playSong(Song song) throws Exception {
         songs = Reader.readAllSongs();
-        songsVbox.getChildren().clear();
-        for (Song song1 : songs) {
-            Button newButton = new Button(song1.getTitle() + " by " + song1.getArtist());
-            newButton.setPrefWidth(650);
-            newButton.setPrefHeight(30);
-
-            newButton.setOnAction(event -> {
                 try {
                     mediaPlayer = new MediaPlayer(new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString()));
                     SongTitleLabel.setText(song.getTitle());
@@ -159,10 +164,8 @@ public class HelloController {
                     System.out.println("Failed to play song");
                     e.printStackTrace();
                 }
-            });
-            songsVbox.getChildren().add(newButton);
-        }
-    }
+            }
+
 
     /**
      * Plays the currently selected song.
