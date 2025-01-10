@@ -84,12 +84,31 @@ public class Song {
         pstmt.setString(3, song.getFilePath());
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
-            System.out.println("Song created successfully.");
             sql = "SELECT fldSongID FROM dbo.TblSong WHERE fldSongName = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, song.getTitle());
+
+            int artistID;
+
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
+                for (String artist : song.getArtist())
+                {
+                    if (BridgeSongArtist.hasArtist(artist))
+                    {
+                        // If the artist already exists
+                        artistID = BridgeSongArtist.getArtistID(artist);
+                    }
+                    else
+                    {
+                        // If the artist is not present in the Database.
+                        BridgeSongArtist.createArtist(artist);
+                        artistID = BridgeSongArtist.getArtistID(artist);
+                    }
+                    BridgeSongArtist.createSongArtist(rs.getInt("fldSongID"), artistID);
+                }
+
+                System.out.println("Song created successfully.");
                 return rs.getInt("fldSongID");
             }
         }else {

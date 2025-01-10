@@ -14,16 +14,14 @@ public class BridgeSongArtist {
      * @throws Exception
      */
     public static void createSongArtist(int songID, int artistID) throws Exception {
-        String sql = "INSERT INTO dbo.tblSongArtist VALUES (fldSongID = ?, fldArtistID = ?)";
+        String sql = "INSERT INTO dbo.TblSongArtist (fldSongID, fldArtistID) VALUES (?, ?)";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, songID);
         pstmt.setInt(2, artistID);
         int affectedRows = pstmt.executeUpdate();
-        if (affectedRows > 0) {
-            System.out.println("Song artist created successfully.");
-        }else{
-            System.out.println("Failed to create the song artist.");
+        if (affectedRows >= 0) {
+            System.out.println("---Created SongArtist---");
         }
     }
 
@@ -35,7 +33,7 @@ public class BridgeSongArtist {
      * @throws Exception
      */
     public static ArrayList<Integer> getAllSongIDsFromArtistID(int artistID) throws Exception {
-        String sql = "SELECT * from dbo.tblSongArtist WHERE fldArtistID = ?";
+        String sql = "SELECT * from dbo.TblSongArtist WHERE fldArtistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, artistID);
@@ -56,7 +54,7 @@ public class BridgeSongArtist {
      * @throws Exception
      */
     public static ArrayList<Integer> getAllArtistIDsFromSongIDs(int songID) throws Exception {
-        String sql = "SELECT * from dbo.tblSongArtist WHERE fldSongID = ?";
+        String sql = "SELECT * from dbo.TblSongArtist WHERE fldSongID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, songID);
@@ -76,7 +74,7 @@ public class BridgeSongArtist {
      * @throws Exception
      */
     public static int getArtistID(String artistName) throws Exception {
-        String sql = "SELECT fldArtistID FROM dbo.tblArtist WHERE fldArtistName = ?";
+        String sql = "SELECT fldArtistID FROM dbo.TblArtist WHERE fldArtistName = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, artistName);
@@ -89,13 +87,33 @@ public class BridgeSongArtist {
     }
 
     /**
+     * Checks if a artist a specified name is inside the database.
+     * @param artistName
+     * @return true if artist is already present, false if it is not.
+     * @throws Exception
+     */
+    public static boolean hasArtist(String artistName) throws Exception {
+        String sql = "SELECT COUNT(*) FROM dbo.TblArtist WHERE fldArtistName = ?";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, artistName);
+        ResultSet resultSet = pstmt.executeQuery();
+        if (resultSet.next()) {
+            if (resultSet.getInt(1) >= 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Reads artist name by artist ID.
      * @param artistID
      * @return
      * @throws Exception
      */
     public static String getArtistName(int artistID) throws Exception {
-        String sql = "SELECT * from dbo.tblArtist WHERE fldArtistID = ?";
+        String sql = "SELECT * from dbo.TblArtist WHERE fldArtistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, artistID);
@@ -111,15 +129,13 @@ public class BridgeSongArtist {
      * @throws Exception
      */
     public static void createArtist(String artistName) throws Exception {
-        String sql = "INSERT INTO dbo.tblArtist VALUES (fldArtistName = ?)";
+        String sql = "INSERT INTO dbo.TblArtist(fldArtistName) VALUES (?)";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, artistName);
         int affectedRows = pstmt.executeUpdate();
-        if (affectedRows > 0) {
-            System.out.println("Artist created successfully.");
-        }else{
-            System.out.println("Failed to update the artist.");
+        if (affectedRows >= 0) {
+            System.out.println("---Created Artist---");
         }
     }
 }
