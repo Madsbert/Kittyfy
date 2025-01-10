@@ -81,9 +81,17 @@ public class HelloController {
         playButton.setText("😿");
         stopButton.setText("\uD83D\uDE40");
 
-
         //initialize Songs
         songs = Reader.readAllSongs();
+
+
+        //initializing searchbar options
+
+        for (Song song : songs) {
+            String artists = String.join(", ", song.getArtist());
+            searchBar.getItems().add(song.getTitle() + " by " + artists);
+        }
+
 
         //creates a Media Player
 
@@ -149,6 +157,55 @@ public class HelloController {
     }
 
     public void addSongClick() {
+    }
+
+    public void playSongOnClick() throws Exception {
+
+        String selectedTitle = searchBar.getValue();
+        if (selectedTitle == null) {
+            System.out.println("No song selected!");
+        }
+        /*
+        String search = "To";
+
+        for (Song song : songs) {
+            if (song.getTitle().toLowerCase().contains(selectedTitle.toLowerCase())) {
+
+            }
+
+            for (String artist : song.getArtist())
+            {
+                if (artist.toLowerCase().contains(selectedTitle.toLowerCase())) {
+                    searchBar.getItems().add(artist);
+                }
+            }
+            if (song.getTitle().toLowerCase().contains(search.toLowerCase())) {}
+
+
+        }
+*/
+
+
+        for (Song song : songs) {
+
+            String artists = String.join(", ", song.getArtist());
+
+            if (selectedTitle.equals(song.getTitle() + " by " + artists)) {
+                currentSongNumber = songs.indexOf(song);
+                mediaPlayer.stop();
+
+                if (isRunning) {
+                    cancelTimer();
+                }
+
+
+                media = new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString());
+                mediaPlayer = new MediaPlayer(media);
+                SongTitleLabel.setText(song.getTitle());
+                play();
+                break;
+            }
+        }
     }
 
     public void skip() throws Exception {
