@@ -7,7 +7,6 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -38,12 +37,12 @@
                     </VBox.margin>
                 </HBox>
                 <ScrollPane fx:id="songsPane" prefHeight="288.0" prefWidth="674.0" style="-fx-background-color: #FF8000; -fx-background-radius: 15;">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-                    </content>
                <VBox.margin>
                   <Insets left="20.0" />
                </VBox.margin>
+               <content>
+                  <VBox fx:id="songsVbox" prefHeight="273.0" prefWidth="624.0" />
+               </content>
                 </ScrollPane>
                 <HBox alignment="CENTER" prefHeight="230.0" prefWidth="674.0">
                     <children>

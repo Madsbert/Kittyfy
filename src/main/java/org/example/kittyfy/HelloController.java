@@ -16,6 +16,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
 import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -47,7 +48,7 @@ public class HelloController {
     private ScrollPane playlistPane;
 
     @FXML
-    private ScrollPane songsPane;
+    private VBox songsVbox;
 
     @FXML
     private ProgressBar progressBar;
@@ -72,6 +73,7 @@ public class HelloController {
     private TimerTask timerTask;
     private boolean isRunning = false;
     private int resetCounter;
+    private Playlist currentPlaylist;
 
 
     public void initialize() throws Exception {
@@ -80,7 +82,7 @@ public class HelloController {
         pictures.setImage(defaultImage);
         playButton.setText("😿");
         stopButton.setText("\uD83D\uDE40");
-
+        currentPlaylist = new Playlist("test", new ArrayList<>());
 
         //initialize Songs
         songs = Reader.readAllSongs();
@@ -101,8 +103,26 @@ public class HelloController {
         //initialize Progressbar
         progressBar.setStyle("-fx-accent: #FFA500;");
 
+        for (Song song : songs) {
+            currentPlaylist.addSong(song);
+        }
+        updateSongList();
     }
 
+    public void updateSongList() {
+        for (Song song : currentPlaylist.getSongs()) {
+            Button newButton = new Button(song.getTitle() + " by " + song.getArtist());
+            newButton.setOnAction((ActionEvent event) -> {
+                try {
+                    playSong(song);
+                } catch (Exception e) {
+                    System.out.println("Failed to play song");
+                    e.printStackTrace();
+                }
+            });
+            songsVbox.getChildren().add(newButton);
+        }
+    }
 
     public void reset() {
         resetCounter++;
@@ -118,18 +138,22 @@ public class HelloController {
 
     }
 
+    public void playSong(Song song) throws Exception {
+        songs = Reader.readAllSongs();
+        mediaPlayer = new MediaPlayer(new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString()));
+        SongTitleLabel.setText(song.getTitle());
+        //starts the song, and changes the icon.
+        mediaPlayer.pause();
+        isRunning = false;
+        play();
+    }
+
     /**
      * Plays the currently selected song.
      * @throws UnsupportedAudioFileException
      * @throws IOException
      */
     public void play() throws Exception {
-        if (mediaPlayer == null)
-        {
-            songs = Reader.readAllSongs();
-            mediaPlayer = new MediaPlayer(new Media("src/main/resources/music/" + songs.get(currentSongNumber).getFilePath()));
-        }
-
         if (isRunning)
         {
             cancelTimer();
