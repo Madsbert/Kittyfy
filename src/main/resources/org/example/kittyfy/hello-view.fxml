@@ -72,7 +72,7 @@
                         </Label>
                         <HBox prefHeight="18.0" prefWidth="355.0">
                            <children>
-                              <Label maxHeight="18.0" maxWidth="25.0" prefHeight="18.0" prefWidth="25.0" text="0:00">
+                              <Label fx:id="currentDurationLabel" maxHeight="18.0" maxWidth="25.0" prefHeight="18.0" prefWidth="25.0">
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>
