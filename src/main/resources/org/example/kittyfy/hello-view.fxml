@@ -15,13 +15,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.HelloController">
     <center>
         <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <children>
                 <HBox alignment="CENTER" prefHeight="73.0" prefWidth="674.0">
                     <children>
-                        <ComboBox fx:id="searchBar" editable="true" prefHeight="40.0" prefWidth="394.0" promptText="Song/Artist" style="-fx-text-fill: white; -fx-background-radius: 15;">
+                        <ComboBox fx:id="searchBar" editable="true" prefHeight="40.0" prefWidth="394.0" promptText="Song/Artist" style="-fx-text-fill: white;">
                             <opaqueInsets>
                                 <Insets />
                             </opaqueInsets>
