@@ -115,9 +115,9 @@ public class HelloController {
             SongTitleLabel.setText(songs.get(currentSongNumber).getTitle());
 
             //Displays the artists
-            String[] asa = songs.get(currentSongNumber).getFilePath().split(" - ");
+            String[] ArtistArray = songs.get(currentSongNumber).getFilePath().split(" - ");
             ArrayList<String> artists = new ArrayList<>();
-            artists.addAll(Arrays.asList(asa[1].split(", ")));
+            artists.addAll(Arrays.asList(ArtistArray[1].split(", ")));
             String artistNames = "";
             if (artists.size() > 1)
             {
@@ -382,6 +382,7 @@ public class HelloController {
                         int currentSecondsMath = (int) (currentSeconds % 60);
                         String formattedCurrentDuration = String.format("%d:%02d", currentMinutesMath, currentSecondsMath);
                         currentDurationLabel.setText(formattedCurrentDuration);
+                        displayDuration();
 
                         // stops the timer if the media has ended, and skips to the next song
                         if (currentSeconds / end >= 1) {
