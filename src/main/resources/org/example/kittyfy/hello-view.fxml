@@ -12,7 +12,7 @@
             <children>
                 <HBox alignment="CENTER" prefHeight="73.0" prefWidth="674.0">
                     <children>
-                        <ComboBox fx:id="searchBar" editable="true" prefHeight="40.0" prefWidth="394.0" promptText="Song/Artist" style="-fx-text-fill: white;">
+                        <ComboBox fx:id="searchBar" editable="true" onAction="#playSongOnClick" prefHeight="40.0" prefWidth="394.0" promptText="Song/Artist" style="-fx-text-fill: white;">
                             <opaqueInsets>
                                 <Insets />
                             </opaqueInsets>
@@ -62,7 +62,7 @@
                         </Label>
                         <HBox prefHeight="18.0" prefWidth="355.0">
                            <children>
-                              <Label maxHeight="18.0" maxWidth="25.0" prefHeight="18.0" prefWidth="25.0" text="0:00">
+                              <Label fx:id="currentDurationLabel" maxHeight="18.0" maxWidth="25.0" prefHeight="18.0" prefWidth="25.0">
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>
