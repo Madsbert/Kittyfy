@@ -151,14 +151,12 @@ public class HelloController {
         resetCounter++;
         if (resetCounter == 2) {
             previousSong();
-            displayDuration();
             resetCounter = 0;
         }
         if (isRunning) {
             progressBar.setProgress(0);
             mediaPlayer.seek(Duration.seconds(0));
         }
-
     }
 
     /**
@@ -301,9 +299,6 @@ public class HelloController {
             playButton.setText("😹");
             displayDuration();
 
-
-
-
         }
         else {
             currentSongNumber = 0;
@@ -315,7 +310,6 @@ public class HelloController {
             mediaPlayer.play();
             playButton.setText("😹");
             displayDuration();
-
         }
     }
 
@@ -332,18 +326,18 @@ public class HelloController {
             if(isRunning){cancelTimer();}
 
             createMediaPlayer();
-
+            playMusic();
             playButton.setText("😹");
             displayDuration();
 
         }
         else {
-            currentSongNumber = allSongs.size() - 1;
+            currentSongNumber = currentPlaylist.getSongs().size() - 1;
             mediaPlayer.stop();
             if(isRunning){cancelTimer();}
 
             createMediaPlayer();
-
+            playMusic();
             playButton.setText("😹");
             displayDuration();
 
