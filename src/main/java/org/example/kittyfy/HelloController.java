@@ -170,39 +170,30 @@ public class HelloController {
         allSongs = Reader.readAllSongs();
                 try {
                     mediaPlayer = new MediaPlayer(new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString()));
-                    SongTitleLabel.setText(song.getTitle());
 
+                    // the MediaPlayer doesn't update the metadata every time it's created, so we need a listener.
+                    mediaPlayer.setOnReady(() -> {
+                        displayDuration();
+                    });
+
+                    //displays artist based on song object instead of currentSongNumber.
+                    Platform.runLater(() -> {
+                    displayArtistBasedOnSong(song);});
+
+                    //displays title based on song object.
+                    Platform.runLater(() -> {
+                    SongTitleLabel.setText(song.getTitle());});
+                    
                     //starts the song, and changes the icon.
                     mediaPlayer.pause();
                     isRunning = false;
                     playMusic();
-
-                    //displays artist based on song object instead of currentSongNumber.
-                    String[] artistArray = song.getFilePath().split(" - ");
-                    ArrayList<String> artists = new ArrayList<>();
-                    artists.addAll(Arrays.asList(artistArray[1].split(", ")));
-                    String artistNames = "";
-                    if (artists.size() > 1) {
-                        for (String artist : artists) {
-                            artistNames += artist + ", ";
-                        }
-                        // Remove the trailing ", "
-                        artistNames = artistNames.substring(0, artistNames.length() - 2);
-                    } else {
-                        artistNames = artists.get(0);
-                    }
-
-                    ArtistNameLabel.setText(artistNames);
 
                     //displays total duration based on media. (doesn't work)
                     if(timer != null) {
                         timer.cancel();
                         beginTimer();
                     }
-                    displayDuration();
-
-                    //displays title based on song object.
-                    SongTitleLabel.setText(song.getTitle());
 
                 }catch (Exception e) {
                     System.out.println("Failed to play song");
@@ -226,7 +217,8 @@ public class HelloController {
             isRunning = false;
             mediaPlayer.pause();
             playButton.setText("😿");
-
+            displayArtistOnLabel();
+            displaySongTitleOnLabel();
 
         }
         else
@@ -235,7 +227,8 @@ public class HelloController {
             isRunning = true;
             mediaPlayer.play();
             playButton.setText("😹");
-
+            displayArtistOnLabel();
+            displaySongTitleOnLabel();
 
             //when the song is finished, skip to the next song.
             if (media.getDuration().toSeconds() <= mediaPlayer.getCurrentTime().toSeconds()) {
@@ -382,7 +375,7 @@ public class HelloController {
 
                     // forces it to update in the JavaFX thread
                     Platform.runLater(() -> {
-                        // Safely update progress bar
+                        // Updates progress bar
                         progressBar.setProgress(currentSeconds / end);
 
                         // Math to display current song duration
@@ -459,6 +452,24 @@ public class HelloController {
         else
         {
             artistNames = artists.getFirst();
+        }
+
+        ArtistNameLabel.setText(artistNames);
+    }
+    //displays artist based on song object instead of currentSongNumber.
+    public void displayArtistBasedOnSong(Song song){
+        String[] artistArray = song.getFilePath().split(" - ");
+        ArrayList<String> artists = new ArrayList<>();
+        artists.addAll(Arrays.asList(artistArray[1].split(", ")));
+        String artistNames = "";
+        if (artists.size() > 1) {
+            for (String artist : artists) {
+                artistNames += artist + ", ";
+            }
+            // Remove the trailing ", "
+            artistNames = artistNames.substring(0, artistNames.length() - 2);
+        } else {
+            artistNames = artists.get(0);
         }
 
         ArtistNameLabel.setText(artistNames);
