@@ -82,7 +82,7 @@
                                     <Insets />
                                  </HBox.margin>
                               </ProgressBar>
-                              <Label fx:id="durationLabel" maxHeight="18.0" maxWidth="25.0" prefHeight="18.0" prefWidth="25.0" />
+                              <Label fx:id="totalDurationLabel" maxHeight="18.0" maxWidth="25.0" prefHeight="18.0" prefWidth="25.0" />
                            </children>
                            <VBox.margin>
                               <Insets />
@@ -107,7 +107,7 @@
                                     <Insets left="40.0" />
                                  </GridPane.margin>
                                       </Button>
-                                      <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#play" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 2;" text="▶" GridPane.columnIndex="1">
+                                      <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#playMusic" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 2;" text="▶" GridPane.columnIndex="1">
                                           <font>
                                               <Font size="36.0" />
                                           </font>
@@ -123,7 +123,7 @@
                                     <Insets />
                                  </GridPane.margin>
                                       </Button>
-                                      <Button fx:id="stopButton" alignment="CENTER" mnemonicParsing="false" onAction="#stop" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="■" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                      <Button fx:id="stopButton" alignment="CENTER" mnemonicParsing="false" onAction="#stopMusic" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="■" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                           <font>
                                               <Font size="24.0" />
                                           </font>

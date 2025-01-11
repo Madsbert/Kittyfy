@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.Button;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
@@ -26,7 +25,6 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -62,7 +60,7 @@ public class HelloController {
     private Label ArtistNameLabel;
 
     @FXML
-    private Label durationLabel;
+    private Label totalDurationLabel;
     @FXML
     private Label currentDurationLabel;
 
@@ -72,7 +70,7 @@ public class HelloController {
     private Media media;
     private static MediaPlayer mediaPlayer;
 
-    private ArrayList<Song> songs;
+    private ArrayList<Song> allSongs;
 
     private int currentSongNumber = 0;
 
@@ -92,57 +90,37 @@ public class HelloController {
         currentPlaylist = new Playlist("test", new ArrayList<>());
 
         //initialize Songs
-        songs = Reader.readAllSongs();
+        allSongs = Reader.readAllSongs();
 
 
         //initializing searchbar options
 
-        for (Song song : songs) {
+        for (Song song : allSongs) {
             String artists = String.join(", ", song.getArtist());
             searchBar.getItems().add(song.getTitle() + " by " + artists);
         }
 
+        System.out.println(allSongs.size()+" songs initialized");
 
-        //creates a Media Player
-
-        System.out.println(songs.size()+" songs initialized");
-
-        if (songs.get(currentSongNumber) != null)
-        {
-            media = new Media(new File("src/main/resources/music/" + songs.get(currentSongNumber).getFilePath()).toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
-            //show the song title of the first song when initialized
-            SongTitleLabel.setText(songs.get(currentSongNumber).getTitle());
-
-            //Displays the artists
-            String[] ArtistArray = songs.get(currentSongNumber).getFilePath().split(" - ");
-            ArrayList<String> artists = new ArrayList<>();
-            artists.addAll(Arrays.asList(ArtistArray[1].split(", ")));
-            String artistNames = "";
-            if (artists.size() > 1)
-            {
-                for (String artist : artists)
-                {
-                    artistNames += artist + ", ";
-                }
-                artistNames = artistNames.substring(0, artistNames.length() - 2);
-            }
-            else
-            {
-                artistNames = artists.getFirst();
-            }
-
-            ArtistNameLabel.setText(artistNames);
-
-        }
 
         //initialize Progressbar
         progressBar.setStyle("-fx-accent: #FFA500;");
 
-        for (Song song : songs) {
-            currentPlaylist.addSong(song);
+        //initialize currentPlaylist
+        for (int i = 0; i < allSongs.size(); i += 2) {
+            currentPlaylist.addSong(allSongs.get(i));
         }
         updateSongList();
+
+        if (currentPlaylist.getSongs().get(currentSongNumber) != null)
+        {
+            createMediaPlayer();
+
+        }
+        SongTitleLabel.setText("Welcome To Kittyfy");
+        ArtistNameLabel.setText("playing playlist: "+ currentPlaylist.getName());
+
+
     }
 
     /**
@@ -156,8 +134,10 @@ public class HelloController {
             newButton.setPrefHeight(30);
             newButton.setOnAction((ActionEvent event) -> {
                 try {
-                    stop();
+                    stopMusic();
                     playSong(song);
+
+
                 } catch (Exception e) {
                     System.out.println("Failed to play song");
                     e.printStackTrace();
@@ -187,14 +167,43 @@ public class HelloController {
      * @throws Exception
      */
     public void playSong(Song song) throws Exception {
-        songs = Reader.readAllSongs();
+        allSongs = Reader.readAllSongs();
                 try {
                     mediaPlayer = new MediaPlayer(new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString()));
                     SongTitleLabel.setText(song.getTitle());
+
                     //starts the song, and changes the icon.
                     mediaPlayer.pause();
                     isRunning = false;
-                    play();
+                    playMusic();
+
+                    //displays artist based on song object instead of currentSongNumber.
+                    String[] artistArray = song.getFilePath().split(" - ");
+                    ArrayList<String> artists = new ArrayList<>();
+                    artists.addAll(Arrays.asList(artistArray[1].split(", ")));
+                    String artistNames = "";
+                    if (artists.size() > 1) {
+                        for (String artist : artists) {
+                            artistNames += artist + ", ";
+                        }
+                        // Remove the trailing ", "
+                        artistNames = artistNames.substring(0, artistNames.length() - 2);
+                    } else {
+                        artistNames = artists.get(0);
+                    }
+
+                    ArtistNameLabel.setText(artistNames);
+
+                    //displays total duration based on media. (doesn't work)
+                    if(timer != null) {
+                        timer.cancel();
+                        beginTimer();
+                    }
+                    displayDuration();
+
+                    //displays title based on song object.
+                    SongTitleLabel.setText(song.getTitle());
+
                 }catch (Exception e) {
                     System.out.println("Failed to play song");
                     e.printStackTrace();
@@ -207,13 +216,17 @@ public class HelloController {
      * @throws UnsupportedAudioFileException
      * @throws IOException
      */
-    public void play() throws Exception {
+    public void playMusic() throws Exception {
         if (isRunning)
         {
+            if (timer == null){beginTimer();}
+            else {cancelTimer();}
+
             cancelTimer();
             isRunning = false;
             mediaPlayer.pause();
             playButton.setText("😿");
+
 
         }
         else
@@ -223,12 +236,13 @@ public class HelloController {
             mediaPlayer.play();
             playButton.setText("😹");
 
+
             //when the song is finished, skip to the next song.
             if (media.getDuration().toSeconds() <= mediaPlayer.getCurrentTime().toSeconds()) {
                 skip();
             }
         }
-        displayDuration();
+
     }
 
     public void addSongClick() {
@@ -261,23 +275,20 @@ public class HelloController {
 */
 
 
-        for (Song song : songs) {
+        for (Song song : currentPlaylist.getSongs()) {
 
             String artists = String.join(", ", song.getArtist());
 
             if (selectedTitle.equals(song.getTitle() + " by " + artists)) {
-                currentSongNumber = songs.indexOf(song);
+                currentSongNumber = allSongs.indexOf(song);
                 mediaPlayer.stop();
 
                 if (isRunning) {
                     cancelTimer();
                 }
 
-
-                media = new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString());
-                mediaPlayer = new MediaPlayer(media);
-                SongTitleLabel.setText(song.getTitle());
-                play();
+                createMediaPlayer();
+                playMusic();
                 break;
             }
         }
@@ -285,25 +296,25 @@ public class HelloController {
 
     public void skip() throws Exception {
 
-        if(currentSongNumber < songs.size()-1){
+        if(currentSongNumber < currentPlaylist.getSongs().size()-1){
             currentSongNumber++;
-            stop();
+            stopMusic();
             if(isRunning){cancelTimer();}
 
             createMediaPlayer();
 
-            /*isRunning = true;
+            isRunning = true;
             mediaPlayer.play();
             playButton.setText("😹");
             displayDuration();
 
-            */
+
 
 
         }
         else {
             currentSongNumber = 0;
-            stop();
+            stopMusic();
             if(isRunning){cancelTimer();}
 
             createMediaPlayer();
@@ -315,7 +326,7 @@ public class HelloController {
         }
     }
 
-    public void stop(){
+    public void stopMusic(){
         mediaPlayer.stop();
         playButton.setText("😿");
         isRunning = false;
@@ -334,7 +345,7 @@ public class HelloController {
 
         }
         else {
-            currentSongNumber = songs.size() - 1;
+            currentSongNumber = allSongs.size() - 1;
             mediaPlayer.stop();
             if(isRunning){cancelTimer();}
 
@@ -354,10 +365,7 @@ public class HelloController {
         // Format as "min:seconds" with two digits for seconds
         String formattedDuration = String.format("%d:%02d", minutes, seconds);
 
-
-        durationLabel.setText(formattedDuration);
-
-
+        totalDurationLabel.setText(formattedDuration);
     }
     public void beginTimer() {
         if (mediaPlayer == null || media == null) {
@@ -419,15 +427,26 @@ public class HelloController {
 
     public void createMediaPlayer() throws Exception {
         //creates a Media Player
-        media = new Media(new File("src/main/resources/music/" + songs.get(currentSongNumber).getFilePath()).toURI().toString());
+        media = new Media(new File("src/main/resources/music/" + currentPlaylist.getSongs().get(currentSongNumber).getFilePath()).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
-        //show the song title of the first song when initialized
-        SongTitleLabel.setText(songs.get(currentSongNumber).getTitle());
+        displaySongTitleOnLabel();
+        displayArtistOnLabel();
+    }
+    public void displaySongTitleOnLabel() {
+        SongTitleLabel.setText(currentPlaylist.getSongs().get(currentSongNumber).getTitle());
 
+        if (currentSongNumber + 1 >= currentPlaylist.getSongs().size()) {
+            currentSongNumber = 0;
+            System.out.println("Coming up: " + currentPlaylist.getSongs().get(currentSongNumber).getTitle());
+        } else {
+            System.out.println("Coming up: " + currentPlaylist.getSongs().get(currentSongNumber + 1).getTitle());
+        }
+    }
+    public void displayArtistOnLabel(){
         //Displays the artists
-        String[] asa = songs.get(currentSongNumber).getFilePath().split(" - ");
+        String[] artistArray = currentPlaylist.getSongs().get(currentSongNumber).getFilePath().split(" - ");
         ArrayList<String> artists = new ArrayList<>();
-        artists.addAll(Arrays.asList(asa[1].split(", ")));
+        artists.addAll(Arrays.asList(artistArray[1].split(", ")));
         String artistNames = "";
         if (artists.size() > 1)
         {
@@ -443,7 +462,6 @@ public class HelloController {
         }
 
         ArtistNameLabel.setText(artistNames);
-        play();
     }
 
 
