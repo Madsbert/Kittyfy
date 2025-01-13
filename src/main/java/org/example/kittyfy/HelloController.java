@@ -138,14 +138,22 @@ public class HelloController {
         for (Song song : currentPlaylist.getSongs()) {
             ArrayList<String> trimmedArtists = new ArrayList<>();
             for (String artist : song.getArtist()) {
-                trimmedArtists.add(artist.trim());
 
-                Button newButton = new Button(song.getTitle().trim() + " by " + artist);
+                Button newButton = new Button(song.getTitle().trim() + " by " + artist.trim());
                 newButton.setPrefWidth(650);
                 newButton.setPrefHeight(30);
-                newButton.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
+                newButton.setStyle(
+                        "-fx-background-color: #000000; " +
+                                "-fx-text-fill: orange; " +
+                                "-fx-border-color: #FFCC00; " +
+                                "-fx-border-width: 0.5; " +
+                                "-fx-border-radius: 0.5;" +
+                                "-fx-underline: true;" +
+                                "-fx-cursor: hand;"
+                );
+
                 newButton.setAlignment(Pos.CENTER);
-                newButton.setPadding(new Insets(0, 0, 0, 200));
+                newButton.setPadding(new Insets(0, 0, 0, 0));
 
 
                 newButton.setOnAction((ActionEvent event) -> {
