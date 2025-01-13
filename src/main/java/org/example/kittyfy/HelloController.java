@@ -53,6 +53,8 @@ public class HelloController {
     private ScrollPane playlistPane;
 
     @FXML
+    private VBox vBoxPlaylists;
+    @FXML
     private VBox songsVbox;
 
     @FXML
@@ -75,6 +77,7 @@ public class HelloController {
     private static MediaPlayer mediaPlayer;
 
     private ArrayList<Song> allSongs;
+    private ArrayList<Playlist> allPlaylists;
 
     private int currentSongNumber = 0;
 
@@ -108,6 +111,29 @@ public class HelloController {
         }
 
         System.out.println(allSongs.size()+" songs initialized");
+        
+        //initializing playlists
+        allPlaylists = Playlist.getAllPlaylists();
+        
+        //initializing playlists options
+        for(Playlist playlist : allPlaylists){
+            Button playlistButton = new Button(playlist.toString());
+            playlistButton.setPrefWidth(100);
+            playlistButton.setPrefHeight(30);
+            playlistButton.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
+            playlistButton.setAlignment(CENTER_LEFT);
+            playlistButton.setPadding(new Insets(0, 0, 0, 5));
+
+
+            playlistButton.setOnAction(event -> {
+                currentPlaylist = playlist;
+                updateSongList();
+                ArtistNameLabel.setText("Playing playlist: " + currentPlaylist.getName());
+                System.out.println("Current playlist set to: " + currentPlaylist.getName());
+            });
+
+            vBoxPlaylists.getChildren().add(playlistButton);
+        }
 
 
         //initialize Progressbar
@@ -163,6 +189,8 @@ public class HelloController {
             }
         }
     }
+
+   
 
     public void reset() throws Exception {
         resetCounter++;
