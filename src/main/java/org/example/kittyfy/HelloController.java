@@ -173,6 +173,7 @@ public class HelloController {
      * When the button is pushed, the song that is currently playing stops, and the playSong (song) is called.
      */
     public void updateSongList() {
+        songsVbox.getChildren().clear();
         for (Song song : currentPlaylist.getSongs()) {
             ArrayList<String> trimmedArtists = new ArrayList<>();
             for (String artist : song.getArtist()) {
