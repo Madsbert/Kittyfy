@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.HelloController">
     <center>
         <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <children>
@@ -16,11 +26,17 @@
                             <opaqueInsets>
                                 <Insets />
                             </opaqueInsets>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                         </ComboBox>
-                        <Button fx:id="addSong" mnemonicParsing="false" onAction="#addSongClick" prefHeight="40.0" prefWidth="50.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="+">
+                        <Button fx:id="addSong" mnemonicParsing="false" onAction="#addSongClick" prefHeight="40.0" prefWidth="50.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="+">
                             <font>
                                 <Font size="20.0" />
                             </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                         </Button>
                     </children>
                     <VBox.margin>
@@ -89,37 +105,49 @@
                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   </rowConstraints>
                                   <children>
-                                      <Button mnemonicParsing="false" onAction="#reset" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="&lt;&lt;">
+                                      <Button mnemonicParsing="false" onAction="#reset" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="&lt;&lt;">
                                           <font>
                                               <Font size="24.0" />
                                           </font>
                                  <GridPane.margin>
                                     <Insets left="40.0" />
                                  </GridPane.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                                       </Button>
-                                      <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#playMusic" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 2;" text="▶" GridPane.columnIndex="1">
+                                      <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#playMusic" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 2; -fx-text-fill: orange;" text="▶" GridPane.columnIndex="1">
                                           <font>
                                               <Font size="36.0" />
                                           </font>
                                  <GridPane.margin>
                                     <Insets left="20.0" />
                                  </GridPane.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                                       </Button>
-                                      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#skip" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="&gt;&gt;" GridPane.columnIndex="2">
+                                      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#skip" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="&gt;&gt;" GridPane.columnIndex="2">
                                           <font>
                                               <Font size="24.0" />
                                           </font>
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                                       </Button>
-                                      <Button fx:id="stopButton" alignment="CENTER" mnemonicParsing="false" onAction="#stopMusic" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="■" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                      <Button fx:id="stopButton" alignment="CENTER" mnemonicParsing="false" onAction="#stopMusic" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="■" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                           <font>
                                               <Font size="24.0" />
                                           </font>
                                  <GridPane.margin>
                                     <Insets bottom="20.0" left="20.0" top="20.0" />
                                  </GridPane.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                                       </Button>
                                   </children>
                            <padding>
@@ -151,13 +179,16 @@
                   <VBox prefHeight="532.0" prefWidth="167.0" />
                </content>
                 </ScrollPane>
-                <Button mnemonicParsing="false" onAction="#createPlaylist" prefHeight="40.0" prefWidth="225.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="Create Purrlist" textAlignment="CENTER" textFill="WHITE">
+                <Button mnemonicParsing="false" onAction="#createPlaylist" prefHeight="40.0" prefWidth="225.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="Create Purrlist" textAlignment="CENTER" textFill="WHITE">
                     <font>
                         <Font name="Berlin Sans FB Demi Bold" size="18.0" />
                     </font>
                <VBox.margin>
                   <Insets left="20.0" right="20.0" />
                </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
                 </Button>
             </children>
         </VBox>
