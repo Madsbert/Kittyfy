@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -27,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static javafx.geometry.Pos.CENTER_LEFT;
 
 
 public class HelloController {
@@ -94,10 +98,13 @@ public class HelloController {
 
 
         //initializing searchbar options
-
         for (Song song : allSongs) {
-            String artists = String.join(", ", song.getArtist());
-            searchBar.getItems().add(song.getTitle() + " by " + artists);
+            ArrayList<String> trimmedArtists= new ArrayList<>();
+            for (String artist : song.getArtist()) {
+                trimmedArtists.add(artist.trim());
+            }
+            String artists = String.join(", ", trimmedArtists);
+            searchBar.getItems().add(song.getTitle().trim() + " by " + artists);
         }
 
         System.out.println(allSongs.size()+" songs initialized");
@@ -129,21 +136,31 @@ public class HelloController {
      */
     public void updateSongList() {
         for (Song song : currentPlaylist.getSongs()) {
-            Button newButton = new Button(song.getTitle() + " by " + song.getArtist());
-            newButton.setPrefWidth(650);
-            newButton.setPrefHeight(30);
-            newButton.setOnAction((ActionEvent event) -> {
-                try {
-                    stopMusic();
-                    playSong(song);
+            ArrayList<String> trimmedArtists = new ArrayList<>();
+            for (String artist : song.getArtist()) {
+                trimmedArtists.add(artist.trim());
+
+                Button newButton = new Button(song.getTitle().trim() + " by " + artist);
+                newButton.setPrefWidth(650);
+                newButton.setPrefHeight(30);
+                newButton.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
+                newButton.setAlignment(Pos.CENTER);
+                newButton.setPadding(new Insets(0, 0, 0, 200));
 
 
-                } catch (Exception e) {
-                    System.out.println("Failed to play song");
-                    e.printStackTrace();
-                }
-            });
-            songsVbox.getChildren().add(newButton);
+                newButton.setOnAction((ActionEvent event) -> {
+                    try {
+                        stopMusic();
+                        playSong(song);
+
+
+                    } catch (Exception e) {
+                        System.out.println("Failed to play song");
+                        e.printStackTrace();
+                    }
+                });
+                songsVbox.getChildren().add(newButton);
+            }
         }
     }
 
@@ -239,11 +256,16 @@ public class HelloController {
     public void addSongClick() {
     }
 
+    /**
+     * plays the song the user clicks on in the combobox
+     * @throws Exception
+     */
     public void playSongOnClick() throws Exception {
 
         String selectedTitle = searchBar.getValue();
-        if (selectedTitle == null) {
+        if (selectedTitle == null||selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
+            return;
         }
         /*
         String search = "To";
@@ -266,23 +288,32 @@ public class HelloController {
 */
 
 
-        for (Song song : currentPlaylist.getSongs()) {
+        for (Song song : allSongs) {
+            ArrayList<String> trimmedArtists= new ArrayList<>();
+            for (String artist : song.getArtist()) {
+                trimmedArtists.add(artist.trim());
+            }
+            String artists = String.join(", ", trimmedArtists);
 
-            String artists = String.join(", ", song.getArtist());
 
-            if (selectedTitle.equals(song.getTitle() + " by " + artists)) {
+            if (selectedTitle.equals(song.getTitle().trim() + " by " + artists)) {
                 currentSongNumber = allSongs.indexOf(song);
-                mediaPlayer.stop();
+                if(mediaPlayer!=null) {
+                    mediaPlayer.stop();
+                }
 
                 if (isRunning) {
                     cancelTimer();
                 }
 
-                createMediaPlayer();
+                //createMediaPlayer();
+                media = new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString());
+                mediaPlayer = new MediaPlayer(media);
                 playMusic();
-                break;
+                return;
             }
         }
+        System.out.println("No song selected!");
     }
 
     public void skip() throws Exception {

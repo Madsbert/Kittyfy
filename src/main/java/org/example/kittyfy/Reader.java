@@ -15,7 +15,7 @@ public class Reader {
 
         for (File file : files) {
             songsFileNames.add("\"" + file.getName().trim() + "\"");
-            //songsFileNames.add(file.getName());
+            songsFileNames.add(file.getName());
 
         }
 
@@ -24,7 +24,7 @@ public class Reader {
 
         for (String fileName : songsFileNames) {
             if (!fileName.endsWith(".wav\"")) { continue; }
-            fileName = fileName.trim();
+            fileName = fileName;
             String[] rows = fileName.split(" - ");
             String songName = rows[0].substring(1);
 

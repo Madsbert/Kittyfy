@@ -20,14 +20,14 @@ public class Song {
     public Song(String title, String genre, String filePath) {
         this.title = title;
         this.genre = genre;
-        this.filePath = filePath.trim();
+        this.filePath = filePath;
     }
 
     public Song(String title, ArrayList<String> artist, String genre, String filePath) {
         this.title = title;
         this.artist = artist;
         this.genre = genre;
-        this.filePath = filePath.trim();
+        this.filePath = filePath;
     }
 
     public String getTitle() {
