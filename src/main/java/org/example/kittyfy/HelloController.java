@@ -509,8 +509,4 @@ public class HelloController {
         stage.setScene(new Scene(root));
         stage.show();
     }
-
-
-
-
 }
