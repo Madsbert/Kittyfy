@@ -114,7 +114,8 @@ public class CreatePlaylistController {
         Playlist newPlaylist = new Playlist(playlistName, playlistSongs);
         newPlaylist.setLastPlayed(0);
 
-        Playlist.createPlaylist(newPlaylist);
+        int playlistID = Playlist.createPlaylist(newPlaylist);
+        newPlaylist.setPlaylistId(playlistID);
 
         BridgePlaylistSong.addSongsToPlaylist(newPlaylist);
 
