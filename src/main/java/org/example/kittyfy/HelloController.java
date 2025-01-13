@@ -205,9 +205,6 @@ public class HelloController {
                 SongTitleLabel.setText(song.getTitle());
             });
 
-            //starts the song, and changes the icon.
-            isRunning = true;
-
             if (fromPlaylist)
             {
                 currentSongNumber = currentPlaylist.getSongIndex(song);
@@ -219,6 +216,7 @@ public class HelloController {
             else {cancelTimer();}
 
             mediaPlayer.play();
+            isRunning = true;
 
             checkIcon();
             displayArtistBasedOnSong(song);
