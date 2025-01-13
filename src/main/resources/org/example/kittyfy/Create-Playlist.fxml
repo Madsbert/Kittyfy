@@ -21,7 +21,7 @@
                      <HBox.margin>
                         <Insets bottom="30.0" left="130.0" top="30.0" />
                      </HBox.margin></ComboBox>
-                  <Button mnemonicParsing="false" onAction="#addSongPlaylist" prefHeight="40.0" prefWidth="63.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="+">
+                  <Button mnemonicParsing="false" onAction="#addSongPlaylist" prefHeight="40.0" prefWidth="63.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" text="+">
                      <HBox.margin>
                         <Insets top="30.0" />
                      </HBox.margin>
@@ -38,7 +38,7 @@
             </ChoiceBox>
             <HBox prefHeight="71.0" prefWidth="650.0">
                <children>
-                  <Button minHeight="40.0" mnemonicParsing="false" onAction="#cancel" prefHeight="40.0" prefWidth="95.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="Cancel ">
+                  <Button minHeight="40.0" mnemonicParsing="false" onAction="#cancel" prefHeight="40.0" prefWidth="95.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" text="Cancel ">
                      <font>
                         <Font name="Berlin Sans FB Demi Bold" size="16.0" />
                      </font>
@@ -46,7 +46,7 @@
                         <Insets left="130.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#createPlaylist" prefHeight="40.0" prefWidth="95.0" style="-fx-text-fill: white; -fx-background-color: #000000; -fx-background-radius: 15;" text="Create">
+                  <Button mnemonicParsing="false" onAction="#createPlaylist" prefHeight="40.0" prefWidth="95.0" style="-fx-text-fill: orange; -fx-background-color: #000000; -fx-background-radius: 15;" text="Create">
                      <font>
                         <Font name="Berlin Sans FB Demi Bold" size="16.0" />
                      </font>
