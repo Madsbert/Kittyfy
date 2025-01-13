@@ -66,19 +66,27 @@ public class Playlist {
      * @param playlist
      * @throws Exception
      */
-    public static void createPlaylist(Playlist playlist) throws Exception {
-        String sql = "INSERT INTO dbo.tblPlaylist VALUES (?, ?, ?)";
+    public static int createPlaylist(Playlist playlist) throws Exception {
+        String sql = "INSERT INTO dbo.TblPlaylist (fldPlaylistName,fldLastPlayed) VALUES (?, ?)";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, playlist.getName());
         pstmt.setLong(2, playlist.getLastPlayed());
-        pstmt.setInt(3, playlist.getPlaylistId());
+
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Playlist created successfully.");
+            sql = "SELECT * FROM dbo.TblPlaylist WHERE fldPlaylistName = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, playlist.getName());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("fldPlaylistId");
+            }
         } else {
             System.out.println("Failed to update the playlist.");
         }
+        return -1;
     }
 
     /**
@@ -87,14 +95,14 @@ public class Playlist {
      * @throws Exception
      */
     public void updatePlaylist(Playlist playlist) throws Exception {
-        String sql = "UPDATE dbo.tblPlaylist SET " +
+        String sql = "UPDATE dbo.TblPlaylist SET " +
                 "fldPlaylistName = ?," +
                 "fldLastPlayed = ? WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, playlist.getName());
-        pstmt.setLong(2, playlist.getLastPlayed());
-        pstmt.setInt(3, playlist.getPlaylistId());
+        pstmt.setInt(2, playlist.getPlaylistId());
+        pstmt.setLong(3, playlist.getLastPlayed());
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Playlist updated successfully.");
@@ -110,7 +118,7 @@ public class Playlist {
      * @throws Exception
      */
     public static Playlist getPlaylist(int playlistId) throws Exception {
-        String sql = "SELECT * from dbo.tblPlaylist WHERE fldPlaylistID = ?";
+        String sql = "SELECT * from dbo.TblPlaylist WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, playlistId);
@@ -138,7 +146,7 @@ public class Playlist {
      * @throws Exception
      */
     public static void deletePlaylist(Playlist playlist) throws Exception {
-        String sql = "DELETE FROM dbo.tblPlaylist WHERE fldPlaylistID = ?";
+        String sql = "DELETE FROM dbo.TblPlaylist WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, playlist.getPlaylistId());
@@ -156,7 +164,7 @@ public class Playlist {
      * @throws Exception
      */
     public static ArrayList<Playlist> getAllPlaylists() throws Exception {
-        String sql = "Select * from dbo.tblPlaylist";
+        String sql = "Select * from dbo.TblPlaylist";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         ResultSet resultSet = pstmt.executeQuery();

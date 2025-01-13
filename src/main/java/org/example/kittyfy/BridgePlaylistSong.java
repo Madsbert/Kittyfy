@@ -19,7 +19,7 @@ public class BridgePlaylistSong {
     }
 
     public static void deleteSongsInPlaylist(Playlist playlist) throws Exception {
-        String sql = "Delete from dbo.tblPlaylistSong WHERE fldPlaylistID = ?";
+        String sql = "Delete from dbo.TblPlaylistSong WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, playlist.getPlaylistId());
@@ -38,8 +38,7 @@ public class BridgePlaylistSong {
      * @throws Exception
      */
     public static void addSongsToPlaylist(Playlist playlist) throws Exception {
-        String sql = "INSERT INTO dbo.tblPlaylistSong " +
-                "VALUES(fldPlaylistID = ?, fldSongID = ?)";
+        String sql = "INSERT INTO dbo.TblPlaylistSong (fldPlaylistID, fldSongID) VALUES (?, ?)";
         Connection conn = DB.getConnection();
 
         PreparedStatement pstmt;
@@ -64,7 +63,7 @@ public class BridgePlaylistSong {
      * @throws Exception
      */
     public static ArrayList<Song> getAllSongsInPlaylist(int playlistID) throws Exception {
-        String sql = "Select * from dbo.tblPlaylistSong WHERE fldPlaylistID = ?";
+        String sql = "Select * from dbo.TblPlaylistSong WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, playlistID);
