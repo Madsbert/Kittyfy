@@ -83,6 +83,7 @@ public class HelloController {
     private boolean isRunning = false;
     private int resetCounter;
     private Playlist currentPlaylist;
+    private Song currentSong;
 
     /**
      * Initializes different aspects of the program, including: Pictures, songs from database, searchbar, buttons
@@ -125,8 +126,8 @@ public class HelloController {
 
         if (currentPlaylist.getSongs().get(currentSongNumber) != null)
         {
-            createMediaPlayer(allSongs.get(0));
-
+            createMediaPlayer(allSongs.getFirst());
+            currentSong = allSongs.getFirst();
         }
         SongTitleLabel.setText("Welcome To Kittyfy");
         ArtistNameLabel.setText("playing playlist: "+ currentPlaylist.getName());
@@ -212,6 +213,7 @@ public class HelloController {
                 currentSongNumber = currentPlaylist.getSongIndex(song);
             }
 
+            currentSong = song;
 
             if (timer == null){beginTimer();}
             else {cancelTimer();}
@@ -237,11 +239,11 @@ public class HelloController {
     private void checkIcon() {
         if (isRunning)
         {
-            playButton.setText("😿");
+            playButton.setText("😹");
         }
         else
         {
-            playButton.setText("😹");
+            playButton.setText("😿");
         }
     }
 
@@ -252,7 +254,19 @@ public class HelloController {
      * @throws IOException
      */
     public void playMusic() throws Exception {
-       playSong(currentPlaylist.getSongs().get(currentSongNumber), false);
+
+       if (isRunning){
+           isRunning = false;
+           checkIcon();
+           mediaPlayer.pause();
+       }
+       else {
+           isRunning = true;
+           checkIcon();
+           mediaPlayer.play();
+           displayArtistBasedOnSong(currentSong);
+           displaySongTitleOnLabel(currentSong);
+       }
     }
 
     public void addSongClick() {
