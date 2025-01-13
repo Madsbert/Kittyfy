@@ -30,7 +30,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                         </ComboBox>
-                        <Button fx:id="addSong" mnemonicParsing="false" onAction="#addSongClick" prefHeight="40.0" prefWidth="50.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="+">
+                        <Button fx:id="addSong" mnemonicParsing="false" onAction="#addSongClick" prefHeight="40.0" prefWidth="50.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="+">
                             <font>
                                 <Font size="20.0" />
                             </font>
@@ -105,7 +105,7 @@
                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   </rowConstraints>
                                   <children>
-                                      <Button mnemonicParsing="false" onAction="#reset" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="&lt;&lt;">
+                                      <Button mnemonicParsing="false" onAction="#reset" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="&lt;&lt;">
                                           <font>
                                               <Font size="24.0" />
                                           </font>
@@ -116,7 +116,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                       </Button>
-                                      <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#playMusic" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 2;" text="▶" GridPane.columnIndex="1">
+                                      <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#playMusic" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 2; -fx-text-fill: orange;" text="▶" GridPane.columnIndex="1">
                                           <font>
                                               <Font size="36.0" />
                                           </font>
@@ -127,7 +127,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                       </Button>
-                                      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#skip" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="&gt;&gt;" GridPane.columnIndex="2">
+                                      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#skip" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="&gt;&gt;" GridPane.columnIndex="2">
                                           <font>
                                               <Font size="24.0" />
                                           </font>
@@ -138,7 +138,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                       </Button>
-                                      <Button fx:id="stopButton" alignment="CENTER" mnemonicParsing="false" onAction="#stopMusic" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="■" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                      <Button fx:id="stopButton" alignment="CENTER" mnemonicParsing="false" onAction="#stopMusic" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="■" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                           <font>
                                               <Font size="24.0" />
                                           </font>
@@ -179,7 +179,7 @@
                   <VBox prefHeight="154.0" prefWidth="166.0" />
                </content>
                 </ScrollPane>
-                <Button mnemonicParsing="false" onAction="#createPlaylist" prefHeight="40.0" prefWidth="225.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;" text="Create Purrlist" textAlignment="CENTER" textFill="WHITE">
+                <Button mnemonicParsing="false" onAction="#createPlaylist" prefHeight="40.0" prefWidth="225.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="Create Purrlist" textAlignment="CENTER" textFill="WHITE">
                     <font>
                         <Font name="Berlin Sans FB Demi Bold" size="18.0" />
                     </font>
