@@ -121,7 +121,7 @@ public class HelloController {
 
         //initializing playlists options
         for(Playlist playlist : allPlaylists){
-            Button playlistButton = new Button(playlist.toString());
+            Button playlistButton = new Button(playlist.getName());
             playlistButton.setPrefWidth(100);
             playlistButton.setPrefHeight(30);
             playlistButton.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
@@ -137,6 +137,13 @@ public class HelloController {
             });
 
             vBoxPlaylists.getChildren().add(playlistButton);
+        }
+
+        //checks if there are songs in playlist
+        if (!currentPlaylist.getSongs().isEmpty()) {
+            createMediaPlayer(allSongs.get(0));
+        } else {
+            System.out.println("Playlist is empty.");
         }
 
 
@@ -170,7 +177,7 @@ public class HelloController {
             ArrayList<String> trimmedArtists = new ArrayList<>();
             for (String artist : song.getArtist()) {
                 trimmedArtists.add(artist.trim());
-                Button newButton = new Button(song.getTitle().trim() + " by " + artist.trim());
+                Button newButton = new Button(song.getTitle().trim() + " by " + String.join(",", artist.trim()));
                 newButton.setPrefWidth(650);
                 newButton.setPrefHeight(30);
                 newButton.setStyle(

@@ -170,7 +170,7 @@ public class Playlist {
         ResultSet resultSet = pstmt.executeQuery();
         ArrayList<Playlist> allPlaylists = new ArrayList<>();
         while (resultSet.next()) {
-            String playlistName = "Not set Error";
+            String playlistName = "Not set Error2";
             long lastPlayed = 0;
             int playlistID = 0;
             if (resultSet.next()) {
