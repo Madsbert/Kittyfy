@@ -203,6 +203,9 @@ public class HelloController {
                     mediaPlayer.pause();
                     isRunning = false;
                     playMusic();
+                    currentSongNumber = currentPlaylist.getSongIndex(song);
+                    displayArtistBasedOnSong(song);
+                    displaySongTitleOnLabel();
 
                     //displays total duration based on media. (doesn't work)
                     if(timer != null) {
@@ -244,6 +247,7 @@ public class HelloController {
             playButton.setText("😹");
             displayArtistOnLabel();
             displaySongTitleOnLabel();
+
 
             //when the song is finished, skip to the next song.
             if (media.getDuration().toSeconds() <= mediaPlayer.getCurrentTime().toSeconds()) {
