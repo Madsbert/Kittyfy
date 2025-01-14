@@ -131,20 +131,27 @@ public class Song {
         Song curSong = null;
         ResultSet resultSet = pstmt.executeQuery();
         if (resultSet.next()) {
-            String name = resultSet.getString("fldSongName");
+            String name = resultSet.getString("fldSongName").trim();
             int genreID = resultSet.getInt("fldGenreID");
-            String filePath = resultSet.getString("fldFilePath");
+            String filePath = resultSet.getString("fldFilePath").trim();
 
-            sql = "SELECT fldGenreName FROM dbo.tblGenre Where fldGenreID = ?";
+            sql = "SELECT fldGenreName FROM dbo.TblGenre Where fldGenreID = ?";
             pstmt = DB.getConnection().prepareStatement(sql);
             pstmt.setInt(1, genreID);
 
             String genreName = "";
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                genreName = rs.getString(0);
+                genreName = rs.getString(1);
             }
+
             curSong = new Song(name, genreName, filePath);
+
+            ArrayList<String> artists = new ArrayList<>();
+            for(int artistID : BridgeSongArtist.getAllArtistIDsFromSongIDs(songID)){
+                artists.add(BridgeSongArtist.getArtistName(artistID).trim());
+            }
+            curSong.setArtist(artists);
             curSong.setSongID(songID);
         }
 

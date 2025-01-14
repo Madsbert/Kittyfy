@@ -1,5 +1,7 @@
 package org.example.kittyfy;
 
+import javafx.scene.control.Button;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +14,7 @@ public class Playlist {
     private String name;
     private long lastPlayed;
     private ArrayList<Song> songs;
+    public Button playlistButton;
 
     public long getLastPlayed() {
         return lastPlayed;
@@ -169,16 +172,12 @@ public class Playlist {
         PreparedStatement pstmt = conn.prepareStatement(sql);
         ResultSet resultSet = pstmt.executeQuery();
         ArrayList<Playlist> allPlaylists = new ArrayList<>();
-        while (resultSet.next()) {
-            String playlistName = "Not set Error2";
-            long lastPlayed = 0;
-            int playlistID = 0;
-            if (resultSet.next()) {
-                playlistName = resultSet.getString("fldPlaylistName");
-                lastPlayed = resultSet.getLong("fldLastPlayed");
-                playlistID = resultSet.getInt("fldPlaylistID");
 
-            }
+        while (resultSet.next()) {
+           String playlistName = resultSet.getString("fldPlaylistName").trim();
+           long lastPlayed = resultSet.getLong("fldLastPlayed");
+           int playlistID = resultSet.getInt("fldPlaylistID");
+
             Playlist newPlaylist = new Playlist(playlistName, BridgePlaylistSong.getAllSongsInPlaylist(playlistID));
             newPlaylist.setLastPlayed(lastPlayed);
             newPlaylist.setPlaylistId(playlistID);
