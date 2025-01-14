@@ -568,7 +568,7 @@ public class HelloController {
         stage.show();
     }
 
-    public void initzializePlaylists() throws Exception {
+
     public void shuffle()
     {
         if (isShuffleMode)
@@ -584,7 +584,7 @@ public class HelloController {
         }
     }
 
-    public void initzializePlaylist() throws Exception {
+    public void initzializePlaylists() throws Exception {
         //initializing playlists
         allPlaylists = Playlist.getAllPlaylists();
         System.out.println(allPlaylists.size()+" playlists initialized");
@@ -677,7 +677,10 @@ public class HelloController {
                 }
             });
         }
+
     }
+
+
 
 
 }
