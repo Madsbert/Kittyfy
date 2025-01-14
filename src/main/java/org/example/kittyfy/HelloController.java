@@ -102,7 +102,7 @@ public class HelloController {
         pictures.setImage(defaultImage);
         playButton.setText("😿");
         stopButton.setText("\uD83D\uDE40");
-        currentPlaylist = new Playlist("test", new ArrayList<>());
+        currentPlaylist = new Playlist("ERROR MISSING CODE", new ArrayList<>());
 
         //initialize Songs
         allSongs = Reader.readAllSongs();
@@ -127,7 +127,11 @@ public class HelloController {
 
        if(!allPlaylists.isEmpty()) {
             currentPlaylist = allPlaylists.get(0);
-        }
+       }
+       else
+       {
+           currentPlaylist = new Playlist("All songs", allSongs);
+       }
         //initializing playlists options
        for(Playlist playlist : allPlaylists){
             Button playlistButton = new Button(playlist.getName());
