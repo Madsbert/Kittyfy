@@ -1,6 +1,7 @@
 package org.example.kittyfy;
 
 import javafx.scene.control.Button;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -148,7 +149,7 @@ public class Playlist {
      * @param playlist
      * @throws Exception
      */
-    public static void deletePlaylist(Playlist playlist) throws Exception {
+    public static void deletePlaylist(@NotNull Playlist playlist) throws Exception {
         String sql = "DELETE FROM dbo.TblPlaylist WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);

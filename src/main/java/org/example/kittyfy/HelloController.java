@@ -22,7 +22,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.util.Duration;
@@ -123,7 +122,7 @@ public class HelloController {
 
 
         //initializing playlists
-        initzializePlaylist();
+        initzializePlaylists();
 
         //initializing playlists options
        initzializePlaylistOptions();
@@ -557,7 +556,7 @@ public class HelloController {
         stage.show();
     }
 
-    public void initzializePlaylist() throws Exception {
+    public void initzializePlaylists() throws Exception {
         //initializing playlists
         allPlaylists = Playlist.getAllPlaylists();
         System.out.println(allPlaylists.size()+" playlists initialized");
