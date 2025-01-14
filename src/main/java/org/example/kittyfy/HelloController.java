@@ -18,6 +18,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -122,54 +123,11 @@ public class HelloController {
 
 
         //initializing playlists
-        allPlaylists = Playlist.getAllPlaylists();
-        System.out.println(allPlaylists.size()+" playlists initialized");
+        initzializePlaylist();
 
-       if(!allPlaylists.isEmpty()) {
-            currentPlaylist = allPlaylists.get(0);
-       }
-       else
-       {
-           currentPlaylist = new Playlist("All songs", allSongs);
-       }
         //initializing playlists options
-       for(Playlist playlist : allPlaylists){
-            Button playlistButton = new Button(playlist.getName());
-            playlistButton.setPrefWidth(100);
-            playlistButton.setPrefHeight(30);
-            playlistButton.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: orange;");
-            playlistButton.setAlignment(CENTER_LEFT);
-            playlistButton.setPadding(new Insets(0, 0, 0, 5));
-            playlist.playlistButton = playlistButton;
+       initzializePlaylistOptions();
 
-
-            playlistButton.setOnAction(event -> {
-
-                currentPlaylist = playlist;
-                currentSongNumber=0;
-                currentSong = currentPlaylist.getSongs().get(currentSongNumber);
-                try {
-                    playSong(currentSong,true);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                updateSongList();
-                ArtistNameLabel.setText("Playing playlist: " + currentPlaylist.getName());
-                System.out.println("Current playlist set to: " + currentPlaylist.getName());
-                playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: white;");
-                playlistButton.setUnderline(true);
-                for(Playlist curPlaylist: allPlaylists){
-                    if(!curPlaylist.getName().equals(currentPlaylist.getName())){
-                        curPlaylist.playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: orange;");
-                        curPlaylist.playlistButton.setUnderline(false);
-                    }
-                }
-            });
-
-
-
-            vBoxPlaylists.getChildren().add(playlistButton);
-        }
 
         //checks if there are songs in playlist
         if (!currentPlaylist.getSongs().isEmpty()) {
@@ -184,10 +142,6 @@ public class HelloController {
         //initialize Progressbar
         progressBar.setStyle("-fx-accent: #FFA500;");
 
-        //initialize currentPlaylist
-        //for (int i = 0; i < allSongs.size(); i += 2) {
-            //currentPlaylist.addSong(allSongs.get(i));
-        //}
 
         //initialize all songs in the song in playlist box
         updateSongList();
@@ -601,5 +555,72 @@ public class HelloController {
         stage.setTitle("Create Playlist");
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+    public void initzializePlaylist() throws Exception {
+        //initializing playlists
+        allPlaylists = Playlist.getAllPlaylists();
+        System.out.println(allPlaylists.size()+" playlists initialized");
+
+        if(!allPlaylists.isEmpty()) {
+            currentPlaylist = allPlaylists.get(0);
+        }
+        else
+        {
+            currentPlaylist = new Playlist("All songs", allSongs);
+        }
+    }
+
+    public void initzializePlaylistOptions() {
+        HBox currentHBox= null;
+
+        //PLaylist buttons
+        for(Playlist playlist : allPlaylists){
+            Button playlistButton = new Button(playlist.getName());
+            playlistButton.setPrefWidth(150);
+            playlistButton.setPrefHeight(30);
+            playlistButton.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: orange;");
+            playlistButton.setAlignment(CENTER_LEFT);
+            playlistButton.setPadding(new Insets(0, 0, 0, 5));
+            playlist.playlistButton = playlistButton;
+
+            //Edit Button
+            Button editButton = new Button();
+            Image editImage = new Image(getClass().getResource("/Pictures/EditIcon.png").toExternalForm());
+            ImageView imageView = new ImageView(editImage);
+            imageView.setFitWidth(15);
+            imageView.setFitHeight(22);
+            editButton.setGraphic(imageView);
+
+            currentHBox = new HBox();
+            currentHBox.setSpacing(0);
+            currentHBox.setPadding(new Insets(0, 0, 0, 0));
+            vBoxPlaylists.getChildren().add(currentHBox);
+
+            playlistButton.setOnAction(event -> {
+
+                currentPlaylist = playlist;
+                currentSongNumber=0;
+                currentSong = currentPlaylist.getSongs().get(currentSongNumber);
+                try {
+                    playSong(currentSong,true);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                updateSongList();
+                ArtistNameLabel.setText("Playing playlist: " + currentPlaylist.getName());
+                System.out.println("Current playlist set to: " + currentPlaylist.getName());
+                playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: white;");
+                playlistButton.setUnderline(true);
+                for(Playlist curPlaylist: allPlaylists){
+                    if(!curPlaylist.getName().equals(currentPlaylist.getName())){
+                        curPlaylist.playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: orange;");
+                        curPlaylist.playlistButton.setUnderline(false);
+                    }
+                }
+            });
+
+            currentHBox.getChildren().addAll(playlistButton, editButton);
+        }
     }
 }
