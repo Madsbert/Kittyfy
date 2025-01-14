@@ -146,7 +146,7 @@ public class CreatePlaylistController {
         Label newLabel = new Label (selectedTitle);
         newLabel.setPrefWidth(650);
         newLabel.setPrefHeight(30);
-        newLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
+        newLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: orange;");
         newLabel.setAlignment(Pos.CENTER_LEFT);
         newLabel.setPadding(new Insets(0, 10, 0,10 ));
 
