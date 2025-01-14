@@ -105,8 +105,8 @@ public class Playlist {
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, playlist.getName());
-        pstmt.setInt(2, playlist.getPlaylistId());
-        pstmt.setLong(3, playlist.getLastPlayed());
+        pstmt.setLong(2, playlist.getLastPlayed());
+        pstmt.setInt(3, playlist.getPlaylistId());
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Playlist updated successfully.");

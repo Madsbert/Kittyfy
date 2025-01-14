@@ -160,7 +160,6 @@ public class EditPlaylistController {
             return;
         }
 
-        playlist.setName(playlistName);
 
         ArrayList<Song> playlistSongs = new ArrayList<>();
         for (Node node : songsInPlaylist.getChildren()) {
@@ -177,6 +176,7 @@ public class EditPlaylistController {
             return;
         }
 
+        playlist.setName(playlistName);
         playlist.setSongs(playlistSongs);
 
         BridgePlaylistSong.updateSongsInPlaylist(playlist);

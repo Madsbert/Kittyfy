@@ -661,6 +661,7 @@ public class HelloController {
             });
 
             editButton.setOnAction(event -> {
+                onClose();
                 try{
                 FXMLLoader fxmlLoader = new FXMLLoader(EditPlaylistController.class.getResource("Edit-Playlist.fxml"));
                 Parent root = fxmlLoader.load();
