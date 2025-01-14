@@ -592,9 +592,11 @@ public class HelloController {
             imageView.setFitHeight(22);
             editButton.setGraphic(imageView);
 
+            //Make HBox and add buttons
             currentHBox = new HBox();
             currentHBox.setSpacing(0);
             currentHBox.setPadding(new Insets(0, 0, 0, 0));
+            currentHBox.getChildren().addAll(playlistButton, editButton);
             vBoxPlaylists.getChildren().add(currentHBox);
 
             playlistButton.setOnAction(event -> {
@@ -620,7 +622,24 @@ public class HelloController {
                 }
             });
 
-            currentHBox.getChildren().addAll(playlistButton, editButton);
+            editButton.setOnAction(event -> {
+                try{
+                FXMLLoader fxmlLoader = new FXMLLoader(EditPlaylistController.class.getResource("Edit-Playlist.fxml"));
+                Parent root = fxmlLoader.load();
+
+                EditPlaylistController controller = fxmlLoader.getController();
+                controller.setPlaylist(playlist);
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setTitle("Edit Playlist");
+                stage.setScene(new Scene(root));
+                stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
+
+
 }
