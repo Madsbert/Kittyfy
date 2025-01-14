@@ -98,7 +98,7 @@ public class Playlist {
      * @param playlist
      * @throws Exception
      */
-    public void updatePlaylist(Playlist playlist) throws Exception {
+    public static void updatePlaylist(Playlist playlist) throws Exception {
         String sql = "UPDATE dbo.TblPlaylist SET " +
                 "fldPlaylistName = ?," +
                 "fldLastPlayed = ? WHERE fldPlaylistID = ?";

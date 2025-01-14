@@ -119,10 +119,62 @@ public class EditPlaylistController {
         shiftScene(event);
     }
 
-    public void deletePlaylistButton(ActionEvent event) throws Exception {
-        Playlist.deletePlaylist(playlist);
+    private Song findSongByTitle (String title) {
+        for (Song song : allSongs) {
+            if (title.contains(song.getTitle())) {
+                return song;
+            }
+        }
+        return null;
+    }
+
+    public void saveChangesButton(ActionEvent event) throws Exception {
+
+        String playlistName = this.playlistNameTextfield.getText();
+        if (playlistName == null || playlistName.isEmpty()) {
+            System.out.println("Playlist name cannot be empty");
+            return;
+        }
+
+        playlist.setName(playlistName);
+
+        ArrayList<Song> playlistSongs = new ArrayList<>();
+        for (Node node : songsInPlaylist.getChildren()) {
+            if (node instanceof Label) {
+                String labelText = ((Label) node).getText();
+                Song song = findSongByTitle(labelText);
+                if (song != null) {
+                    playlistSongs.add(song);
+                }
+            }
+        }
+        if (playlistSongs.isEmpty()) {
+            System.out.println("No songs found. You must add at least one song.");
+            return;
+        }
+
+        playlist.setSongs(playlistSongs);
+
+        BridgePlaylistSong.updateSongsInPlaylist(playlist);
+        Playlist.updatePlaylist(playlist);
+
         shiftScene(event);
     }
+
+    public void deletePlaylistButton(ActionEvent event) throws Exception {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Playlist");
+        alert.setHeaderText("Are you sure you want to delete this playlist?");
+        alert.setContentText("This action cannot be undone.");
+
+        if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            BridgePlaylistSong.deleteSongsInPlaylist(playlist);
+            Playlist.deletePlaylist(playlist);
+            System.out.println("Playlist deleted: " + playlist.getName());
+            shiftScene(event);
+        }
+    }
+
     //method to shift scenes
     private void shiftScene(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloController.class.getResource("hello-view.fxml"));
