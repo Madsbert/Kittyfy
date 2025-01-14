@@ -102,7 +102,7 @@ public class HelloController {
         pictures.setImage(defaultImage);
         playButton.setText("😿");
         stopButton.setText("\uD83D\uDE40");
-        shuffleButton.setText("\uD83D\uDD00");
+        shuffleButton.setText("Shuffle");
         currentPlaylist = new Playlist("ERROR MISSING CODE", new ArrayList<>());
 
         //initialize Songs
@@ -148,7 +148,7 @@ public class HelloController {
 
                 currentPlaylist = playlist;
                 if (isShuffleMode) {
-                    currentSongNumber = new Random().nextInt(allSongs.size());
+                    currentSongNumber = new Random().nextInt(currentPlaylist.getSongs().size());
                 }
                 else
                 {
@@ -408,16 +408,20 @@ public class HelloController {
         int forward = 1;
         if (isShuffleMode)
         {
-            forward = new Random().nextInt(1, currentPlaylist.getSongs().size()/2);
+            forward = new Random().nextInt(2, currentPlaylist.getSongs().size()/2 + 1);
         }
 
         if(currentSongNumber + forward <= currentPlaylist.getSongs().size()-1){
             currentSongNumber += forward;
         }
         else {
-            currentSongNumber = currentSongNumber + forward - currentPlaylist.getSongs().size()-1;
+            currentSongNumber = (currentSongNumber + forward) - currentPlaylist.getSongs().size() - 1;
         }
 
+        if (currentSongNumber < 0)
+        {
+            currentSongNumber = 0;
+        }
         playSong(currentPlaylist.getSongs().get(currentSongNumber), true);
     }
 
@@ -622,12 +626,13 @@ public class HelloController {
         if (isShuffleMode)
         {
             isShuffleMode = false;
-            shuffleButton.setStyle("-fx-background-color: BLACK");
+            shuffleButton.setStyle("-fx-text-fill: ORANGE; -fx-background-color: BLACK;");
         }
         else
         {
             isShuffleMode = true;
-            shuffleButton.setStyle("-fx-background-color: WHITE");
+            shuffleButton.setStyle("-fx-text-fill: WHITE; -fx-background-color: BLACK;");
+            shuffleButton.setUnderline(true);
         }
     }
 }
