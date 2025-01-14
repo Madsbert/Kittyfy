@@ -26,10 +26,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.CENTER_LEFT;
@@ -83,12 +80,16 @@ public class HelloController {
 
     private int currentSongNumber = 0;
 
+    @FXML
+    private Button shuffleButton;
+
     private static Timer timer;
     private TimerTask timerTask;
     private boolean isRunning = false;
     private int resetCounter;
     private Playlist currentPlaylist;
     private Song currentSong;
+    private boolean isShuffleMode = false;
 
     /**
      * Initializes different aspects of the program, including: Pictures, songs from database, searchbar, buttons
@@ -102,6 +103,7 @@ public class HelloController {
         pictures.setImage(defaultImage);
         playButton.setText("😿");
         stopButton.setText("\uD83D\uDE40");
+        shuffleButton.setText("Shuffle");
         currentPlaylist = new Playlist("ERROR MISSING CODE", new ArrayList<>());
 
         //initialize Songs
@@ -350,14 +352,24 @@ public class HelloController {
      * @throws Exception
      */
     public void skip() throws Exception {
-        currentSongNumber++;
-        if(currentSongNumber <= currentPlaylist.getSongs().size()-1){
-            playSong(currentPlaylist.getSongs().get(currentSongNumber), true);
+        int forward = 1;
+        if (isShuffleMode)
+        {
+            forward = new Random().nextInt(2, currentPlaylist.getSongs().size()/2 + 1);
+        }
+
+        if(currentSongNumber + forward <= currentPlaylist.getSongs().size()-1){
+            currentSongNumber += forward;
         }
         else {
-            currentSongNumber = 0;
-            playSong(currentPlaylist.getSongs().get(currentSongNumber), true);
+            currentSongNumber = (currentSongNumber + forward) - currentPlaylist.getSongs().size() - 1;
         }
+
+        if (currentSongNumber < 0)
+        {
+            currentSongNumber = 0;
+        }
+        playSong(currentPlaylist.getSongs().get(currentSongNumber), true);
     }
 
     /**
@@ -557,6 +569,22 @@ public class HelloController {
     }
 
     public void initzializePlaylists() throws Exception {
+    public void shuffle()
+    {
+        if (isShuffleMode)
+        {
+            isShuffleMode = false;
+            shuffleButton.setStyle("-fx-text-fill: ORANGE; -fx-background-color: BLACK;");
+        }
+        else
+        {
+            isShuffleMode = true;
+            shuffleButton.setStyle("-fx-text-fill: WHITE; -fx-background-color: BLACK;");
+            shuffleButton.setUnderline(true);
+        }
+    }
+
+    public void initzializePlaylist() throws Exception {
         //initializing playlists
         allPlaylists = Playlist.getAllPlaylists();
         System.out.println(allPlaylists.size()+" playlists initialized");
@@ -599,6 +627,17 @@ public class HelloController {
             vBoxPlaylists.getChildren().add(currentHBox);
 
             playlistButton.setOnAction(event -> {
+
+                currentPlaylist = playlist;
+                if (isShuffleMode) {
+                    currentSongNumber = new Random().nextInt(currentPlaylist.getSongs().size());
+                }
+                else
+                {
+                    currentSongNumber=0;
+                }
+
+                currentSong = currentPlaylist.getSongs().get(currentSongNumber);
 
                 currentPlaylist = playlist;
                 currentSongNumber=0;
