@@ -58,8 +58,10 @@ public class EditPlaylistController {
     }
 
 
-
-
+    /**
+     * setting the playlist and initializing the songlabels
+     * @param playlist
+     */
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
         System.out.println("Editing playlist: " + playlist.getName());
@@ -87,6 +89,9 @@ public class EditPlaylistController {
 
     }
 
+    /**
+     * Initialize Songs in Searchbar
+     */
     public void initializeSongsInSearchbar(){
         for (Song song : allSongs) {
             ArrayList<String> trimmedArtists = new ArrayList<>();
@@ -100,6 +105,9 @@ public class EditPlaylistController {
         System.out.println(allSongs.size() + " songs initialized");
     }
 
+    /**
+     * method to add song to playlist
+     */
     public void addSongToPlaylist() {
         String selectedTitle = searchbarPlaylist.getValue();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
@@ -115,10 +123,20 @@ public class EditPlaylistController {
         songsInPlaylist.getChildren().add(newLabel);
     }
 
+    /**
+     * shifts scene and doesn't add to database
+     * @param event
+     * @throws IOException
+     */
     public void cancelButton(ActionEvent event) throws IOException {
         shiftScene(event);
     }
 
+    /**
+     * Finds the songs by titel
+     * @param title
+     * @return
+     */
     private Song findSongByTitle (String title) {
         for (Song song : allSongs) {
             if (title.contains(song.getTitle())) {
@@ -128,6 +146,12 @@ public class EditPlaylistController {
         return null;
     }
 
+
+    /**
+     * Saves the changes made to either the playlistname or songs added or deleted
+     * @param event
+     * @throws Exception
+     */
     public void saveChangesButton(ActionEvent event) throws Exception {
 
         String playlistName = this.playlistNameTextfield.getText();
@@ -161,6 +185,11 @@ public class EditPlaylistController {
         shiftScene(event);
     }
 
+    /**
+     * deletes the playlist
+     * @param event
+     * @throws Exception
+     */
     public void deletePlaylistButton(ActionEvent event) throws Exception {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Playlist");
@@ -175,7 +204,12 @@ public class EditPlaylistController {
         }
     }
 
-    //method to shift scenes
+
+    /**
+     * method to shift scenes
+     * @param actionEvent
+     * @throws IOException
+     */
     private void shiftScene(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloController.class.getResource("hello-view.fxml"));
         Parent root = fxmlLoader.load();
