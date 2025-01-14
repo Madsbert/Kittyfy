@@ -153,6 +153,9 @@ public class Playlist {
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, playlist.getPlaylistId());
+
+        BridgePlaylistSong.deleteSongsInPlaylist(playlist);
+
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Playlist deleted successfully.");
