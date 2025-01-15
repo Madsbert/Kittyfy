@@ -21,18 +21,15 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.CENTER_LEFT;
@@ -88,17 +85,20 @@ public class HelloController {
 
     private int currentSongNumber = 0;
 
+    @FXML
+    private Button shuffleButton;
+
     private static Timer timer;
     private TimerTask timerTask;
     private boolean isRunning = false;
     private int resetCounter;
     private Playlist currentPlaylist;
     private Song currentSong;
+    private boolean isShuffleMode = false;
 
     /**
      * Initializes different aspects of the program, including: Pictures, songs from database, searchbar, buttons
      * and welcome messages
-     *
      * @throws Exception
      */
 
@@ -108,8 +108,8 @@ public class HelloController {
         pictures.setImage(defaultImage);
         playButton.setText("😿");
         stopButton.setText("\uD83D\uDE40");
+        shuffleButton.setText("Shuffle");
         currentPlaylist = new Playlist("ERROR MISSING CODE", new ArrayList<>());
-
 
         //initialize Songs
         allSongs = Reader.readAllSongs();
@@ -129,59 +129,11 @@ public class HelloController {
 
 
         //initializing playlists
-        allPlaylists = Playlist.getAllPlaylists();
-        System.out.println(allPlaylists.size() + " playlists initialized");
-
-        if (!allPlaylists.isEmpty()) {
-            currentPlaylist = allPlaylists.getFirst();
-        } else {
-            currentPlaylist = new Playlist("All songs", allSongs);
-        }
-
+        initzializePlaylists();
 
         //initializing playlists options
-        for (Playlist playlist : allPlaylists) {
-            Button playlistButton = new Button(playlist.getName());
-            playlistButton.setPrefWidth(100);
-            playlistButton.setPrefHeight(30);
-            playlistButton.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: orange;");
-            playlistButton.setAlignment(CENTER_LEFT);
-            playlistButton.setPadding(new Insets(0, 0, 0, 5));
-            playlist.playlistButton = playlistButton;
+       initzializePlaylistOptions();
 
-
-            playlistButton.setOnAction(event -> {
-                currentPlaylist = playlist;
-                currentSongNumber = 0;
-                currentSong = currentPlaylist.getSongs().get(currentSongNumber);
-                try {
-                    displayPlaylistTitleAndTotalPlaylistDuration();
-                } catch (UnsupportedAudioFileException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    playSong(currentSong, true);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                updateSongList();
-                ArtistNameLabel.setText("Playing playlist: " + currentPlaylist.getName());
-                System.out.println("Current playlist set to: " + currentPlaylist.getName());
-                playlistButton.setStyle("-fx-background-color: #000000; " + "-fx-text-fill: white;");
-                playlistButton.setUnderline(true);
-                for (Playlist curPlaylist : allPlaylists) {
-                    if (!curPlaylist.getName().equals(currentPlaylist.getName())) {
-                        curPlaylist.playlistButton.setStyle("-fx-background-color: #000000; " + "-fx-text-fill: orange;");
-                        curPlaylist.playlistButton.setUnderline(false);
-                    }
-                }
-            });
-
-
-            vBoxPlaylists.getChildren().add(playlistButton);
-        }
 
         //checks if there are songs in playlist
         if (!currentPlaylist.getSongs().isEmpty()) {
@@ -233,7 +185,7 @@ public class HelloController {
             newButton.setPrefWidth(650);
             newButton.setPrefHeight(30);
             newButton.setStyle(
-                    "-fx-background-color: #000000; " +
+                            "-fx-background-color: #000000; " +
                             "-fx-text-fill: orange; " +
                             "-fx-border-color: #FFCC00; " +
                             "-fx-border-width: 0.5; " +
@@ -265,16 +217,13 @@ public class HelloController {
 
     /**
      * Connecting the musicfile to the label, calls the display Artist, Title and Duration methods, and begins the timer.
-     *
      * @param song
      * @throws Exception
      */
     public void playSong(Song song, Boolean fromPlaylist) throws Exception {
         allSongs = Reader.readAllSongs();
         stopMusic();
-        if (isRunning) {
-            cancelTimer();
-        }
+        if(isRunning){cancelTimer();}
 
         try {
             mediaPlayer = new MediaPlayer(new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString()));
@@ -300,11 +249,8 @@ public class HelloController {
 
             currentSong = song;
 
-            if (timer == null) {
-                beginTimer();
-            } else {
-                cancelTimer();
-            }
+            if (timer == null){beginTimer();}
+            else {cancelTimer();}
 
             mediaPlayer.play();
             isRunning = true;
@@ -336,7 +282,6 @@ public class HelloController {
 
     /**
      * Plays the currently selected song and displays the artist + title + total duration.
-     *
      * @throws UnsupportedAudioFileException
      * @throws IOException
      */
@@ -358,7 +303,6 @@ public class HelloController {
 
     /**
      * plays the song the user clicks on in the combobox, and calls the playMusic method.
-     *
      * @throws Exception
      */
     public void playSongOnClick() throws Exception {
@@ -386,10 +330,8 @@ public class HelloController {
         }
         System.out.println("No song selected!");
     }
-
     /**
      * restarts the song that is currently playing, and calls the previousSong method after 2 clicks.
-     *
      * @throws Exception
      */
     public void reset() throws Exception {
@@ -407,17 +349,27 @@ public class HelloController {
     /**
      * skips to the next song in the order, and if the order is finished, circle back to the first song.
      * and play the music.
-     *
      * @throws Exception
      */
     public void skip() throws Exception {
-        currentSongNumber++;
-        if (currentSongNumber <= currentPlaylist.getSongs().size() - 1) {
-            playSong(currentPlaylist.getSongs().get(currentSongNumber), true);
-        } else {
-            currentSongNumber = 0;
-            playSong(currentPlaylist.getSongs().get(currentSongNumber), true);
+        int forward = 1;
+        if (isShuffleMode)
+        {
+            forward = new Random().nextInt(2, currentPlaylist.getSongs().size()/2 + 1);
         }
+
+        if(currentSongNumber + forward <= currentPlaylist.getSongs().size()-1){
+            currentSongNumber += forward;
+        }
+        else {
+            currentSongNumber = (currentSongNumber + forward) - currentPlaylist.getSongs().size() - 1;
+        }
+
+        if (currentSongNumber < 0)
+        {
+            currentSongNumber = 0;
+        }
+        playSong(currentPlaylist.getSongs().get(currentSongNumber), true);
     }
 
     /**
@@ -431,7 +383,6 @@ public class HelloController {
 
     /**
      * just skip method in reverse.
-     *
      * @throws Exception
      */
     public void previousSong() throws Exception {
@@ -446,7 +397,6 @@ public class HelloController {
 
     /**
      * displays the total time the song has, and displays in the correct Label.
-     *
      * @param duration is an object created by the media, and ensures that the time displayed is the same and the
      *                 song that is currently playing
      */
@@ -532,7 +482,6 @@ public class HelloController {
     /**
      * Creates a media and mediaPlayer object.
      * and displays the song title and artist.
-     *
      * @throws Exception
      */
     public void createMediaPlayer(Song song) throws Exception {
@@ -580,7 +529,6 @@ public class HelloController {
 
     /**
      * displays the artist/artists of the song that is played, based on a song object instead of currentSongNumber.
-     *
      * @param song a song.
      */
     public void displayArtistBasedOnSong(Song song) {
@@ -632,4 +580,121 @@ public class HelloController {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
+
+    public void shuffle()
+    {
+        if (isShuffleMode)
+        {
+            isShuffleMode = false;
+            shuffleButton.setStyle("-fx-text-fill: ORANGE; -fx-background-color: BLACK;");
+        }
+        else
+        {
+            isShuffleMode = true;
+            shuffleButton.setStyle("-fx-text-fill: WHITE; -fx-background-color: BLACK;");
+            shuffleButton.setUnderline(true);
+        }
+    }
+
+    public void initzializePlaylists() throws Exception {
+        //initializing playlists
+        allPlaylists = Playlist.getAllPlaylists();
+        System.out.println(allPlaylists.size()+" playlists initialized");
+
+        if(!allPlaylists.isEmpty()) {
+            currentPlaylist = allPlaylists.get(0);
+        }
+        else
+        {
+            currentPlaylist = new Playlist("All songs", allSongs);
+        }
+    }
+
+    public void initzializePlaylistOptions() {
+        HBox currentHBox= null;
+
+        //PLaylist buttons
+        for(Playlist playlist : allPlaylists){
+            Button playlistButton = new Button(playlist.getName());
+            playlistButton.setPrefWidth(150);
+            playlistButton.setPrefHeight(30);
+            playlistButton.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: orange;");
+            playlistButton.setAlignment(CENTER_LEFT);
+            playlistButton.setPadding(new Insets(0, 0, 0, 5));
+            playlist.playlistButton = playlistButton;
+
+            //Edit Button
+            Button editButton = new Button();
+            Image editImage = new Image(getClass().getResource("/Pictures/EditIcon.png").toExternalForm());
+            ImageView imageView = new ImageView(editImage);
+            imageView.setFitWidth(15);
+            imageView.setFitHeight(22);
+            editButton.setGraphic(imageView);
+
+            //Make HBox and add buttons
+            currentHBox = new HBox();
+            currentHBox.setSpacing(0);
+            currentHBox.setPadding(new Insets(0, 0, 0, 0));
+            currentHBox.getChildren().addAll(playlistButton, editButton);
+            vBoxPlaylists.getChildren().add(currentHBox);
+
+            playlistButton.setOnAction(event -> {
+
+                currentPlaylist = playlist;
+                if (isShuffleMode) {
+                    currentSongNumber = new Random().nextInt(currentPlaylist.getSongs().size());
+                }
+                else
+                {
+                    currentSongNumber=0;
+                }
+
+                currentSong = currentPlaylist.getSongs().get(currentSongNumber);
+
+                currentPlaylist = playlist;
+                currentSongNumber=0;
+                currentSong = currentPlaylist.getSongs().get(currentSongNumber);
+                try {
+                    playSong(currentSong,true);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                updateSongList();
+                ArtistNameLabel.setText("Playing playlist: " + currentPlaylist.getName());
+                System.out.println("Current playlist set to: " + currentPlaylist.getName());
+                playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: white;");
+                playlistButton.setUnderline(true);
+                for(Playlist curPlaylist: allPlaylists){
+                    if(!curPlaylist.getName().equals(currentPlaylist.getName())){
+                        curPlaylist.playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: orange;");
+                        curPlaylist.playlistButton.setUnderline(false);
+                    }
+                }
+            });
+
+            editButton.setOnAction(event -> {
+                onClose();
+                try{
+                FXMLLoader fxmlLoader = new FXMLLoader(EditPlaylistController.class.getResource("Edit-Playlist.fxml"));
+                Parent root = fxmlLoader.load();
+
+                EditPlaylistController controller = fxmlLoader.getController();
+                controller.setPlaylist(playlist);
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setTitle("Edit Playlist");
+                stage.setScene(new Scene(root));
+                stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+    }
+
+
+
+
 }
