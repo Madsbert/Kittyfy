@@ -109,11 +109,11 @@ public class HelloController {
         playButton.setText("😿");
         stopButton.setText("\uD83D\uDE40");
         shuffleButton.setText("Shuffle");
-        currentPlaylist = new Playlist("ERROR MISSING CODE", new ArrayList<>());
 
         //initialize Songs
         allSongs = Reader.readAllSongs();
 
+        Playlist allSongsPlaylist = new Playlist("All songs", allSongs);
 
         //initializing searchbar options
         for (Song song : allSongs) {
@@ -142,7 +142,15 @@ public class HelloController {
             System.out.println("Playlist is empty.");
         }
 
-        currentPlaylist = allPlaylists.getFirst();
+        if (!allPlaylists.isEmpty())
+        {
+            currentPlaylist = allPlaylists.getFirst();
+        }
+        else
+        {
+            currentPlaylist = allSongsPlaylist;
+        }
+
 
 
         //initialize Progressbar
@@ -152,11 +160,11 @@ public class HelloController {
         //initialize all songs in the song in playlist box
         updateSongList();
 
-        if (currentPlaylist.getSongs().get(currentSongNumber) != null) {
+        if (!currentPlaylist.getSongs().isEmpty()) {
             createMediaPlayer(currentPlaylist.getSongs().getFirst());
             currentSong = currentPlaylist.getSongs().getFirst();
-
         }
+
         displayPlaylistTitleAndTotalPlaylistDuration();
         SongTitleLabel.setText("Welcome To Kittyfy");
         ArtistNameLabel.setText("playing playlist: " + currentPlaylist.getName());
@@ -650,11 +658,24 @@ public class HelloController {
                     currentSongNumber=0;
                 }
 
-                currentSong = currentPlaylist.getSongs().get(currentSongNumber);
+                if (!currentPlaylist.getSongs().isEmpty())
+                {
+                    currentSong = currentPlaylist.getSongs().get(currentSongNumber);
+                }
+                else
+                {
+                    currentSong = allSongs.getFirst();
+                }
 
-                currentPlaylist = playlist;
-                currentSongNumber=0;
-                currentSong = currentPlaylist.getSongs().get(currentSongNumber);
+
+
+                try {
+                    displayPlaylistTitleAndTotalPlaylistDuration();
+                } catch (UnsupportedAudioFileException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 try {
                     playSong(currentSong,true);
                 } catch (Exception e) {
@@ -665,6 +686,7 @@ public class HelloController {
                 System.out.println("Current playlist set to: " + currentPlaylist.getName());
                 playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: white;");
                 playlistButton.setUnderline(true);
+
                 for(Playlist curPlaylist: allPlaylists){
                     if(!curPlaylist.getName().equals(currentPlaylist.getName())){
                         curPlaylist.playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: orange;");
