@@ -119,8 +119,7 @@ public class HelloController {
         Playlist allSongsPlaylist = new Playlist("All songs", allSongs);
 
         //initializing searchbar options
-        searchBar.setEditable(true); //er det nødvendigt når vi har trykket på editable knappen i scenebuilder?
-        ObservableList<String> songOptions = FXCollections.observableArrayList(); //Hvad gør den her helt præcist?
+        //ObservableList<String> songOptions = FXCollections.observableArrayList(); //Hvad gør den her helt præcist?
         for (Song song : allSongs) {
             ArrayList<String> trimmedArtists = new ArrayList<>();
             for (String artist : song.getArtist()) {
@@ -128,22 +127,22 @@ public class HelloController {
             }
             String artists = String.join(", ", trimmedArtists);
             searchBar.getItems().add(song.getTitle().trim() + " by " + artists);
-            songOptions.add(song.getTitle().trim() + " by " + artists);//Skal vi tilføje den her eller det ligemeget?
+            //songOptions.add(song.getTitle().trim() + " by " + artists);//Skal vi tilføje den her eller det ligemeget?
         }
 
         //Initializing a filtered list of songs from the search in the searchbar.
-        FilteredList<String> filteredSongs = new FilteredList<>(songOptions, s -> true);
-        searchBar.setItems(filteredSongs);
+        //FilteredList<String> filteredSongs = new FilteredList<>(songOptions, s -> true);
+        //searchBar.setItems(filteredSongs);
 
         //If nothing has been written in the searchbar then show list of all songs.
-        searchBar.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue == null || newValue.trim().isEmpty()) {
-                filteredSongs.setPredicate(s -> true);
-            }else{
-                String search = newValue.toLowerCase().trim();
-                filteredSongs.setPredicate(song -> song.toLowerCase().contains(search));
-            }
-        });
+        //searchBar.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            //if(newValue == null || newValue.trim().isEmpty()) {
+                //filteredSongs.setPredicate(s -> true);
+            //}else{
+                //String search = newValue.toLowerCase().trim();
+                //filteredSongs.setPredicate(song -> song.toLowerCase().contains(search));
+           // }
+       // });
 
         System.out.println(allSongs.size() + " songs initialized");
 
@@ -152,7 +151,7 @@ public class HelloController {
         initzializePlaylists();
 
         //initializing playlists options
-       initzializePlaylistOptions();
+        initzializePlaylistOptions();
 
 
         //checks if there are songs in playlist
