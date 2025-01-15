@@ -72,7 +72,7 @@
             </children></VBox>
     </center>
     <right>
-        <VBox prefHeight="616.0" prefWidth="311.0" BorderPane.alignment="CENTER">
+        <VBox prefHeight="616.0" prefWidth="310.0" BorderPane.alignment="CENTER">
             <children>
                 <Label alignment="CENTER" prefHeight="102.0" prefWidth="321.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" text="Songs">
                     <font>

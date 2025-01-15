@@ -11,7 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -73,19 +75,42 @@ public class EditPlaylistController {
                 for (String artist : song.getArtist()) {
                     trimmedArtists.add(artist.trim());
                 }
-                Label newLabel = new Label(song.getTitle().trim() + " by " + String.join(",", trimmedArtists));
-                newLabel.setPrefWidth(650);
-                newLabel.setPrefHeight(30);
-                newLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
-                newLabel.setAlignment(Pos.CENTER_LEFT);
-                newLabel.setPadding(new Insets(0, 10, 0, 10));
+                Label songLabel = new Label(song.getTitle().trim() + " by " + String.join(",", trimmedArtists));
+                songLabel.setPrefWidth(650);
+                songLabel.setPrefHeight(30);
+                songLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
+                songLabel.setAlignment(Pos.CENTER_LEFT);
+                songLabel.setPadding(new Insets(0, 10, 0, 10));
 
-                songsInPlaylist.getChildren().add(newLabel);
+
+                //Delete Button
+                Button deleteSongButton = new Button();
+                deleteSongButton.setText("⎯");
+                deleteSongButton.setFont(new Font("Berlin Sans FB Demi",14));
+                deleteSongButton.setPrefWidth(25);
+                deleteSongButton.setPrefHeight(30);
+                deleteSongButton.setStyle("-fx-background-color: #000000;"+"-fx-text-fill: orange;"+"-fx-border-color: orange;");
+
+
+                //Make HBox and add buttons
+                HBox currentHBox = new HBox();
+                currentHBox.setSpacing(0);
+                currentHBox.setPadding(new Insets(0, 0, 0, 0));
+                currentHBox.getChildren().addAll(songLabel, deleteSongButton);
+                songsInPlaylist.getChildren().add(currentHBox);
 
                 playlistNameTextfield.setText(playlist.getName());
+
+                deleteSongButton.setOnAction(actionEvent -> {
+                    try {
+                        BridgePlaylistSong.deleteSongFromPlaylist(playlist,song);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    currentHBox.getChildren().clear();
+                });
             }
         }
-
 
     }
 
@@ -113,14 +138,42 @@ public class EditPlaylistController {
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
         }
-        Label newLabel = new Label (selectedTitle);
-        newLabel.setPrefWidth(650);
-        newLabel.setPrefHeight(30);
-        newLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
-        newLabel.setAlignment(Pos.CENTER_LEFT);
-        newLabel.setPadding(new Insets(0, 10, 0,10 ));
+        for (Song song : playlist.getSongs()) {
 
-        songsInPlaylist.getChildren().add(newLabel);
+            //Song Labels
+            Label songLabels = new Label(selectedTitle);
+            songLabels.setPrefWidth(650);
+            songLabels.setPrefHeight(30);
+            songLabels.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
+            songLabels.setAlignment(Pos.CENTER_LEFT);
+            songLabels.setPadding(new Insets(0, 10, 0, 10));
+
+            //Delete Button
+            Button deleteSongButton = new Button();
+            deleteSongButton.setText("⎯");
+            deleteSongButton.setFont(new Font("Berlin Sans FB Demi", 14));
+            deleteSongButton.setPrefWidth(25);
+            deleteSongButton.setPrefHeight(30);
+            deleteSongButton.setStyle("-fx-background-color: #000000;" + "-fx-text-fill: orange;" + "-fx-border-color: orange;");
+
+
+            //Make HBox and add buttons
+            HBox currentHBox = new HBox();
+            currentHBox.setSpacing(0);
+            currentHBox.setPadding(new Insets(0, 0, 0, 0));
+            currentHBox.getChildren().addAll(songLabels, deleteSongButton);
+            songsInPlaylist.getChildren().add(currentHBox);
+
+            deleteSongButton.setOnAction(actionEvent -> {
+                try {
+                    BridgePlaylistSong.deleteSongFromPlaylist(playlist, song);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                currentHBox.getChildren().clear();
+            });
+        }
+
     }
 
     /**

@@ -56,6 +56,22 @@ public class BridgePlaylistSong {
         }
     }
 
+    public static void deleteSongFromPlaylist(Playlist playlist, Song song) throws Exception {
+        String sql = "DELETE FROM dbo.TblPlaylistSong WHERE fldPlaylistID  = ? AND fldSongID = ?";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, playlist.getPlaylistId());
+        pstmt.setInt(2, song.getSongID());
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows > 0) {
+            System.out.println("Song deleted from the playlist.");
+        }
+        else {
+            System.out.println("Failed to delete song from the playlist.");
+        }
+    }
+
+
     /**
      * Gets all songs in a specified playlist
      * @param playlistID
