@@ -321,7 +321,7 @@ public class HelloController {
         } else {
             isRunning = true;
             checkIcon();
-            playSong(currentSong, false);
+            mediaPlayer.play();
         }
     }
 
@@ -583,7 +583,20 @@ public class HelloController {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
             AudioFormat format = audioInputStream.getFormat();
             long frames = audioInputStream.getFrameLength();
-            TotalPlaylistDuration += (frames+0.0) / format.getFrameRate();
+
+            if (frames >= 50000000)
+            {
+                TotalPlaylistDuration += (double) frames / (format.getFrameRate() * 142.948717949);
+                System.out.println("Song: " + song.getTitle() + ", duration: " + (double) frames / (format.getFrameRate() * 142.948717949));
+                System.out.println("Frames: " + frames + ", frame rate: " + format.getFrameRate());
+            }
+            else
+            {
+                TotalPlaylistDuration += (double) frames / format.getFrameRate();
+                System.out.println("Song: " + song.getTitle() + ", duration: " + (double) frames / (format.getFrameRate()));
+                System.out.println("Frames: " + frames + ", frame rate: " + format.getFrameRate());
+            }
+
         }
             int hours = (int) TotalPlaylistDuration / 3600;
             int minutes = (int) ((TotalPlaylistDuration % 3600) / 60);
