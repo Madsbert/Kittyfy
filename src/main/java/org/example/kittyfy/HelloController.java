@@ -1,5 +1,6 @@
 package org.example.kittyfy;
 
+import com.almasb.fxgl.audio.Sound;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -110,8 +111,10 @@ public class HelloController {
         stopButton.setText("\uD83D\uDE40");
         shuffleButton.setText("Shuffle");
 
-        //initialize Songs
+        // initialize Songs
         allSongs = Reader.readAllSongs();
+        // initialize sound effects
+        SoundEffects.readAllEffects();
 
         Playlist allSongsPlaylist = new Playlist("All songs", allSongs);
 
@@ -298,6 +301,7 @@ public class HelloController {
         if (isRunning) {
             isRunning = false;
             checkIcon();
+            SoundEffects.play(SoundEffects.kittySounds.PAUSE);
             mediaPlayer.pause();
         } else {
             isRunning = true;
