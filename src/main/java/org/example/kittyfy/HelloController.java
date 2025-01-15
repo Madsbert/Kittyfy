@@ -136,17 +136,23 @@ public class HelloController {
         FilteredList<String> filteredSongs = new FilteredList<>(songOptions, s -> true);
         searchBar.setItems(filteredSongs);
 
-        //If nothing has been written in the searchbar then show list of all songs.
         searchBar.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue == null || newValue.trim().isEmpty()) {
+            if (newValue == null || newValue.trim().isEmpty()) {
                 filteredSongs.setPredicate(s -> true);
-            }else{
+            } else {
                 String search = newValue.toLowerCase().trim();
                 filteredSongs.setPredicate(song -> song.toLowerCase().contains(search));
             }
         });
 
-
+        searchBar.setOnAction(event -> {
+            try {
+                playSongOnClick();
+            } catch (Exception e) {
+                System.out.println("Error");
+                e.printStackTrace();
+            }
+        });
 
         System.out.println(allSongs.size() + " songs initialized");
 
@@ -343,19 +349,31 @@ public class HelloController {
      */
     public void playSongOnClick() throws Exception {
         String selectedTitle = searchBar.getValue();
-        System.out.println("" + selectedTitle + "monkey");
+        System.out.println("Selected title: " + selectedTitle);
 
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
             return;
         }
         for (Song song : allSongs) {
+            ArrayList<String> trimmedArtists = new ArrayList<>();
+            for (String artist : song.getArtist()) {
+                trimmedArtists.add(artist.trim());
+            }
+            String artists = String.join(", ", trimmedArtists);
+            String songTitleAndArtist = song.getTitle().trim() + " by " + artists;
 
-            if (selectedTitle.contains(song.getTitle().trim())) {
-
-                playSong(song, false);
+            if (selectedTitle.equalsIgnoreCase(songTitleAndArtist)) {
+                playSong(song, true);
                 return;
             }
+
+
+            //if (selectedTitle.contains(song.getTitle().trim())) {
+
+                //playSong(song, false);
+                //return;
+            //}
         }
         System.out.println("No song selected! wka wka");
     }
