@@ -16,6 +16,7 @@ public class Playlist {
     private long lastPlayed;
     private ArrayList<Song> songs;
     public Button playlistButton;
+    public String folderPath;
 
     public long getLastPlayed() {
         return lastPlayed;
@@ -32,6 +33,11 @@ public class Playlist {
         this.lastPlayed = lastPlayed;
     }
 
+    public Playlist(String name, ArrayList<Song> songs, String selectedPicFolderFilepath) {
+        this.name = name;
+        this.songs = songs;
+        this.folderPath = selectedPicFolderFilepath;
+    }
     public Playlist(String name, ArrayList<Song> songs) {
         this.name = name;
         this.songs = songs;
@@ -65,17 +71,23 @@ public class Playlist {
         this.playlistId = playlistId;
     }
 
+    public String getFolderPath() {
+        return folderPath;
+    }
+
+
     /**
      * Creates a playlist in the database.
      * @param playlist
      * @throws Exception
      */
     public static int createPlaylist(Playlist playlist) throws Exception {
-        String sql = "INSERT INTO dbo.TblPlaylist (fldPlaylistName,fldLastPlayed) VALUES (?, ?)";
+        String sql = "INSERT INTO dbo.TblPlaylist (fldPlaylistName,fldLastPlayed,fldPictureFilepath) VALUES (?, ?,?)";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, playlist.getName());
         pstmt.setLong(2, playlist.getLastPlayed());
+        pstmt.setString(3,playlist.getFolderPath());
 
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {

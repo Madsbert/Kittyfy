@@ -113,7 +113,7 @@ public class HelloController {
         //initialize Songs
         allSongs = Reader.readAllSongs();
 
-        Playlist allSongsPlaylist = new Playlist("All songs", allSongs);
+        Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures");
 
         //initializing searchbar options
         for (Song song : allSongs) {
@@ -628,7 +628,7 @@ public class HelloController {
         }
         else
         {
-            currentPlaylist = new Playlist("All songs", allSongs);
+            currentPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures");
         }
     }
 

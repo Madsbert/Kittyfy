@@ -12,8 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 
@@ -43,6 +42,7 @@ public class CreatePlaylistController {
     private VBox songsInPlaylist;
 
     private ArrayList<Song> allSongs;
+    private String selectedPicFolderFilepath;
 
 
     public void initialize() throws Exception {
@@ -111,13 +111,15 @@ public class CreatePlaylistController {
             return;
         }
 
-        Playlist newPlaylist = new Playlist(playlistName, playlistSongs);
+        Playlist newPlaylist = new Playlist(playlistName, playlistSongs,selectedPicFolderFilepath);
         newPlaylist.setLastPlayed(0);
 
         int playlistID = Playlist.createPlaylist(newPlaylist);
         newPlaylist.setPlaylistId(playlistID);
 
         BridgePlaylistSong.addSongsToPlaylist(newPlaylist);
+
+        //add the folder path to the database.
 
         shiftScene(event);
     }
@@ -151,6 +153,23 @@ public class CreatePlaylistController {
         newLabel.setPadding(new Insets(0, 10, 0,10 ));
 
         songsInPlaylist.getChildren().add(newLabel);
+    }
+
+    public void openFileExplorer(ActionEvent event) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select a Folder");
+
+        //Shows the directory
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        File selectedFolder = directoryChooser.showDialog(stage);
+        //extracts the folder path.
+        if (selectedFolder != null) {
+            selectedPicFolderFilepath = selectedFolder.getAbsolutePath().trim();
+            System.out.println("Selected Folder Path: " + selectedPicFolderFilepath);
+            choosePictures.setValue(selectedPicFolderFilepath);
+        } else {
+            System.out.println("No folder was selected.");
+        }
     }
 
 }
