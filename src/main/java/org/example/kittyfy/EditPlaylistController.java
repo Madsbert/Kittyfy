@@ -192,9 +192,11 @@ public class EditPlaylistController {
      */
     public void deletePlaylistButton(ActionEvent event) throws Exception {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        ImageView imageView = new ImageView(getClass().getResource("/Pictures/StopSignCat.png").toExternalForm());
         alert.setTitle("Delete Playlist");
         alert.setHeaderText("Are you sure you want to delete this playlist?");
         alert.setContentText("This action cannot be undone.");
+        alert.setGraphic(imageView);
 
         if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             BridgePlaylistSong.deleteSongsInPlaylist(playlist);
