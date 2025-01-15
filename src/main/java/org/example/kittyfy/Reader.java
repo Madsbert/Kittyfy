@@ -38,6 +38,11 @@ public class Reader {
 
             String genre = rows[2].split("\\.")[0];
 
+            if (!Song.doesGenreExist(genre))
+            {
+                Song.createGenre(genre);
+            }
+
             Song curSong = new Song(songName, artists, genre, fileName.substring(1, fileName.length() - 1));
             curSong.setSongID(Song.createSong(curSong));
             songs.add(curSong);
