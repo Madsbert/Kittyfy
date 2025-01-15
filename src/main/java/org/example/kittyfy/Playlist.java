@@ -1,6 +1,7 @@
 package org.example.kittyfy;
 
 import javafx.scene.control.Button;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -97,15 +98,15 @@ public class Playlist {
      * @param playlist
      * @throws Exception
      */
-    public void updatePlaylist(Playlist playlist) throws Exception {
+    public static void updatePlaylist(Playlist playlist) throws Exception {
         String sql = "UPDATE dbo.TblPlaylist SET " +
                 "fldPlaylistName = ?," +
                 "fldLastPlayed = ? WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, playlist.getName());
-        pstmt.setInt(2, playlist.getPlaylistId());
-        pstmt.setLong(3, playlist.getLastPlayed());
+        pstmt.setLong(2, playlist.getLastPlayed());
+        pstmt.setInt(3, playlist.getPlaylistId());
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Playlist updated successfully.");
@@ -148,11 +149,14 @@ public class Playlist {
      * @param playlist
      * @throws Exception
      */
-    public static void deletePlaylist(Playlist playlist) throws Exception {
+    public static void deletePlaylist(@NotNull Playlist playlist) throws Exception {
         String sql = "DELETE FROM dbo.TblPlaylist WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, playlist.getPlaylistId());
+
+        BridgePlaylistSong.deleteSongsInPlaylist(playlist);
+
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Playlist deleted successfully.");

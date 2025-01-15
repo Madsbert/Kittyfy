@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.EditPlaylistController">
+    <center>
+        <VBox prefHeight="616.0" prefWidth="581.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" BorderPane.alignment="CENTER">
+            <children>
+                <TextField fx:id="playlistNameTextfield" prefHeight="40.0" prefWidth="410.0" promptText="Playlist name">
+                    <VBox.margin>
+                        <Insets left="130.0" right="114.0" top="30.0" />
+                    </VBox.margin>
+                </TextField>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <ComboBox fx:id="searchbarPlaylist" editable="true" prefHeight="40.0" prefWidth="343.0" promptText="Song/Artist">
+                            <HBox.margin>
+                                <Insets bottom="30.0" left="130.0" top="30.0" />
+                            </HBox.margin></ComboBox>
+                        <Button mnemonicParsing="false" onAction="#addSongToPlaylist" prefHeight="40.0" prefWidth="63.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" text="+">
+                            <HBox.margin>
+                                <Insets top="30.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+                <ChoiceBox fx:id="choosePictures" prefHeight="40.0" prefWidth="408.0">
+                    <VBox.margin>
+                        <Insets bottom="30.0" left="130.0" />
+                    </VBox.margin>
+                </ChoiceBox>
+                <HBox prefHeight="71.0" prefWidth="650.0">
+                    <children>
+                        <Button minHeight="40.0" mnemonicParsing="false" onAction="#cancelButton" prefHeight="40.0" prefWidth="95.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" text="Cancel ">
+                            <font>
+                                <Font name="Berlin Sans FB Demi Bold" size="16.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="130.0" />
+                            </HBox.margin>
+                        </Button>
+                  <Button mnemonicParsing="false" onAction="#deletePlaylistButton" prefHeight="40.0" prefWidth="152.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" styleClass="ba" text="Delete Playlist">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="16.0" />
+                     </font>
+                  </Button>
+                        <Button mnemonicParsing="false" onAction="#saveChangesButton" prefHeight="40.0" prefWidth="134.0" style="-fx-text-fill: orange; -fx-background-color: #000000; -fx-background-radius: 15;" text="Save Changes">
+                            <font>
+                                <Font name="Berlin Sans FB Demi Bold" size="16.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets bottom="30.0" left="20.0" />
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
+                <ImageView fx:id="editPlaylistImage" fitHeight="288.0" fitWidth="405.0" pickOnBounds="true" preserveRatio="true">
+                    <VBox.margin>
+                        <Insets left="130.0" />
+                    </VBox.margin>
+                </ImageView>
+            </children></VBox>
+    </center>
+    <right>
+        <VBox prefHeight="616.0" prefWidth="311.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label alignment="CENTER" prefHeight="102.0" prefWidth="321.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" text="Songs">
+                    <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="32.0" />
+                    </font>
+                </Label>
+                <ScrollPane prefHeight="520.0" prefWidth="248.0">
+                    <content>
+                        <VBox fx:id="songsInPlaylist" prefHeight="522.0" prefWidth="295.0" />
+                    </content>
+                </ScrollPane>
+            </children></VBox>
+    </right>
+</BorderPane>

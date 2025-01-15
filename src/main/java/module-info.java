@@ -13,6 +13,7 @@ module org.example.kittyfy {
     requires java.sql;
     requires java.desktop;
     requires javafx.media;
+    requires annotations;
 
     opens org.example.kittyfy to javafx.fxml;
     exports org.example.kittyfy;
