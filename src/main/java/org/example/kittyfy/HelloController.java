@@ -21,6 +21,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import javafx.scene.image.Image;
@@ -33,6 +34,7 @@ import javafx.scene.Scene;
 import javafx.util.Duration;
 
 import java.util.*;
+import java.util.Timer;
 
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.CENTER_LEFT;
@@ -119,7 +121,7 @@ public class HelloController {
         Playlist allSongsPlaylist = new Playlist("All songs", allSongs);
 
         //initializing searchbar options
-        //ObservableList<String> songOptions = FXCollections.observableArrayList(); //Hvad gør den her helt præcist?
+       ObservableList<String> songOptions = FXCollections.observableArrayList();
         for (Song song : allSongs) {
             ArrayList<String> trimmedArtists = new ArrayList<>();
             for (String artist : song.getArtist()) {
@@ -127,22 +129,24 @@ public class HelloController {
             }
             String artists = String.join(", ", trimmedArtists);
             searchBar.getItems().add(song.getTitle().trim() + " by " + artists);
-            //songOptions.add(song.getTitle().trim() + " by " + artists);//Skal vi tilføje den her eller det ligemeget?
+            songOptions.add(song.getTitle().trim() + " by " + artists);
         }
 
         //Initializing a filtered list of songs from the search in the searchbar.
-        //FilteredList<String> filteredSongs = new FilteredList<>(songOptions, s -> true);
-        //searchBar.setItems(filteredSongs);
+        FilteredList<String> filteredSongs = new FilteredList<>(songOptions, s -> true);
+        searchBar.setItems(filteredSongs);
 
         //If nothing has been written in the searchbar then show list of all songs.
-        //searchBar.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-            //if(newValue == null || newValue.trim().isEmpty()) {
-                //filteredSongs.setPredicate(s -> true);
-            //}else{
-                //String search = newValue.toLowerCase().trim();
-                //filteredSongs.setPredicate(song -> song.toLowerCase().contains(search));
-           // }
-       // });
+        searchBar.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue == null || newValue.trim().isEmpty()) {
+                filteredSongs.setPredicate(s -> true);
+            }else{
+                String search = newValue.toLowerCase().trim();
+                filteredSongs.setPredicate(song -> song.toLowerCase().contains(search));
+            }
+        });
+
+
 
         System.out.println(allSongs.size() + " songs initialized");
 
@@ -189,6 +193,11 @@ public class HelloController {
         ArtistNameLabel.setText("playing playlist: " + currentPlaylist.getName());
 
 
+    }
+    @FXML
+    public void updateSearchbar() {
+        searchBar.getEditor().getText();
+        System.out.println(searchBar.getEditor().getText());
     }
 
     /**
@@ -333,29 +342,22 @@ public class HelloController {
      * @throws Exception
      */
     public void playSongOnClick() throws Exception {
-
         String selectedTitle = searchBar.getValue();
+        System.out.println("" + selectedTitle + "monkey");
+
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
             return;
         }
-
-
         for (Song song : allSongs) {
-            ArrayList<String> trimmedArtists = new ArrayList<>();
-            for (String artist : song.getArtist()) {
-                trimmedArtists.add(artist.trim());
-            }
-            String artists = String.join(", ", trimmedArtists);
 
-
-            if (selectedTitle.equals(song.getTitle().trim() + " by " + artists)) {
+            if (selectedTitle.contains(song.getTitle().trim())) {
 
                 playSong(song, false);
                 return;
             }
         }
-        System.out.println("No song selected!");
+        System.out.println("No song selected! wka wka");
     }
     /**
      * restarts the song that is currently playing, and calls the previousSong method after 2 clicks.
