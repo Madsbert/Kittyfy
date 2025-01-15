@@ -1,5 +1,8 @@
 package org.example.kittyfy;
 
+import javafx.scene.media.Media;
+import javafx.util.Duration;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +31,22 @@ public class Song {
         this.artist = artist;
         this.genre = genre;
         this.filePath = filePath;
+    }
+
+    public double getDuration() {
+        String pathFile = "src/main/resources/music/" + filePath;
+        File donkeyCock = new File(pathFile);
+        Media media = new Media(donkeyCock.toURI().toString());
+        System.out.println(media.getSource());
+        Duration duration = media.getDuration();
+        double seconds = duration.toSeconds();
+        if (seconds >= 0)
+        {
+            return seconds;
+        }
+        System.out.println(pathFile);
+        System.out.println(seconds);
+        return 404;
     }
 
     public String getTitle() {
