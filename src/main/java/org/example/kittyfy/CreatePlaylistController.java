@@ -44,7 +44,7 @@ public class CreatePlaylistController {
     private VBox songsInPlaylist;
 
     private ArrayList<Song> allSongs;
-    private static String selectedPicFolderFilepath = null;
+    private String selectedPicFolderFilepath = null;
 
 
     public void initialize() throws Exception {
