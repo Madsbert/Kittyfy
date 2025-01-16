@@ -233,8 +233,17 @@ public class HelloController {
     public void showRandomImage(){
         try {
             String imageFolderPath = Playlist.getFolderPath(currentPlaylist.getName());
-            assert imageFolderPath != null;
-            File folder = new File(imageFolderPath.trim());
+
+            File folder;
+            if (imageFolderPath != null) {
+                folder = new File(imageFolderPath.trim());
+            }
+            else
+            {
+                // uses default folder if no folder is declared in the database.
+                folder = new File("src/main/resources/Pictures/DefaultPlaylistPictures");
+            }
+
 
             File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png"));
 
