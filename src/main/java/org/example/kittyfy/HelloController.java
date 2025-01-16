@@ -310,7 +310,19 @@ public class HelloController {
         }
     }
 
-    public void addSongClick() {
+    private Song findSongByTitle (String title) {
+        for (Song song : allSongs) {
+            if (title.contains(song.getTitle().trim())) {
+                return song;
+            }
+        }
+        return null;
+    }
+
+    public void addSongClick() throws Exception {
+
+        BridgePlaylistSong.addSongToPlaylist(currentPlaylist, currentSong); //Song.getSong(findSongByTitle(searchBar.getValue()));
+        updateSongList();
     }
 
     /**

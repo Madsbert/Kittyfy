@@ -71,6 +71,22 @@ public class BridgePlaylistSong {
         }
     }
 
+    public static void addSongToPlaylist(Playlist playlist, Song song) throws Exception {
+        String sql ="INSERT INTO dbo.TblPlaylistSong (fldPlaylistID, fldSongID) VALUES (?, ?)";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, playlist.getPlaylistId());
+        pstmt.setInt(2, song.getSongID());
+        playlist.addSong(song);
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows > 0) {
+            System.out.println("Song added to the playlist.");
+        }
+        else {
+            System.out.println("Failed to add song to playlist.");
+        }
+    }
+
 
     /**
      * Gets all songs in a specified playlist
