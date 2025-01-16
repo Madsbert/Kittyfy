@@ -233,7 +233,6 @@ public class HelloController {
     public void showRandomImage(){
         try {
             String imageFolderPath = Playlist.getFolderPath(currentPlaylist.getName());
-
             File folder;
             if (imageFolderPath != null) {
                 folder = new File(imageFolderPath.trim());
@@ -305,10 +304,8 @@ public class HelloController {
             isRunning = true;
 
             checkIcon();
-            //displayArtistBasedOnSong(song);
-            //displaySongTitleOnLabel(song);
 
-            //displays total duration based on media. (doesn't work)
+            //displays total duration based on media.
             if (timer != null) {
                 timer.cancel();
                 beginTimer();
@@ -688,7 +685,7 @@ public class HelloController {
         }
         else
         {
-            currentPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures");
+            currentPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures/DefaultPlaylistPictures");
         }
     }
 
@@ -743,7 +740,7 @@ public class HelloController {
                     String folderPath;
                     if (currentPlaylist.getFolderPath(currentPlaylist.getName()) != null){
                         folderPath = currentPlaylist.getFolderPath(currentPlaylist.getName());
-                    } else {folderPath = "src/main/resources/Pictures";}
+                    } else {folderPath = "src/main/resources/Pictures/DefaultPlaylistPictures";}
 
                     System.out.println("pictureFolderPath for selected Playlist: " + folderPath);
 

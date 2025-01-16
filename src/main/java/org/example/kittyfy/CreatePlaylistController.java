@@ -44,7 +44,7 @@ public class CreatePlaylistController {
     private VBox songsInPlaylist;
 
     private ArrayList<Song> allSongs;
-    private static String selectedPicFolderFilepath = null;
+    private String selectedPicFolderFilepath = "";
 
 
     public void initialize() throws Exception {
@@ -132,7 +132,8 @@ public class CreatePlaylistController {
 
         Playlist newPlaylist = new Playlist(playlistName, playlistSongs,selectedPicFolderFilepath);
         newPlaylist.setLastPlayed(0);
-
+        System.out.println("ChoiceBox value: " + choosePictures.getValue());
+        System.out.println("selecet path = "+selectedPicFolderFilepath);
         int playlistID = Playlist.createPlaylist(newPlaylist);
         newPlaylist.setPlaylistId(playlistID);
 
@@ -181,11 +182,15 @@ public class CreatePlaylistController {
             selectedPicFolderFilepath = selectedFolder.getAbsolutePath().trim();
             System.out.println("Selected Folder Path: " + selectedPicFolderFilepath);
             choosePictures.setValue(selectedPicFolderFilepath);
+
         }
     }
     public void getGenreFromChoiceBox() {
         if (choosePictures.getValue() != null) {
-            switch (choosePictures.getValue()) {
+            // Skip switch case if the value is already a custom folder path
+            if (selectedPicFolderFilepath != null && !selectedPicFolderFilepath.isEmpty()) {
+                return;}
+            switch (choosePictures.getValue().trim()) {
                 case "Rock":
                     selectedPicFolderFilepath = "src/main/resources/Pictures/catRockTheme";
                     choosePictures.setValue(selectedPicFolderFilepath);

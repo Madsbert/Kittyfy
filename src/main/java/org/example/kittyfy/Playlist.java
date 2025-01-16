@@ -81,15 +81,18 @@ public class Playlist {
 
     public static String getFolderPath(String playlistName) {
         String sql = "SELECT fldPictureFilepath FROM dbo.TblPlaylist Where fldPlaylistName = ?";
-        try {
+        Connection conn = DB.getConnection();
+        try
+        {
             ResultSet resultSet;
-            try (PreparedStatement pstmt = DB.getConnection().prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            {
                 pstmt.setString(1, playlistName);
                 resultSet = pstmt.executeQuery();
             }
             if (resultSet.next()) {
                 System.out.println(resultSet.getString("fldPictureFilepath"));
-                return resultSet.getString("fldPictureFilepath");
+                return resultSet.getString("fldPictureFilepath").trim();
 
             } else {
                 return null;
@@ -123,6 +126,7 @@ public class Playlist {
                 pstmt.setString(1, playlist.getName());
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
+
                     return rs.getInt("fldPlaylistId");
                 }
             } else {
