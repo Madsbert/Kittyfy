@@ -71,46 +71,11 @@ public class EditPlaylistController {
         //initialize songs in playlist
         if(playlist != null) {
             for (Song song : playlist.getSongs()) {
-                ArrayList<String> trimmedArtists = new ArrayList<>();
-                for (String artist : song.getArtist()) {
-                    trimmedArtists.add(artist.trim());
-                }
-                Label songLabel = new Label(song.getTitle().trim() + " by " + String.join(",", trimmedArtists));
-                songLabel.setPrefWidth(650);
-                songLabel.setPrefHeight(30);
-                songLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
-                songLabel.setAlignment(Pos.CENTER_LEFT);
-                songLabel.setPadding(new Insets(0, 10, 0, 10));
-
-
-                //Delete Button
-                Button deleteSongButton = new Button();
-                deleteSongButton.setText("⎯");
-                deleteSongButton.setFont(new Font("Berlin Sans FB Demi",14));
-                deleteSongButton.setPrefWidth(25);
-                deleteSongButton.setPrefHeight(30);
-                deleteSongButton.setStyle("-fx-background-color: #000000;"+"-fx-text-fill: orange;"+"-fx-border-color: orange;");
-
-
-                //Make HBox and add buttons
-                HBox currentHBox = new HBox();
-                currentHBox.setSpacing(0);
-                currentHBox.setPadding(new Insets(0, 0, 0, 0));
-                currentHBox.getChildren().addAll(songLabel, deleteSongButton);
-                songsInPlaylist.getChildren().add(currentHBox);
-
-                playlistNameTextfield.setText(playlist.getName());
-
-                deleteSongButton.setOnAction(actionEvent -> {
-                    try {
-                        BridgePlaylistSong.deleteSongFromPlaylist(playlist,song);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                    currentHBox.getChildren().clear();
-                });
+                addSongToVBox(song);
             }
         }
+
+
 
     }
 
@@ -137,42 +102,17 @@ public class EditPlaylistController {
         String selectedTitle = searchbarPlaylist.getValue();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
+            return;
         }
-        for (Song song : playlist.getSongs()) {
-
-            //Song Labels
-            Label songLabels = new Label(selectedTitle);
-            songLabels.setPrefWidth(650);
-            songLabels.setPrefHeight(30);
-            songLabels.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
-            songLabels.setAlignment(Pos.CENTER_LEFT);
-            songLabels.setPadding(new Insets(0, 10, 0, 10));
-
-            //Delete Button
-            Button deleteSongButton = new Button();
-            deleteSongButton.setText("⎯");
-            deleteSongButton.setFont(new Font("Berlin Sans FB Demi", 14));
-            deleteSongButton.setPrefWidth(25);
-            deleteSongButton.setPrefHeight(30);
-            deleteSongButton.setStyle("-fx-background-color: #000000;" + "-fx-text-fill: orange;" + "-fx-border-color: orange;");
-
-
-            //Make HBox and add buttons
-            HBox currentHBox = new HBox();
-            currentHBox.setSpacing(0);
-            currentHBox.setPadding(new Insets(0, 0, 0, 0));
-            currentHBox.getChildren().addAll(songLabels, deleteSongButton);
-            songsInPlaylist.getChildren().add(currentHBox);
-
-            deleteSongButton.setOnAction(actionEvent -> {
-                try {
-                    BridgePlaylistSong.deleteSongFromPlaylist(playlist, song);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                songsInPlaylist.getChildren().remove(currentHBox);
-            });
+        Song selectedSong = findSongByTitle(selectedTitle);
+        if (selectedSong != null && !playlist.getSongs().contains(selectedSong)) {
+            playlist.getSongs().add(selectedSong);
+            addSongToVBox(selectedSong);
+        } else {
+            System.out.println("Song is already in the playlist or not found.");
         }
+
+
 
     }
 
@@ -192,7 +132,7 @@ public class EditPlaylistController {
      */
     private Song findSongByTitle (String title) {
         for (Song song : allSongs) {
-            if (title.contains(song.getTitle())) {
+            if (title.contains(song.getTitle().trim())) {
                 return song;
             }
         }
@@ -214,20 +154,34 @@ public class EditPlaylistController {
         }
 
 
+
         ArrayList<Song> playlistSongs = new ArrayList<>();
         for (Node node : songsInPlaylist.getChildren()) {
-            if (node instanceof Label) {
-                String labelText = ((Label) node).getText();
-                Song song = findSongByTitle(labelText);
-                if (song != null) {
-                    playlistSongs.add(song);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                for(Node child: hbox.getChildren()){
+                    if(child instanceof Label){
+                        String labelText = ((Label) child).getText();
+                        Song song = findSongByTitle(labelText);
+                        if (song != null) {
+                            playlistSongs.add(song);
+
+                        }else{
+                            System.out.println("No Song found for label " + labelText);
+                        }
+                        break;
+                    }
                 }
+            }else{
+                System.out.println("Node in sonsplaylist in not an hbox");
             }
         }
         if (playlistSongs.isEmpty()) {
             System.out.println("No songs found. You must add at least one song.");
             return;
         }
+
+
 
         playlist.setName(playlistName);
         playlist.setSongs(playlistSongs);
@@ -274,6 +228,48 @@ public class EditPlaylistController {
         stage.show();
     }
 
+    private void addSongToVBox(Song song) {
+            ArrayList<String> trimmedArtists = new ArrayList<>();
+            for (String artist : song.getArtist()) {
+                trimmedArtists.add(artist.trim());
+            }
+            Label songLabel = new Label(song.getTitle().trim() + " by " + String.join(", ", trimmedArtists));
+            songLabel.setPrefWidth(650);
+            songLabel.setPrefHeight(30);
+            songLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
+            songLabel.setAlignment(Pos.CENTER_LEFT);
+            songLabel.setPadding(new Insets(0, 10, 0, 10));
+
+
+            //Delete Button
+            Button deleteSongButton = new Button();
+            deleteSongButton.setText("⎯");
+            deleteSongButton.setFont(new Font("Berlin Sans FB Demi",14));
+            deleteSongButton.setPrefWidth(25);
+            deleteSongButton.setPrefHeight(30);
+            deleteSongButton.setStyle("-fx-background-color: #000000;"+"-fx-text-fill: orange;"+"-fx-border-color: orange;");
+
+
+            //Make HBox and add buttons
+            HBox currentHBox = new HBox(songLabel, deleteSongButton);
+            currentHBox.setSpacing(0);
+            currentHBox.setPadding(new Insets(0, 0, 0, 0));
+            songsInPlaylist.getChildren().add(currentHBox);
+
+            playlistNameTextfield.setText(playlist.getName());
+
+            deleteSongButton.setOnAction(actionEvent -> {
+                try {
+                    BridgePlaylistSong.deleteSongFromPlaylist(playlist,song);
+                    playlist.getSongs().remove(song);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                if(songsInPlaylist.getChildren().contains(currentHBox)) {
+                    songsInPlaylist.getChildren().remove(currentHBox);
+                }
+            });
+    }
 
 }
 
