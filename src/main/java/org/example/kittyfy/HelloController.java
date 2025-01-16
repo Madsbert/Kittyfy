@@ -117,7 +117,7 @@ public class HelloController {
         // initialize sound effects
         SoundEffects.readAllEffects();
 
-        Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures");
+        Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "Change This to a Default png Folder");
 
         //initializing searchbar options
         for (Song song : allSongs) {
@@ -396,7 +396,11 @@ public class HelloController {
         int forward = 1;
         if (isShuffleMode)
         {
-            forward = new Random().nextInt(2, currentPlaylist.getSongs().size()/2 + 1);
+            if (currentPlaylist.getSongs().size() > 2)
+            {
+                forward = new Random().nextInt(1, currentPlaylist.getSongs().size()/2 + 1);
+            }
+
         }
 
         if(currentSongNumber + forward <= currentPlaylist.getSongs().size()-1){

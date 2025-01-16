@@ -74,6 +74,10 @@ public class Playlist {
     public String getFolderPath() {
         return folderPath;
     }
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
+    }
+
 
     public static String getFolderPath(String playlistName) throws Exception {
         String sql = "SELECT fldPictureFilepath FROM dbo.TblPlaylist Where fldPlaylistName = ?";
@@ -126,12 +130,14 @@ public class Playlist {
     public static void updatePlaylist(Playlist playlist) throws Exception {
         String sql = "UPDATE dbo.TblPlaylist SET " +
                 "fldPlaylistName = ?," +
-                "fldLastPlayed = ? WHERE fldPlaylistID = ?";
+                "fldLastPlayed = ?," +
+                "fldPictureFilepath = ?  WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, playlist.getName());
         pstmt.setLong(2, playlist.getLastPlayed());
-        pstmt.setInt(3, playlist.getPlaylistId());
+        pstmt.setString(3, playlist.getFolderPath());
+        pstmt.setInt(4, playlist.getPlaylistId());
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Playlist updated successfully.");
