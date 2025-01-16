@@ -60,6 +60,8 @@ public class EditPlaylistController {
         //initializing searchbar options
        initializeSongsInSearchbar();
 
+
+
     }
 
 
@@ -70,6 +72,7 @@ public class EditPlaylistController {
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
         System.out.println("Editing playlist: " + playlist.getName());
+        playlistNameTextfield.setText(playlist.getName());
 
         //initialize songs in playlist
         if(playlist != null) {
@@ -261,15 +264,9 @@ public class EditPlaylistController {
             currentHBox.setPadding(new Insets(0, 0, 0, 0));
             songsInPlaylist.getChildren().add(currentHBox);
 
-            playlistNameTextfield.setText(playlist.getName());
 
             deleteSongButton.setOnAction(actionEvent -> {
-                try {
-                    BridgePlaylistSong.deleteSongFromPlaylist(playlist,song);
-                    playlist.getSongs().remove(song);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+
                 if(songsInPlaylist.getChildren().contains(currentHBox)) {
                     songsInPlaylist.getChildren().remove(currentHBox);
                 }

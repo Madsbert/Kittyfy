@@ -366,7 +366,11 @@ public class HelloController {
         int forward = 1;
         if (isShuffleMode)
         {
-            forward = new Random().nextInt(2, currentPlaylist.getSongs().size()/2 + 1);
+            if (currentPlaylist.getSongs().size() > 2)
+            {
+                forward = new Random().nextInt(1, currentPlaylist.getSongs().size()/2 + 1);
+            }
+
         }
 
         if(currentSongNumber + forward <= currentPlaylist.getSongs().size()-1){
@@ -663,7 +667,6 @@ public class HelloController {
             vBoxPlaylists.getChildren().add(currentHBox);
 
             playlistButton.setOnAction(event -> {
-
                 currentPlaylist = playlist;
                 if (isShuffleMode) {
                     currentSongNumber = new Random().nextInt(currentPlaylist.getSongs().size());
@@ -717,6 +720,7 @@ public class HelloController {
             });
 
             editButton.setOnAction(event -> {
+                SoundEffects.play(SoundEffects.kittySounds.SELECT);
                 onClose();
                 try{
                 FXMLLoader fxmlLoader = new FXMLLoader(EditPlaylistController.class.getResource("Edit-Playlist.fxml"));
