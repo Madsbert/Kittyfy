@@ -300,6 +300,23 @@ public class Song {
     }
 
     /**
+     * gets all genres from the database and returns them as an arraylist.
+     * @return an array named "genreNames".
+     * @throws Exception
+     */
+    public static ArrayList<String> getAllGenreNames() throws Exception {
+        String sql = "SELECT fldGenreName FROM dbo.tblGenre";
+        Connection conn = DB.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        ResultSet resultSet = pstmt.executeQuery();
+        ArrayList<String> genreNames = new ArrayList<>();
+        while (resultSet.next()) {
+            genreNames.add(resultSet.getString("fldGenreName"));
+        }
+        return genreNames;
+    }
+
+    /**
      * Converts genre name into the id for the genre.
      * @param genreName
      * @return Genre ID.
