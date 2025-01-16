@@ -116,7 +116,7 @@ public class HelloController {
         // initialize sound effects
         SoundEffects.readAllEffects();
 
-        Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures");
+        Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "Change This to a Default png Folder");
 
         //initializing searchbar options
         for (Song song : allSongs) {
