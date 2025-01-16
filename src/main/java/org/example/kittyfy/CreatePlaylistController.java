@@ -91,6 +91,7 @@ public class CreatePlaylistController {
      * @throws Exception
      */
     public void createPlaylist(ActionEvent event) throws Exception {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String playlistName = this.playlistName.getText();
         if (playlistName == null || playlistName.isEmpty()) {
             System.out.println("Playlist name cannot be empty");
@@ -125,6 +126,7 @@ public class CreatePlaylistController {
     }
 
     public void cancel(ActionEvent event) throws IOException {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         shiftScene(event);
     }
 
@@ -140,7 +142,7 @@ public class CreatePlaylistController {
     }
 
     public void addSongPlaylist() throws Exception {
-
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String selectedTitle = searchbarPlaylist.getValue();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");

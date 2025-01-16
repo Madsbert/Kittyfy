@@ -1,5 +1,6 @@
 package org.example.kittyfy;
 
+import com.almasb.fxgl.audio.Sound;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -78,7 +79,7 @@ public class HelloController {
     private File[] files;
 
     private Media media;
-    private static MediaPlayer mediaPlayer;
+    public static MediaPlayer mediaPlayer;
 
     private ArrayList<Song> allSongs;
     private ArrayList<Playlist> allPlaylists;
@@ -110,8 +111,10 @@ public class HelloController {
         stopButton.setText("\uD83D\uDE40");
         shuffleButton.setText("Shuffle");
 
-        //initialize Songs
+        // initialize Songs
         allSongs = Reader.readAllSongs();
+        // initialize sound effects
+        SoundEffects.readAllEffects();
 
         Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures");
 
@@ -260,7 +263,7 @@ public class HelloController {
             if (timer == null){beginTimer();}
             else {cancelTimer();}
 
-            mediaPlayer.play();
+            SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
             isRunning = true;
 
             checkIcon();
@@ -299,10 +302,11 @@ public class HelloController {
             isRunning = false;
             checkIcon();
             mediaPlayer.pause();
+            SoundEffects.play(SoundEffects.kittySounds.PAUSE);
         } else {
             isRunning = true;
             checkIcon();
-            mediaPlayer.play();
+            SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
         }
     }
 
@@ -320,7 +324,6 @@ public class HelloController {
             System.out.println("No song selected!");
             return;
         }
-
 
         for (Song song : allSongs) {
             ArrayList<String> trimmedArtists = new ArrayList<>();
@@ -594,6 +597,8 @@ public class HelloController {
      * @throws IOException
      */
     public void createPlaylist(ActionEvent actionEvent) throws IOException {
+        mediaPlayer.stop();
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         FXMLLoader fxmlLoader = new FXMLLoader(CreatePlaylistController.class.getResource("Create-Playlist.fxml"));
         Parent root = fxmlLoader.load();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -605,6 +610,7 @@ public class HelloController {
 
     public void shuffle()
     {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         if (isShuffleMode)
         {
             isShuffleMode = false;
