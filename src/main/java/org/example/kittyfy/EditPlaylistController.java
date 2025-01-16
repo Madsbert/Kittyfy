@@ -170,7 +170,7 @@ public class EditPlaylistController {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                currentHBox.getChildren().clear();
+                songsInPlaylist.getChildren().remove(currentHBox);
             });
         }
 
