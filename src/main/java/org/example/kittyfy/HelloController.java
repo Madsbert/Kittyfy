@@ -79,7 +79,7 @@ public class HelloController {
     private File[] files;
 
     private Media media;
-    private static MediaPlayer mediaPlayer;
+    public static MediaPlayer mediaPlayer;
 
     private ArrayList<Song> allSongs;
     private ArrayList<Playlist> allPlaylists;
@@ -263,7 +263,7 @@ public class HelloController {
             if (timer == null){beginTimer();}
             else {cancelTimer();}
 
-            mediaPlayer.play();
+            SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
             isRunning = true;
 
             checkIcon();
@@ -301,12 +301,12 @@ public class HelloController {
         if (isRunning) {
             isRunning = false;
             checkIcon();
-            SoundEffects.play(SoundEffects.kittySounds.PAUSE);
             mediaPlayer.pause();
+            SoundEffects.play(SoundEffects.kittySounds.PAUSE);
         } else {
             isRunning = true;
             checkIcon();
-            mediaPlayer.play();
+            SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
         }
     }
 
