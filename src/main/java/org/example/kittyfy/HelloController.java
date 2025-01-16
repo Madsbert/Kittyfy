@@ -653,11 +653,11 @@ public class HelloController {
 
             //Edit Button
             Button editButton = new Button();
-            Image editImage = new Image(getClass().getResource("/Pictures/EditIcon.png").toExternalForm());
-            ImageView imageView = new ImageView(editImage);
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(22);
-            editButton.setGraphic(imageView);
+            editButton.setText("⚙");
+            editButton.setStyle("-fx-font-size: 25;");
+            editButton.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: orange;");
+            editButton.setPrefWidth(30);
+            editButton.setPrefHeight(30);
 
             //Make HBox and add buttons
             currentHBox = new HBox();
