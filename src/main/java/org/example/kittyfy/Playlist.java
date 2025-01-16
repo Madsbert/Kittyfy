@@ -74,6 +74,10 @@ public class Playlist {
         this.folderPath = folderPath;
     }
 
+    public void addSong(Song song) {
+        songs.add(song);
+    }
+
 
     public static String getFolderPath(String playlistName) {
         String sql = "SELECT fldPictureFilepath FROM dbo.TblPlaylist Where fldPlaylistName = ?";
