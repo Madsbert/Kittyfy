@@ -81,7 +81,7 @@ public class HelloController {
     private Media media;
     public static MediaPlayer mediaPlayer;
 
-    private ArrayList<Song> allSongs;
+    public static ArrayList<Song> allSongs;
     private ArrayList<Playlist> allPlaylists;
 
     private int currentSongNumber = 0;
@@ -336,6 +336,9 @@ public class HelloController {
             isRunning = true;
             checkIcon();
             SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
+            displayPlaylistTitleAndTotalPlaylistDuration();
+            displayArtistOnLabel();
+            displaySongTitleOnLabel(currentSong);
         }
     }
 
