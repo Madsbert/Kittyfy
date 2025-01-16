@@ -194,7 +194,7 @@ public class HelloController {
                 trimmedArtists.add(artist.trim());
             }
             Button newButton = new Button(song.getTitle().trim() + " by " + String.join(",", trimmedArtists));
-            newButton.setPrefWidth(650);
+            newButton.setPrefWidth(642);
             newButton.setPrefHeight(30);
             newButton.setStyle(
                             "-fx-background-color: #000000; " +
