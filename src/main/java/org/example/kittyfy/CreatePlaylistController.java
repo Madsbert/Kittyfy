@@ -42,7 +42,7 @@ public class CreatePlaylistController {
     private VBox songsInPlaylist;
 
     private ArrayList<Song> allSongs;
-    private String selectedPicFolderFilepath = null;
+    private static String selectedPicFolderFilepath = null;
 
 
     public void initialize() throws Exception {
@@ -111,7 +111,8 @@ public class CreatePlaylistController {
             System.out.println("No songs found. You must add at least one song.");
             return;
         }
-        getGenreFromChoiceBox();
+
+       getGenreFromChoiceBox();
 
         Playlist newPlaylist = new Playlist(playlistName, playlistSongs,selectedPicFolderFilepath);
         newPlaylist.setLastPlayed(0);

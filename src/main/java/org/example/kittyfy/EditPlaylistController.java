@@ -14,8 +14,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -40,6 +42,7 @@ public class EditPlaylistController {
     private ArrayList<Song> allSongs;
 
     private Playlist playlist;
+    private String selectedPicFolderFilepath = null;
 
     public void initialize() throws Exception {
         //adding a default picture
@@ -47,7 +50,7 @@ public class EditPlaylistController {
         editPlaylistImage.setImage(image);
 
         //filling the choicebox with options
-        choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Klassisk");
+        choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Classical");
         choosePictures.setValue("Choose Picture Album");
 
         //initialize Songs
@@ -155,8 +158,6 @@ public class EditPlaylistController {
             return;
         }
 
-
-
         ArrayList<Song> playlistSongs = new ArrayList<>();
         for (Node node : songsInPlaylist.getChildren()) {
             if (node instanceof HBox) {
@@ -184,9 +185,10 @@ public class EditPlaylistController {
         }
 
 
-
+        getGenreFromChoiceBox1();
         playlist.setName(playlistName);
         playlist.setSongs(playlistSongs);
+        playlist.setFolderPath(selectedPicFolderFilepath);
 
         BridgePlaylistSong.updateSongsInPlaylist(playlist);
         Playlist.updatePlaylist(playlist);
@@ -273,7 +275,42 @@ public class EditPlaylistController {
                 }
             });
     }
+    public void openFileExplorer(ActionEvent event) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select a Folder");
 
+        //Shows the directory
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        File selectedFolder = directoryChooser.showDialog(stage);
+        //extracts the folder path.
+        if (selectedFolder != null) {
+            selectedPicFolderFilepath = selectedFolder.getAbsolutePath().trim();
+            System.out.println("Selected Folder Path: " + selectedPicFolderFilepath);
+            choosePictures.setValue(selectedPicFolderFilepath);
+        }
+    }
+    public void getGenreFromChoiceBox1() {
+        if (choosePictures.getValue() != null) {
+            switch (choosePictures.getValue()) {
+                case "Rock":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catRockTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                case "Classical":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catClassicalTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                case "Dansk Top":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catDanskTopTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                default:
+                    selectedPicFolderFilepath = null;
+                    System.out.println("No folder was selected.");
+            }
+        }
+
+    }
 }
 
 
