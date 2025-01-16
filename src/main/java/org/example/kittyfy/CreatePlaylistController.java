@@ -57,7 +57,6 @@ public class CreatePlaylistController {
         for (String genre : genres){
             choosePictures.getItems().add(genre);
         }
-        choosePictures.getItems().add("Choose Picture Album");
         choosePictures.setValue("Choose Picture Album");
 
         //initialize Songs
