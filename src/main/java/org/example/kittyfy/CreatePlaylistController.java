@@ -57,7 +57,6 @@ public class CreatePlaylistController {
         for (String genre : genres){
             choosePictures.getItems().add(genre);
         }
-        choosePictures.getItems().add("Choose Picture Album");
         choosePictures.setValue("Choose Picture Album");
 
         //initialize Songs
@@ -105,12 +104,23 @@ public class CreatePlaylistController {
         }
         ArrayList<Song> playlistSongs = new ArrayList<>();
         for (Node node : songsInPlaylist.getChildren()) {
-            if (node instanceof Label) {
-                String labelText = ((Label) node).getText();
-                Song song = findSongByTitle(labelText);
-                if (song != null) {
-                    playlistSongs.add(song);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                for(Node child: hbox.getChildren()){
+                    if(child instanceof Label){
+                        String labelText = ((Label) child).getText();
+                        Song song = findSongByTitle(labelText);
+                        if (song != null) {
+                            playlistSongs.add(song);
+
+                        }else{
+                            System.out.println("No Song found for label " + labelText);
+                        }
+                        break;
+                    }
                 }
+            }else{
+                System.out.println("Node in sonsplaylist in not an hbox");
             }
         }
         if (playlistSongs.isEmpty()) {
@@ -118,7 +128,7 @@ public class CreatePlaylistController {
             return;
         }
 
-       getGenreFromChoiceBox();
+        getGenreFromChoiceBox();
 
         Playlist newPlaylist = new Playlist(playlistName, playlistSongs,selectedPicFolderFilepath);
         newPlaylist.setLastPlayed(0);

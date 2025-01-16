@@ -81,7 +81,7 @@ public class HelloController {
     private Media media;
     public static MediaPlayer mediaPlayer;
 
-    private ArrayList<Song> allSongs;
+    public static ArrayList<Song> allSongs;
     private ArrayList<Playlist> allPlaylists;
 
     private int currentSongNumber = 0;
@@ -193,7 +193,7 @@ public class HelloController {
             for (String artist : song.getArtist()) {
                 trimmedArtists.add(artist.trim());
             }
-            Button newButton = new Button(song.getTitle().trim() + " by " + String.join(",", trimmedArtists));
+            Button newButton = new Button(song.getTitle().trim() + " by " + String.join(", ", trimmedArtists));
             newButton.setPrefWidth(642);
             newButton.setPrefHeight(30);
             newButton.setStyle(
@@ -233,8 +233,17 @@ public class HelloController {
     public void showRandomImage(){
         try {
             String imageFolderPath = Playlist.getFolderPath(currentPlaylist.getName());
-            assert imageFolderPath != null;
-            File folder = new File(imageFolderPath.trim());
+
+            File folder;
+            if (imageFolderPath != null) {
+                folder = new File(imageFolderPath.trim());
+            }
+            else
+            {
+                // uses default folder if no folder is declared in the database.
+                folder = new File("src/main/resources/Pictures/DefaultPlaylistPictures");
+            }
+
 
             File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png"));
 
@@ -336,10 +345,29 @@ public class HelloController {
             isRunning = true;
             checkIcon();
             SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
+            displayPlaylistTitleAndTotalPlaylistDuration();
+            displayArtistOnLabel();
+            displaySongTitleOnLabel(currentSong);
         }
     }
 
-    public void addSongClick() {
+    private Song findSongByTitle (String title) {
+        for (Song song : allSongs) {
+            if (title.contains(song.getTitle().trim())) {
+                return song;
+            }
+        }
+        return null;
+    }
+
+    public void addSongClick() throws Exception {
+        String selectedSongTitle = searchBar.getValue();
+        Song songToAdd = findSongByTitle(selectedSongTitle);
+
+        if (songToAdd != null) {
+            BridgePlaylistSong.addSongToPlaylist(currentPlaylist, Song.getSong(songToAdd.getTitle()));
+            updateSongList();
+        }
     }
 
     /**
