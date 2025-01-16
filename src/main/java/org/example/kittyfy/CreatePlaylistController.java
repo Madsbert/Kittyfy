@@ -12,8 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 
@@ -43,6 +42,7 @@ public class CreatePlaylistController {
     private VBox songsInPlaylist;
 
     private ArrayList<Song> allSongs;
+    private String selectedPicFolderFilepath = null;
 
 
     public void initialize() throws Exception {
@@ -51,7 +51,7 @@ public class CreatePlaylistController {
         createPlaylistImage.setImage(playlistImage);
 
         //filling the choicebox with options
-        choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Klassisk");
+        choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Classical");
         choosePictures.setValue("Choose Picture Album");
 
         //initialize Songs
@@ -91,6 +91,7 @@ public class CreatePlaylistController {
      * @throws Exception
      */
     public void createPlaylist(ActionEvent event) throws Exception {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String playlistName = this.playlistName.getText();
         if (playlistName == null || playlistName.isEmpty()) {
             System.out.println("Playlist name cannot be empty");
@@ -110,8 +111,9 @@ public class CreatePlaylistController {
             System.out.println("No songs found. You must add at least one song.");
             return;
         }
+        getGenreFromChoiceBox();
 
-        Playlist newPlaylist = new Playlist(playlistName, playlistSongs);
+        Playlist newPlaylist = new Playlist(playlistName, playlistSongs,selectedPicFolderFilepath);
         newPlaylist.setLastPlayed(0);
 
         int playlistID = Playlist.createPlaylist(newPlaylist);
@@ -123,6 +125,7 @@ public class CreatePlaylistController {
     }
 
     public void cancel(ActionEvent event) throws IOException {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         shiftScene(event);
     }
 
@@ -138,11 +141,12 @@ public class CreatePlaylistController {
     }
 
     public void addSongPlaylist() throws Exception {
-
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String selectedTitle = searchbarPlaylist.getValue();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
         }
+        else {
         Label newLabel = new Label (selectedTitle);
         newLabel.setPrefWidth(650);
         newLabel.setPrefHeight(30);
@@ -151,6 +155,42 @@ public class CreatePlaylistController {
         newLabel.setPadding(new Insets(0, 10, 0,10 ));
 
         songsInPlaylist.getChildren().add(newLabel);
+        }
     }
 
+    public void openFileExplorer(ActionEvent event) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select a Folder");
+
+        //Shows the directory
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        File selectedFolder = directoryChooser.showDialog(stage);
+        //extracts the folder path.
+        if (selectedFolder != null) {
+            selectedPicFolderFilepath = selectedFolder.getAbsolutePath().trim();
+            System.out.println("Selected Folder Path: " + selectedPicFolderFilepath);
+            choosePictures.setValue(selectedPicFolderFilepath);
+        }
+    }
+    public void getGenreFromChoiceBox() {
+        if (choosePictures.getValue() != null) {
+            switch (choosePictures.getValue()) {
+                case "Rock":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catRockTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                case "Classical":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catClassicalTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                case "Dansk Top":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catDanskTopTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                default :
+                    selectedPicFolderFilepath = null;
+                    System.out.println("No folder was selected.");
+            }
+        }
+    }
 }

@@ -99,6 +99,7 @@ public class EditPlaylistController {
      * method to add song to playlist
      */
     public void addSongToPlaylist() {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String selectedTitle = searchbarPlaylist.getValue();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
@@ -122,6 +123,7 @@ public class EditPlaylistController {
      * @throws IOException
      */
     public void cancelButton(ActionEvent event) throws IOException {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         shiftScene(event);
     }
 
@@ -146,7 +148,7 @@ public class EditPlaylistController {
      * @throws Exception
      */
     public void saveChangesButton(ActionEvent event) throws Exception {
-
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String playlistName = this.playlistNameTextfield.getText();
         if (playlistName == null || playlistName.isEmpty()) {
             System.out.println("Playlist name cannot be empty");
@@ -206,6 +208,7 @@ public class EditPlaylistController {
         alert.setGraphic(imageView);
 
         if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            SoundEffects.play(SoundEffects.kittySounds.SELECT);
             BridgePlaylistSong.deleteSongsInPlaylist(playlist);
             Playlist.deletePlaylist(playlist);
             System.out.println("Playlist deleted: " + playlist.getName());

@@ -177,6 +177,12 @@ public class Song {
         return curSong;
     }
 
+    /**
+     * Returns the existence of a song on the database tabel TblSong.
+     * @param songName
+     * @return true if it exists, false if not
+     * @throws SQLException
+     */
     public static boolean doesSongExist(String songName) throws SQLException {
         String sql = "SELECT COUNT(*) FROM dbo.TblSong Where fldSongName = ?";
         PreparedStatement pstmt;
@@ -190,6 +196,32 @@ public class Song {
         }
 
         pstmt.setString(1, songName);
+        ResultSet result = pstmt.executeQuery();
+        if (result.next()) {
+            return result.getInt(1) == 1;
+        }
+        return false;
+    }
+
+    /**
+     * Returns the existence of a song on the database tabel TblSong.
+     * @param genreName
+     * @return true if it exists, false if not
+     * @throws SQLException
+     */
+    public static boolean doesGenreExist(String genreName) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM dbo.TblGenre Where fldGenreName = ?";
+        PreparedStatement pstmt;
+        try {
+            Connection conn = DB.getConnection();
+            pstmt = conn.prepareStatement(sql);
+        }
+        catch (Exception e) {
+            DB.getConnection().rollback();
+            return doesGenreExist(genreName);
+        }
+
+        pstmt.setString(1, genreName);
         ResultSet result = pstmt.executeQuery();
         if (result.next()) {
             return result.getInt(1) == 1;
