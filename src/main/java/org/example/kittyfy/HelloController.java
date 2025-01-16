@@ -193,8 +193,8 @@ public class HelloController {
             for (String artist : song.getArtist()) {
                 trimmedArtists.add(artist.trim());
             }
-            Button newButton = new Button(song.getTitle().trim() + " by " + String.join(",", trimmedArtists));
-            newButton.setPrefWidth(650);
+            Button newButton = new Button(song.getTitle().trim() + " by " + String.join(", ", trimmedArtists));
+            newButton.setPrefWidth(642);
             newButton.setPrefHeight(30);
             newButton.setStyle(
                             "-fx-background-color: #000000; " +
@@ -358,9 +358,13 @@ public class HelloController {
     }
 
     public void addSongClick() throws Exception {
+        String selectedSongTitle = searchBar.getValue();
+        Song songToAdd = findSongByTitle(selectedSongTitle);
 
-        BridgePlaylistSong.addSongToPlaylist(currentPlaylist, currentSong); //Song.getSong(findSongByTitle(searchBar.getValue()));
-        updateSongList();
+        if (songToAdd != null) {
+            BridgePlaylistSong.addSongToPlaylist(currentPlaylist, Song.getSong(songToAdd.getTitle()));
+            updateSongList();
+        }
     }
 
     /**

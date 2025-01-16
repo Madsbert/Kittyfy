@@ -132,8 +132,7 @@ public class CreatePlaylistController {
 
         Playlist newPlaylist = new Playlist(playlistName, playlistSongs,selectedPicFolderFilepath);
         newPlaylist.setLastPlayed(0);
-        System.out.println("ChoiceBox value: " + choosePictures.getValue());
-        System.out.println("selecet path = "+selectedPicFolderFilepath);
+
         int playlistID = Playlist.createPlaylist(newPlaylist);
         newPlaylist.setPlaylistId(playlistID);
 
@@ -182,7 +181,6 @@ public class CreatePlaylistController {
             selectedPicFolderFilepath = selectedFolder.getAbsolutePath().trim();
             System.out.println("Selected Folder Path: " + selectedPicFolderFilepath);
             choosePictures.setValue(selectedPicFolderFilepath);
-
         }
     }
     public void getGenreFromChoiceBox() {
