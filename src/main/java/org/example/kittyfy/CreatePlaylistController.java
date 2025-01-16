@@ -42,7 +42,7 @@ public class CreatePlaylistController {
     private VBox songsInPlaylist;
 
     private ArrayList<Song> allSongs;
-    private String selectedPicFolderFilepath;
+    private String selectedPicFolderFilepath = null;
 
 
     public void initialize() throws Exception {
@@ -51,7 +51,7 @@ public class CreatePlaylistController {
         createPlaylistImage.setImage(playlistImage);
 
         //filling the choicebox with options
-        choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Klassisk");
+        choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Classical");
         choosePictures.setValue("Choose Picture Album");
 
         //initialize Songs
@@ -110,6 +110,7 @@ public class CreatePlaylistController {
             System.out.println("No songs found. You must add at least one song.");
             return;
         }
+        getGenreFromChoiceBox();
 
         Playlist newPlaylist = new Playlist(playlistName, playlistSongs,selectedPicFolderFilepath);
         newPlaylist.setLastPlayed(0);
@@ -118,8 +119,6 @@ public class CreatePlaylistController {
         newPlaylist.setPlaylistId(playlistID);
 
         BridgePlaylistSong.addSongsToPlaylist(newPlaylist);
-
-        //add the folder path to the database.
 
         shiftScene(event);
     }
@@ -145,6 +144,7 @@ public class CreatePlaylistController {
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
         }
+        else {
         Label newLabel = new Label (selectedTitle);
         newLabel.setPrefWidth(650);
         newLabel.setPrefHeight(30);
@@ -153,6 +153,7 @@ public class CreatePlaylistController {
         newLabel.setPadding(new Insets(0, 10, 0,10 ));
 
         songsInPlaylist.getChildren().add(newLabel);
+        }
     }
 
     public void openFileExplorer(ActionEvent event) {
@@ -167,9 +168,27 @@ public class CreatePlaylistController {
             selectedPicFolderFilepath = selectedFolder.getAbsolutePath().trim();
             System.out.println("Selected Folder Path: " + selectedPicFolderFilepath);
             choosePictures.setValue(selectedPicFolderFilepath);
-        } else {
-            System.out.println("No folder was selected.");
         }
     }
-
+    public void getGenreFromChoiceBox() {
+        if (choosePictures.getValue() != null) {
+            switch (choosePictures.getValue()) {
+                case "Rock":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catRockTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                case "Classical":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catClassicalTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                case "Dansk Top":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catDanskTopTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                default :
+                    selectedPicFolderFilepath = null;
+                    System.out.println("No folder was selected.");
+            }
+        }
+    }
 }

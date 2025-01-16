@@ -75,14 +75,27 @@ public class Playlist {
         return folderPath;
     }
 
+    public static String getFolderPath(String playlistName) throws Exception {
+        String sql = "SELECT fldPictureFilepath FROM dbo.TblPlaylist Where fldPlaylistName = ?";
+        PreparedStatement pstmt = DB.getConnection().prepareStatement(sql);
+        pstmt.setString(1, playlistName);
+        ResultSet resultSet = pstmt.executeQuery();
+        if (resultSet.next()) {
+            System.out.println(resultSet.getString("fldPictureFilepath"));
+            return resultSet.getString("fldPictureFilepath");
 
+        } else {
+            return null;
+        }
+
+    }
     /**
      * Creates a playlist in the database.
      * @param playlist
      * @throws Exception
      */
     public static int createPlaylist(Playlist playlist) throws Exception {
-        String sql = "INSERT INTO dbo.TblPlaylist (fldPlaylistName,fldLastPlayed,fldPictureFilepath) VALUES (?, ?,?)";
+        String sql = "INSERT INTO dbo.TblPlaylist (fldPlaylistName,fldLastPlayed,fldPictureFilepath) VALUES (?, ?, ?)";
         Connection conn = DB.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, playlist.getName());

@@ -568,14 +568,10 @@ public class HelloController {
             if (frames >= 50000000)
             {
                 TotalPlaylistDuration += (double) frames / (format.getFrameRate() * 142.948717949);
-                System.out.println("Song: " + song.getTitle() + ", duration: " + (double) frames / (format.getFrameRate() * 142.948717949));
-                System.out.println("Frames: " + frames + ", frame rate: " + format.getFrameRate());
             }
             else
             {
                 TotalPlaylistDuration += (double) frames / format.getFrameRate();
-                System.out.println("Song: " + song.getTitle() + ", duration: " + (double) frames / (format.getFrameRate()));
-                System.out.println("Frames: " + frames + ", frame rate: " + format.getFrameRate());
             }
 
         }
@@ -679,14 +675,20 @@ public class HelloController {
                 {
                     currentSong = allSongs.getFirst();
                 }
-
-
-
                 try {
                     displayPlaylistTitleAndTotalPlaylistDuration();
+                    String folderPath;
+                    if (currentPlaylist.getFolderPath(currentPlaylist.getName()) != null){
+                        folderPath = currentPlaylist.getFolderPath(currentPlaylist.getName());
+                    } else {folderPath = "src/main/resources/Pictures";}
+
+                    System.out.println("pictureFolderPath for selected Playlist: " + folderPath);
+
                 } catch (UnsupportedAudioFileException e) {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 try {
@@ -728,8 +730,4 @@ public class HelloController {
         }
 
     }
-
-
-
-
 }
