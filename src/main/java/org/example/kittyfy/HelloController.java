@@ -325,7 +325,6 @@ public class HelloController {
             return;
         }
 
-
         for (Song song : allSongs) {
             ArrayList<String> trimmedArtists = new ArrayList<>();
             for (String artist : song.getArtist()) {
@@ -598,6 +597,8 @@ public class HelloController {
      * @throws IOException
      */
     public void createPlaylist(ActionEvent actionEvent) throws IOException {
+        mediaPlayer.stop();
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         FXMLLoader fxmlLoader = new FXMLLoader(CreatePlaylistController.class.getResource("Create-Playlist.fxml"));
         Parent root = fxmlLoader.load();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -609,6 +610,7 @@ public class HelloController {
 
     public void shuffle()
     {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         if (isShuffleMode)
         {
             isShuffleMode = false;

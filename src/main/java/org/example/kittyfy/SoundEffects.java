@@ -10,7 +10,6 @@ public class SoundEffects {
     public enum kittySounds {
         PAUSE,
         PLAY,
-        STOP,
         SELECT
     }
 
@@ -24,12 +23,19 @@ public class SoundEffects {
 
         soundEffectArray.add("pauseKitty.wav");
         soundEffectArray.add("playKitty.wav");
+        soundEffectArray.add("selectKitty.wav");
     }
 
 
-    public static void play(kittySounds soundEffect) throws Exception {
-        Media media = new Media(new File("src/main/resources/sound effects/" + soundEffectArray.get(soundEffect.ordinal())).toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
+    public static void play(kittySounds soundEffect) {
+        try {
+            Media media = new Media(new File("src/main/resources/sound effects/" + soundEffectArray.get(soundEffect.ordinal())).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+        }
+        catch (Exception e) {
+            System.out.println("Sound effect could not be found");
+        }
+
         if (soundEffect.equals(kittySounds.PAUSE)) {
             mediaPlayer.setVolume(0.1);
         }
@@ -37,7 +43,7 @@ public class SoundEffects {
         mediaPlayer.setOnEndOfMedia(new Runnable() {
             public void run() {
                 mediaPlayer.stop();
-                if (!soundEffect.equals(kittySounds.PAUSE)) {
+                if (soundEffect.equals(kittySounds.PLAY)) {
                     HelloController.mediaPlayer.play();
                 }
 
