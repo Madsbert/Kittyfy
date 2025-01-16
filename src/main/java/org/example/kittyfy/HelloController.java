@@ -307,6 +307,9 @@ public class HelloController {
             isRunning = true;
             checkIcon();
             SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
+            displayPlaylistTitleAndTotalPlaylistDuration();
+            displayArtistOnLabel();
+            displaySongTitleOnLabel(currentSong);
         }
     }
 

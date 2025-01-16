@@ -122,9 +122,7 @@ public class BridgeSongArtist {
             pstmt.setString(1, artistName);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
-                if (resultSet.getInt(1) >= 1) {
-                    return true;
-                }
+                return resultSet.getInt(1) >= 1;
             }
             return false;
         }
