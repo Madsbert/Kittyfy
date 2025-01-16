@@ -52,8 +52,11 @@ public class CreatePlaylistController {
         Image playlistImage = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/CatMakingMusic.png")).toExternalForm());
         createPlaylistImage.setImage(playlistImage);
 
-        //filling the choicebox with options
-        choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Classical");
+        //filling the choicebox with options from database.
+        ArrayList<String> genres = new ArrayList<>(Song.getAllGenreNames());
+        for (String genre : genres){
+            choosePictures.getItems().add(genre);
+        }
         choosePictures.setValue("Choose Picture Album");
 
         //initialize Songs

@@ -12,7 +12,7 @@ public class DB {
 
     /**
      * Establishes connection to the Database.
-     * @return
+     * @return return the connection to the Database.
      */
     public static Connection getConnection() {
         if (conn == null) {

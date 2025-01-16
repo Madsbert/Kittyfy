@@ -81,7 +81,7 @@ public class HelloController {
     private Media media;
     public static MediaPlayer mediaPlayer;
 
-    private ArrayList<Song> allSongs;
+    public static ArrayList<Song> allSongs;
     private ArrayList<Playlist> allPlaylists;
 
     private int currentSongNumber = 0;
@@ -104,6 +104,7 @@ public class HelloController {
      */
 
     public void initialize() throws Exception {
+
         //Adding a default picture
         Image defaultImage = new Image(getClass().getResource("/Pictures/MusicCat.png").toExternalForm());
         pictures.setImage(defaultImage);
@@ -116,7 +117,7 @@ public class HelloController {
         // initialize sound effects
         SoundEffects.readAllEffects();
 
-        Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "Change This to a Default png Folder");
+        Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures/DefaultPlaylistPictures");
 
         //initializing searchbar options
         for (Song song : allSongs) {
@@ -177,7 +178,7 @@ public class HelloController {
 
     /**
      * Updates songlist in scrollbar and set the buttons to a certain size.
-     * When the button is pushed, the song that is currently playing stops, and the playSong (song) is called.
+     * When the button is pushed, the song that is currently playing stops, and the playSong (song) is called while a random picture shows.
      */
     public void updateSongList() {
         songsVbox.getChildren().clear();
@@ -214,6 +215,7 @@ public class HelloController {
                 try {
                     stopMusic();
                     playSong(song, true);
+                    showRandomImage();
 
                 } catch (Exception e) {
                     System.out.println("Failed to play song");
@@ -225,6 +227,33 @@ public class HelloController {
         }
     }
 
+    /**
+     * Takes random picture from picture folder and shows it on the imageview on the hello-view UI.
+     */
+    public void showRandomImage(){
+        try {
+            String imageFolderPath = Playlist.getFolderPath(currentPlaylist.getName());
+            assert imageFolderPath != null;
+            File folder = new File(imageFolderPath.trim());
+
+            File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png"));
+
+
+            if (listOfFiles != null && listOfFiles.length > 0) {
+                Random rand = new Random();
+                File ranImageFile = listOfFiles[rand.nextInt(listOfFiles.length)];
+
+                Image randomImage = new Image(ranImageFile.toURI().toString());
+                pictures.setImage(randomImage);
+
+            } else {
+                System.out.println("No image found.");
+            }
+        }catch (Exception e) {
+            System.out.println("Failed to load image.");
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Connecting the musicfile to the label, calls the display Artist, Title and Duration methods, and begins the timer.
@@ -307,6 +336,9 @@ public class HelloController {
             isRunning = true;
             checkIcon();
             SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
+            displayPlaylistTitleAndTotalPlaylistDuration();
+            displayArtistOnLabel();
+            displaySongTitleOnLabel(currentSong);
         }
     }
 
@@ -375,6 +407,7 @@ public class HelloController {
      * @throws Exception
      */
     public void skip() throws Exception {
+        showRandomImage();
         int forward = 1;
         if (isShuffleMode)
         {

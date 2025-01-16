@@ -14,6 +14,7 @@ module org.example.kittyfy {
     requires java.desktop;
     requires javafx.media;
     requires annotations;
+    requires sqljdbc4;
 
     opens org.example.kittyfy to javafx.fxml;
     exports org.example.kittyfy;
