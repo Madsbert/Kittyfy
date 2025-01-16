@@ -59,10 +59,6 @@ public class Playlist {
         this.songs = songs;
     }
 
-    public void addSong(Song song) {
-        songs.add(song);
-    }
-
     public int getPlaylistId() {
         return playlistId;
     }
@@ -75,19 +71,25 @@ public class Playlist {
         return folderPath;
     }
 
-    public static String getFolderPath(String playlistName) throws Exception {
+    public static String getFolderPath(String playlistName) {
         String sql = "SELECT fldPictureFilepath FROM dbo.TblPlaylist Where fldPlaylistName = ?";
-        PreparedStatement pstmt = DB.getConnection().prepareStatement(sql);
-        pstmt.setString(1, playlistName);
-        ResultSet resultSet = pstmt.executeQuery();
-        if (resultSet.next()) {
-            System.out.println(resultSet.getString("fldPictureFilepath"));
-            return resultSet.getString("fldPictureFilepath");
+        try {
+            PreparedStatement pstmt = DB.getConnection().prepareStatement(sql);
+            pstmt.setString(1, playlistName);
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                System.out.println(resultSet.getString("fldPictureFilepath"));
+                return resultSet.getString("fldPictureFilepath");
 
-        } else {
+            } else {
+                return null;
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get folder path");
             return null;
         }
-
     }
     /**
      * Creates a playlist in the database.
