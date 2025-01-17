@@ -139,13 +139,6 @@ public class HelloController {
        initzializePlaylistOptions();
 
 
-        //checks if there are songs in playlist
-        if (!currentPlaylist.getSongs().isEmpty()) {
-            createMediaPlayer(allSongs.get(0));
-        } else {
-            System.out.println("Playlist is empty.");
-        }
-
         if (!allPlaylists.isEmpty())
         {
             currentPlaylist = allPlaylists.getFirst();
@@ -153,27 +146,24 @@ public class HelloController {
         else
         {
             currentPlaylist = allSongsPlaylist;
+            currentSong = allSongsPlaylist.getSongs().getFirst();
         }
 
-
+        if (!currentPlaylist.getSongs().isEmpty()) {
+            currentSong = currentPlaylist.getSongs().getFirst();
+        }
 
         //initialize Progressbar
         progressBar.setStyle("-fx-accent: #FFA500;");
 
-
         //initialize all songs in the song in playlist box
         updateSongList();
 
-        if (!currentPlaylist.getSongs().isEmpty()) {
-            createMediaPlayer(currentPlaylist.getSongs().getFirst());
-            currentSong = currentPlaylist.getSongs().getFirst();
-        }
+        createMediaPlayer();
 
         displayPlaylistTitleAndTotalPlaylistDuration();
         SongTitleLabel.setText("Welcome To Kittyfy");
         ArtistNameLabel.setText("playing playlist: " + currentPlaylist.getName());
-
-
     }
 
     /**
@@ -271,11 +261,8 @@ public class HelloController {
     public void playSong(Song song, Boolean fromPlaylist) throws Exception {
         allSongs = Reader.readAllSongs();
         stopMusic();
-        if(isRunning){cancelTimer();}
 
         try {
-            mediaPlayer = new MediaPlayer(new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString()));
-
             // the MediaPlayer doesn't update the metadata every time it's created, so we need a listener.
             mediaPlayer.setOnReady(() -> {
                 displayDuration(mediaPlayer.getMedia().getDuration());
@@ -300,8 +287,13 @@ public class HelloController {
             if (timer == null){beginTimer();}
             else {cancelTimer();}
 
-            SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
+            //SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
             isRunning = true;
+
+            mediaPlayer.dispose();
+            createMediaPlayer();
+
+            mediaPlayer.play();
 
             checkIcon();
 
@@ -310,6 +302,7 @@ public class HelloController {
                 timer.cancel();
                 beginTimer();
             }
+
         } catch (Exception e) {
             System.out.println("Failed to play song");
             e.printStackTrace();
@@ -502,7 +495,8 @@ public class HelloController {
                     // forces it to update in the JavaFX thread
                     Platform.runLater(() -> {
                         // Updates progress bar
-                        progressBar.setProgress(currentSeconds / end);
+                        System.out.println("Progress: " + currentSeconds + "/" + end);
+                        progressBar.setProgress(currentSeconds * 1.33 / end);
 
                         // Math to display current song duration
                         int currentMinutesMath = (int) (currentSeconds / 60);
@@ -525,7 +519,7 @@ public class HelloController {
                 }
             }
         };
-        timer.schedule(timerTask, 0, 1000);
+        timer.schedule(timerTask, 0, 500);
     }
 
     /**
@@ -554,11 +548,11 @@ public class HelloController {
      * and displays the song title and artist.
      * @throws Exception
      */
-    public void createMediaPlayer(Song song) throws Exception {
+    public void createMediaPlayer() throws Exception {
         //creates a Media Player
-        media = new Media(new File("src/main/resources/music/" + currentPlaylist.getSongs().get(currentSongNumber).getFilePath()).toURI().toString());
+        media = new Media(new File("src/main/resources/music/" + currentSong.getFilePath()).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
-        displaySongTitleOnLabel(song);
+        displaySongTitleOnLabel(currentSong);
         displayArtistOnLabel();
     }
 
