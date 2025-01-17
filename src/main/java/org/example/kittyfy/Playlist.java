@@ -78,7 +78,11 @@ public class Playlist {
         songs.add(song);
     }
 
-
+    /**
+     * ???
+     * @param playlistName
+     * @return
+     */
     public static String getFolderPath(String playlistName) {
         String sql = "SELECT fldPictureFilepath FROM dbo.TblPlaylist Where fldPlaylistName = ?";
         Connection conn = DB.getConnection();
@@ -104,6 +108,7 @@ public class Playlist {
             return null;
         }
     }
+
     /**
      * Creates a playlist in the database.
      * @param playlist playlist object to create in the database.
@@ -277,21 +282,6 @@ public class Playlist {
     {
         for (int i = 0; i < songs.size(); i++) {
             if (songs.get(i).getFilePath().equals(song.getFilePath())) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * Gets the playlist index of a wanted song.
-     * @param songTitle Title of the song wanted.
-     * @return Index of song in playlist Arraylist. Returns -1 if song is not in the playlist.
-     */
-    public int getSongIndex(String songTitle)
-    {
-        for (int i = 0; i < songs.size(); i++) {
-            if (songs.get(i).getTitle().equals(songTitle)) {
                 return i;
             }
         }

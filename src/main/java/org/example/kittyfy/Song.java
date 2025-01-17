@@ -310,7 +310,7 @@ public class Song {
     }
 
     /**
-     * gets all genres from the database and returns them as an arraylist.
+     * Gets all genres from the database and returns them as an arraylist.
      * @return an array named "genreNames".
      * @throws Exception
      */
