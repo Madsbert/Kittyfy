@@ -16,6 +16,7 @@ public class Playlist {
     private long lastPlayed;
     private ArrayList<Song> songs;
     public Button playlistButton;
+    public String folderPath;
 
     public long getLastPlayed() {
         return lastPlayed;
@@ -32,6 +33,11 @@ public class Playlist {
         this.lastPlayed = lastPlayed;
     }
 
+    public Playlist(String name, ArrayList<Song> songs, String selectedPicFolderFilepath) {
+        this.name = name;
+        this.songs = songs;
+        this.folderPath = selectedPicFolderFilepath;
+    }
     public Playlist(String name, ArrayList<Song> songs) {
         this.name = name;
         this.songs = songs;
@@ -53,10 +59,6 @@ public class Playlist {
         this.songs = songs;
     }
 
-    public void addSong(Song song) {
-        songs.add(song);
-    }
-
     public int getPlaylistId() {
         return playlistId;
     }
@@ -65,129 +67,205 @@ public class Playlist {
         this.playlistId = playlistId;
     }
 
+    public String getFolderPath() {
+        return folderPath;
+    }
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
+    }
+
+    public void addSong(Song song) {
+        songs.add(song);
+    }
+
+
+    public static String getFolderPath(String playlistName) {
+        String sql = "SELECT fldPictureFilepath FROM dbo.TblPlaylist Where fldPlaylistName = ?";
+        Connection conn = DB.getConnection();
+        try
+        {
+            ResultSet resultSet;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            {
+                pstmt.setString(1, playlistName);
+                resultSet = pstmt.executeQuery();
+            }
+            if (resultSet.next()) {
+                System.out.println(resultSet.getString("fldPictureFilepath"));
+                return resultSet.getString("fldPictureFilepath").trim();
+
+            } else {
+                return null;
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get folder path");
+            return null;
+        }
+    }
     /**
      * Creates a playlist in the database.
-     * @param playlist
-     * @throws Exception
+     * @param playlist playlist object to create in the database.
      */
-    public static int createPlaylist(Playlist playlist) throws Exception {
-        String sql = "INSERT INTO dbo.TblPlaylist (fldPlaylistName,fldLastPlayed) VALUES (?, ?)";
+    public static int createPlaylist(Playlist playlist) {
+        String sql = "INSERT INTO dbo.TblPlaylist (fldPlaylistName,fldLastPlayed,fldPictureFilepath) VALUES (?, ?, ?)";
         Connection conn = DB.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, playlist.getName());
-        pstmt.setLong(2, playlist.getLastPlayed());
-
-        int affectedRows = pstmt.executeUpdate();
-        if (affectedRows > 0) {
-            System.out.println("Playlist created successfully.");
-            sql = "SELECT * FROM dbo.TblPlaylist WHERE fldPlaylistName = ?";
-            pstmt = conn.prepareStatement(sql);
+        try
+        {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, playlist.getName());
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("fldPlaylistId");
+            pstmt.setLong(2, playlist.getLastPlayed());
+            pstmt.setString(3,playlist.getFolderPath());
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Playlist created successfully.");
+                sql = "SELECT * FROM dbo.TblPlaylist WHERE fldPlaylistName = ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, playlist.getName());
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+
+                    return rs.getInt("fldPlaylistId");
+                }
+            } else {
+                System.out.println("Failed to update the playlist.");
             }
-        } else {
-            System.out.println("Failed to update the playlist.");
+            return -1;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to create playlist.");
         }
         return -1;
     }
 
     /**
      * Updates a playlist in the database.
-     * @param playlist
-     * @throws Exception
+     * @param playlist updated instance of the playlist.
      */
-    public static void updatePlaylist(Playlist playlist) throws Exception {
+    public static void updatePlaylist(Playlist playlist) {
         String sql = "UPDATE dbo.TblPlaylist SET " +
                 "fldPlaylistName = ?," +
-                "fldLastPlayed = ? WHERE fldPlaylistID = ?";
+                "fldLastPlayed = ?," +
+                "fldPictureFilepath = ?  WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, playlist.getName());
-        pstmt.setLong(2, playlist.getLastPlayed());
-        pstmt.setInt(3, playlist.getPlaylistId());
-        int affectedRows = pstmt.executeUpdate();
-        if (affectedRows > 0) {
-            System.out.println("Playlist updated successfully.");
-        } else {
-            System.out.println("Failed to update the playlist.");
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, playlist.getName());
+            pstmt.setLong(2, playlist.getLastPlayed());
+            pstmt.setString(3, playlist.getFolderPath());
+            pstmt.setInt(4, playlist.getPlaylistId());
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Playlist updated successfully.");
+            } else {
+                System.out.println("Failed to update the playlist.");
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to update playlist.");
         }
     }
 
     /**
      * Reads a playlist from the database and creates a new playlist object.
-     * @param playlistId
+     * @param playlistId ID of the playlist to read from the database.
      * @return Playlist object made from DB Data.
-     * @throws Exception
      */
-    public static Playlist getPlaylist(int playlistId) throws Exception {
+    public static Playlist getPlaylist(int playlistId) {
         String sql = "SELECT * from dbo.TblPlaylist WHERE fldPlaylistID = ?";
         Connection conn = DB.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1, playlistId);
-        ResultSet resultSet = pstmt.executeQuery();
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, playlistId);
+            ResultSet resultSet = pstmt.executeQuery();
 
-        String playlistName = "Not set Error";
-        long lastPlayed = 0;
-        int playlistID = 0;
-        if (resultSet.next()) {
-            playlistName = resultSet.getString("fldPlaylistName");
-            lastPlayed = resultSet.getLong("fldLastPlayed");
-            playlistID = resultSet.getInt("fldPlaylistID");
-        }
-
-        Playlist newPlaylist = new Playlist(playlistName, BridgePlaylistSong.getAllSongsInPlaylist(playlistID));
-        newPlaylist.setLastPlayed(lastPlayed);
-        newPlaylist.setPlaylistId(playlistID);
-
-        return newPlaylist;
-    }
-
-    /**
-     * Deletes playlist from the database.
-     * @param playlist
-     * @throws Exception
-     */
-    public static void deletePlaylist(@NotNull Playlist playlist) throws Exception {
-        String sql = "DELETE FROM dbo.TblPlaylist WHERE fldPlaylistID = ?";
-        Connection conn = DB.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1, playlist.getPlaylistId());
-
-        BridgePlaylistSong.deleteSongsInPlaylist(playlist);
-
-        int affectedRows = pstmt.executeUpdate();
-        if (affectedRows > 0) {
-            System.out.println("Playlist deleted successfully.");
-        }else {
-            System.out.println("Failed to delete the playlist.");
-        }
-    }
-
-    /**
-     * Gets all playlists from playlist table.
-     * @return
-     * @throws Exception
-     */
-    public static ArrayList<Playlist> getAllPlaylists() throws Exception {
-        String sql = "Select * from dbo.TblPlaylist";
-        Connection conn = DB.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        ResultSet resultSet = pstmt.executeQuery();
-        ArrayList<Playlist> allPlaylists = new ArrayList<>();
-
-        while (resultSet.next()) {
-           String playlistName = resultSet.getString("fldPlaylistName").trim();
-           long lastPlayed = resultSet.getLong("fldLastPlayed");
-           int playlistID = resultSet.getInt("fldPlaylistID");
+            String playlistName = "Not set Error";
+            long lastPlayed = 0;
+            int playlistID = 0;
+            if (resultSet.next()) {
+                playlistName = resultSet.getString("fldPlaylistName");
+                lastPlayed = resultSet.getLong("fldLastPlayed");
+                playlistID = resultSet.getInt("fldPlaylistID");
+            }
 
             Playlist newPlaylist = new Playlist(playlistName, BridgePlaylistSong.getAllSongsInPlaylist(playlistID));
             newPlaylist.setLastPlayed(lastPlayed);
             newPlaylist.setPlaylistId(playlistID);
-            allPlaylists.add(newPlaylist);
+
+            return newPlaylist;
         }
-        return allPlaylists;
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get playlist.");
+        }
+        return null;
+    }
+
+    /**
+     * Deletes playlist from the database.
+     * @param playlist playlist instance to delete from the database.
+     */
+    public static void deletePlaylist(@NotNull Playlist playlist) {
+        String sql = "DELETE FROM dbo.TblPlaylist WHERE fldPlaylistID = ?";
+        Connection conn = DB.getConnection();
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, playlist.getPlaylistId());
+
+            BridgePlaylistSong.deleteSongsInPlaylist(playlist);
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Playlist deleted successfully.");
+            }else {
+                System.out.println("Failed to delete the playlist.");
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to delete the playlist.");
+        }
+
+    }
+
+    /**
+     * Gets all playlists from playlist table.
+     * @return ArrayList with all playlists from the database.
+     */
+    public static ArrayList<Playlist> getAllPlaylists() {
+        String sql = "Select * from dbo.TblPlaylist";
+        Connection conn = DB.getConnection();
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet resultSet = pstmt.executeQuery();
+            ArrayList<Playlist> allPlaylists = new ArrayList<>();
+
+            while (resultSet.next()) {
+                String playlistName = resultSet.getString("fldPlaylistName").trim();
+                long lastPlayed = resultSet.getLong("fldLastPlayed");
+                int playlistID = resultSet.getInt("fldPlaylistID");
+
+                Playlist newPlaylist = new Playlist(playlistName, BridgePlaylistSong.getAllSongsInPlaylist(playlistID));
+                newPlaylist.setLastPlayed(lastPlayed);
+                newPlaylist.setPlaylistId(playlistID);
+                allPlaylists.add(newPlaylist);
+            }
+            return allPlaylists;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get all playlists.");
+        }
+        return null;
     }
 
     /**

@@ -1,9 +1,7 @@
 package org.example.kittyfy;
 
+import com.almasb.fxgl.audio.Sound;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +19,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import javafx.scene.image.Image;
@@ -34,7 +31,6 @@ import javafx.scene.Scene;
 import javafx.util.Duration;
 
 import java.util.*;
-import java.util.Timer;
 
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.CENTER_LEFT;
@@ -83,9 +79,9 @@ public class HelloController {
     private File[] files;
 
     private Media media;
-    private static MediaPlayer mediaPlayer;
+    public static MediaPlayer mediaPlayer;
 
-    private ArrayList<Song> allSongs;
+    public static ArrayList<Song> allSongs;
     private ArrayList<Playlist> allPlaylists;
 
     private int currentSongNumber = 0;
@@ -108,6 +104,7 @@ public class HelloController {
      */
 
     public void initialize() throws Exception {
+
         //Adding a default picture
         Image defaultImage = new Image(getClass().getResource("/Pictures/MusicCat.png").toExternalForm());
         pictures.setImage(defaultImage);
@@ -115,13 +112,15 @@ public class HelloController {
         stopButton.setText("\uD83D\uDE40");
         shuffleButton.setText("Shuffle");
 
-        //initialize Songs
+        // initialize Songs
         allSongs = Reader.readAllSongs();
 
-        Playlist allSongsPlaylist = new Playlist("All songs", allSongs);
+        // initialize sound effects
+        SoundEffects.readAllEffects();
+
+        Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures/DefaultPlaylistPictures");
 
         //initializing searchbar options
-       ObservableList<String> songOptions = FXCollections.observableArrayList();
         for (Song song : allSongs) {
             ArrayList<String> trimmedArtists = new ArrayList<>();
             for (String artist : song.getArtist()) {
@@ -129,30 +128,7 @@ public class HelloController {
             }
             String artists = String.join(", ", trimmedArtists);
             searchBar.getItems().add(song.getTitle().trim() + " by " + artists);
-            songOptions.add(song.getTitle().trim() + " by " + artists);
         }
-
-        //Initializing a filtered list of songs from the search in the searchbar.
-        FilteredList<String> filteredSongs = new FilteredList<>(songOptions, s -> true);
-        searchBar.setItems(filteredSongs);
-
-        searchBar.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null || newValue.trim().isEmpty()) {
-                filteredSongs.setPredicate(s -> true);
-            } else {
-                String search = newValue.toLowerCase().trim();
-                filteredSongs.setPredicate(song -> song.toLowerCase().contains(search));
-            }
-        });
-
-        searchBar.setOnAction(event -> {
-            try {
-                playSongOnClick();
-            } catch (Exception e) {
-                System.out.println("Error");
-                e.printStackTrace();
-            }
-        });
 
         System.out.println(allSongs.size() + " songs initialized");
 
@@ -161,15 +137,8 @@ public class HelloController {
         initzializePlaylists();
 
         //initializing playlists options
-        initzializePlaylistOptions();
+       initzializePlaylistOptions();
 
-
-        //checks if there are songs in playlist
-        if (!currentPlaylist.getSongs().isEmpty()) {
-            createMediaPlayer(allSongs.get(0));
-        } else {
-            System.out.println("Playlist is empty.");
-        }
 
         if (!allPlaylists.isEmpty())
         {
@@ -178,37 +147,29 @@ public class HelloController {
         else
         {
             currentPlaylist = allSongsPlaylist;
+            currentSong = allSongsPlaylist.getSongs().getFirst();
         }
 
-
+        if (!currentPlaylist.getSongs().isEmpty()) {
+            currentSong = currentPlaylist.getSongs().getFirst();
+        }
 
         //initialize Progressbar
         progressBar.setStyle("-fx-accent: #FFA500;");
 
-
         //initialize all songs in the song in playlist box
         updateSongList();
 
-        if (!currentPlaylist.getSongs().isEmpty()) {
-            createMediaPlayer(currentPlaylist.getSongs().getFirst());
-            currentSong = currentPlaylist.getSongs().getFirst();
-        }
+        createMediaPlayer();
 
         displayPlaylistTitleAndTotalPlaylistDuration();
         SongTitleLabel.setText("Welcome To Kittyfy");
         ArtistNameLabel.setText("playing playlist: " + currentPlaylist.getName());
-
-
-    }
-    @FXML
-    public void updateSearchbar() {
-        searchBar.getEditor().getText();
-        System.out.println(searchBar.getEditor().getText());
     }
 
     /**
      * Updates songlist in scrollbar and set the buttons to a certain size.
-     * When the button is pushed, the song that is currently playing stops, and the playSong (song) is called.
+     * When the button is pushed, the song that is currently playing stops, and the playSong (song) is called while a random picture shows.
      */
     public void updateSongList() {
         songsVbox.getChildren().clear();
@@ -223,8 +184,8 @@ public class HelloController {
             for (String artist : song.getArtist()) {
                 trimmedArtists.add(artist.trim());
             }
-            Button newButton = new Button(song.getTitle().trim() + " by " + String.join(",", trimmedArtists));
-            newButton.setPrefWidth(650);
+            Button newButton = new Button(song.getTitle().trim() + " by " + String.join(", ", trimmedArtists));
+            newButton.setPrefWidth(642);
             newButton.setPrefHeight(30);
             newButton.setStyle(
                             "-fx-background-color: #000000; " +
@@ -245,6 +206,7 @@ public class HelloController {
                 try {
                     stopMusic();
                     playSong(song, true);
+                    showRandomImage();
 
                 } catch (Exception e) {
                     System.out.println("Failed to play song");
@@ -256,6 +218,41 @@ public class HelloController {
         }
     }
 
+    /**
+     * Takes random picture from picture folder and shows it on the imageview on the hello-view UI.
+     */
+    public void showRandomImage(){
+        try {
+            String imageFolderPath = Playlist.getFolderPath(currentPlaylist.getName());
+            File folder;
+            if (imageFolderPath != null) {
+                folder = new File(imageFolderPath.trim());
+            }
+            else
+            {
+                // uses default folder if no folder is declared in the database.
+                folder = new File("src/main/resources/Pictures/DefaultPlaylistPictures");
+            }
+
+
+            File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png"));
+
+
+            if (listOfFiles != null && listOfFiles.length > 0) {
+                Random rand = new Random();
+                File ranImageFile = listOfFiles[rand.nextInt(listOfFiles.length)];
+
+                Image randomImage = new Image(ranImageFile.toURI().toString());
+                pictures.setImage(randomImage);
+
+            } else {
+                System.out.println("No image found.");
+            }
+        }catch (Exception e) {
+            System.out.println("Failed to load image.");
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Connecting the musicfile to the label, calls the display Artist, Title and Duration methods, and begins the timer.
@@ -263,13 +260,9 @@ public class HelloController {
      * @throws Exception
      */
     public void playSong(Song song, Boolean fromPlaylist) throws Exception {
-        allSongs = Reader.readAllSongs();
         stopMusic();
-        if(isRunning){cancelTimer();}
 
         try {
-            mediaPlayer = new MediaPlayer(new Media(new File("src/main/resources/music/" + song.getFilePath()).toURI().toString()));
-
             // the MediaPlayer doesn't update the metadata every time it's created, so we need a listener.
             mediaPlayer.setOnReady(() -> {
                 displayDuration(mediaPlayer.getMedia().getDuration());
@@ -294,19 +287,26 @@ public class HelloController {
             if (timer == null){beginTimer();}
             else {cancelTimer();}
 
-            mediaPlayer.play();
+
             isRunning = true;
 
-            checkIcon();
-            //displayArtistBasedOnSong(song);
-            //displaySongTitleOnLabel(song);
+            mediaPlayer.dispose();
+            createMediaPlayer();
 
-            //displays total duration based on media. (doesn't work)
+            //displays total duration based on media.
             if (timer != null) {
                 timer.cancel();
                 beginTimer();
             }
-        } catch (Exception e) {
+
+            SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
+
+            //mediaPlayer.play();
+
+            checkIcon();
+
+        }
+        catch (Exception e) {
             System.out.println("Failed to play song");
             e.printStackTrace();
         }
@@ -333,14 +333,34 @@ public class HelloController {
             isRunning = false;
             checkIcon();
             mediaPlayer.pause();
+            SoundEffects.play(SoundEffects.kittySounds.PAUSE);
         } else {
             isRunning = true;
             checkIcon();
-            mediaPlayer.play();
+            SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
+            displayPlaylistTitleAndTotalPlaylistDuration();
+            displayArtistOnLabel();
+            displaySongTitleOnLabel(currentSong);
         }
     }
 
-    public void addSongClick() {
+    private Song findSongByTitle (String title) {
+        for (Song song : allSongs) {
+            if (title.contains(song.getTitle().trim())) {
+                return song;
+            }
+        }
+        return null;
+    }
+
+    public void addSongClick() throws Exception {
+        String selectedSongTitle = searchBar.getValue();
+        Song songToAdd = findSongByTitle(selectedSongTitle);
+
+        if (songToAdd != null) {
+            BridgePlaylistSong.addSongToPlaylist(currentPlaylist, Song.getSong(songToAdd.getTitle()));
+            updateSongList();
+        }
     }
 
     /**
@@ -348,34 +368,28 @@ public class HelloController {
      * @throws Exception
      */
     public void playSongOnClick() throws Exception {
-        String selectedTitle = searchBar.getValue();
-        System.out.println("Selected title: " + selectedTitle);
 
+        String selectedTitle = searchBar.getValue();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
             return;
         }
+
         for (Song song : allSongs) {
             ArrayList<String> trimmedArtists = new ArrayList<>();
             for (String artist : song.getArtist()) {
                 trimmedArtists.add(artist.trim());
             }
             String artists = String.join(", ", trimmedArtists);
-            String songTitleAndArtist = song.getTitle().trim() + " by " + artists;
 
-            if (selectedTitle.equalsIgnoreCase(songTitleAndArtist)) {
-                playSong(song, true);
+
+            if (selectedTitle.equals(song.getTitle().trim() + " by " + artists)) {
+
+                playSong(song, false);
                 return;
             }
-
-
-            //if (selectedTitle.contains(song.getTitle().trim())) {
-
-                //playSong(song, false);
-                //return;
-            //}
         }
-        System.out.println("No song selected! wka wka");
+        System.out.println("No song selected!");
     }
     /**
      * restarts the song that is currently playing, and calls the previousSong method after 2 clicks.
@@ -399,10 +413,15 @@ public class HelloController {
      * @throws Exception
      */
     public void skip() throws Exception {
+        showRandomImage();
         int forward = 1;
         if (isShuffleMode)
         {
-            forward = new Random().nextInt(2, currentPlaylist.getSongs().size()/2 + 1);
+            if (currentPlaylist.getSongs().size() > 2)
+            {
+                forward = new Random().nextInt(1, currentPlaylist.getSongs().size()/2 + 1);
+            }
+
         }
 
         if(currentSongNumber + forward <= currentPlaylist.getSongs().size()-1){
@@ -479,7 +498,8 @@ public class HelloController {
                     // forces it to update in the JavaFX thread
                     Platform.runLater(() -> {
                         // Updates progress bar
-                        progressBar.setProgress(currentSeconds / end);
+                        System.out.println("Progress: " + currentSeconds + "/" + end);
+                        progressBar.setProgress(currentSeconds * 1.33 / end);
 
                         // Math to display current song duration
                         int currentMinutesMath = (int) (currentSeconds / 60);
@@ -502,7 +522,7 @@ public class HelloController {
                 }
             }
         };
-        timer.schedule(timerTask, 0, 1000);
+        timer.schedule(timerTask, 0, 500);
     }
 
     /**
@@ -531,11 +551,11 @@ public class HelloController {
      * and displays the song title and artist.
      * @throws Exception
      */
-    public void createMediaPlayer(Song song) throws Exception {
+    public void createMediaPlayer() throws Exception {
         //creates a Media Player
-        media = new Media(new File("src/main/resources/music/" + currentPlaylist.getSongs().get(currentSongNumber).getFilePath()).toURI().toString());
+        media = new Media(new File("src/main/resources/music/" + currentSong.getFilePath()).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
-        displaySongTitleOnLabel(song);
+        displaySongTitleOnLabel(currentSong);
         displayArtistOnLabel();
     }
 
@@ -607,14 +627,10 @@ public class HelloController {
             if (frames >= 50000000)
             {
                 TotalPlaylistDuration += (double) frames / (format.getFrameRate() * 142.948717949);
-                System.out.println("Song: " + song.getTitle() + ", duration: " + (double) frames / (format.getFrameRate() * 142.948717949));
-                System.out.println("Frames: " + frames + ", frame rate: " + format.getFrameRate());
             }
             else
             {
                 TotalPlaylistDuration += (double) frames / format.getFrameRate();
-                System.out.println("Song: " + song.getTitle() + ", duration: " + (double) frames / (format.getFrameRate()));
-                System.out.println("Frames: " + frames + ", frame rate: " + format.getFrameRate());
             }
 
         }
@@ -633,6 +649,8 @@ public class HelloController {
      * @throws IOException
      */
     public void createPlaylist(ActionEvent actionEvent) throws IOException {
+        mediaPlayer.stop();
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         FXMLLoader fxmlLoader = new FXMLLoader(CreatePlaylistController.class.getResource("Create-Playlist.fxml"));
         Parent root = fxmlLoader.load();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -644,6 +662,7 @@ public class HelloController {
 
     public void shuffle()
     {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         if (isShuffleMode)
         {
             isShuffleMode = false;
@@ -667,7 +686,7 @@ public class HelloController {
         }
         else
         {
-            currentPlaylist = new Playlist("All songs", allSongs);
+            currentPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures/DefaultPlaylistPictures");
         }
     }
 
@@ -686,11 +705,11 @@ public class HelloController {
 
             //Edit Button
             Button editButton = new Button();
-            Image editImage = new Image(getClass().getResource("/Pictures/EditIcon.png").toExternalForm());
-            ImageView imageView = new ImageView(editImage);
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(22);
-            editButton.setGraphic(imageView);
+            editButton.setText("⚙");
+            editButton.setStyle("-fx-font-size: 25;");
+            editButton.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: orange;");
+            editButton.setPrefWidth(30);
+            editButton.setPrefHeight(30);
 
             //Make HBox and add buttons
             currentHBox = new HBox();
@@ -700,7 +719,6 @@ public class HelloController {
             vBoxPlaylists.getChildren().add(currentHBox);
 
             playlistButton.setOnAction(event -> {
-
                 currentPlaylist = playlist;
                 if (isShuffleMode) {
                     currentSongNumber = new Random().nextInt(currentPlaylist.getSongs().size());
@@ -718,14 +736,20 @@ public class HelloController {
                 {
                     currentSong = allSongs.getFirst();
                 }
-
-
-
                 try {
                     displayPlaylistTitleAndTotalPlaylistDuration();
+                    String folderPath;
+                    if (currentPlaylist.getFolderPath(currentPlaylist.getName()) != null){
+                        folderPath = currentPlaylist.getFolderPath(currentPlaylist.getName());
+                    } else {folderPath = "src/main/resources/Pictures/DefaultPlaylistPictures";}
+
+                    System.out.println("pictureFolderPath for selected Playlist: " + folderPath);
+
                 } catch (UnsupportedAudioFileException e) {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 try {
@@ -748,6 +772,7 @@ public class HelloController {
             });
 
             editButton.setOnAction(event -> {
+                SoundEffects.play(SoundEffects.kittySounds.SELECT);
                 onClose();
                 try{
                 FXMLLoader fxmlLoader = new FXMLLoader(EditPlaylistController.class.getResource("Edit-Playlist.fxml"));
@@ -767,8 +792,4 @@ public class HelloController {
         }
 
     }
-
-
-
-
 }

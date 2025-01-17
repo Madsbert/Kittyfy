@@ -16,7 +16,6 @@ public class Reader {
         for (File file : files) {
             songsFileNames.add("\"" + file.getName().trim() + "\"");
             songsFileNames.add(file.getName());
-
         }
 
         ArrayList<Song> songs = new ArrayList<>(songsFileNames.size());
@@ -24,7 +23,6 @@ public class Reader {
 
         for (String fileName : songsFileNames) {
             if (!fileName.endsWith(".wav\"")) { continue; }
-            fileName = fileName;
             String[] rows = fileName.split(" - ");
             String songName = rows[0].substring(1);
 
@@ -37,6 +35,11 @@ public class Reader {
             artists.addAll(Arrays.asList(rows[1].split(",")));
 
             String genre = rows[2].split("\\.")[0];
+
+            if (!Song.doesGenreExist(genre))
+            {
+                Song.createGenre(genre);
+            }
 
             Song curSong = new Song(songName, artists, genre, fileName.substring(1, fileName.length() - 1));
             curSong.setSongID(Song.createSong(curSong));

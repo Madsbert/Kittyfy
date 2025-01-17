@@ -11,9 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Font;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 
@@ -43,6 +44,7 @@ public class CreatePlaylistController {
     private VBox songsInPlaylist;
 
     private ArrayList<Song> allSongs;
+    private String selectedPicFolderFilepath = "";
 
 
     public void initialize() throws Exception {
@@ -50,8 +52,11 @@ public class CreatePlaylistController {
         Image playlistImage = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/CatMakingMusic.png")).toExternalForm());
         createPlaylistImage.setImage(playlistImage);
 
-        //filling the choicebox with options
-        choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Klassisk");
+        //filling the choicebox with options from database.
+        ArrayList<String> genres = new ArrayList<>(Song.getAllGenreNames());
+        for (String genre : genres){
+            choosePictures.getItems().add(genre);
+        }
         choosePictures.setValue("Choose Picture Album");
 
         //initialize Songs
@@ -91,6 +96,7 @@ public class CreatePlaylistController {
      * @throws Exception
      */
     public void createPlaylist(ActionEvent event) throws Exception {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String playlistName = this.playlistName.getText();
         if (playlistName == null || playlistName.isEmpty()) {
             System.out.println("Playlist name cannot be empty");
@@ -98,12 +104,23 @@ public class CreatePlaylistController {
         }
         ArrayList<Song> playlistSongs = new ArrayList<>();
         for (Node node : songsInPlaylist.getChildren()) {
-            if (node instanceof Label) {
-                String labelText = ((Label) node).getText();
-                Song song = findSongByTitle(labelText);
-                if (song != null) {
-                    playlistSongs.add(song);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                for(Node child: hbox.getChildren()){
+                    if(child instanceof Label){
+                        String labelText = ((Label) child).getText();
+                        Song song = findSongByTitle(labelText);
+                        if (song != null) {
+                            playlistSongs.add(song);
+
+                        }else{
+                            System.out.println("No Song found for label " + labelText);
+                        }
+                        break;
+                    }
                 }
+            }else{
+                System.out.println("Node in sonsplaylist in not an hbox");
             }
         }
         if (playlistSongs.isEmpty()) {
@@ -111,7 +128,9 @@ public class CreatePlaylistController {
             return;
         }
 
-        Playlist newPlaylist = new Playlist(playlistName, playlistSongs);
+        getGenreFromChoiceBox();
+
+        Playlist newPlaylist = new Playlist(playlistName, playlistSongs,selectedPicFolderFilepath);
         newPlaylist.setLastPlayed(0);
 
         int playlistID = Playlist.createPlaylist(newPlaylist);
@@ -123,6 +142,7 @@ public class CreatePlaylistController {
     }
 
     public void cancel(ActionEvent event) throws IOException {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         shiftScene(event);
     }
 
@@ -138,20 +158,91 @@ public class CreatePlaylistController {
     }
 
     public void addSongPlaylist() throws Exception {
-
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String selectedTitle = searchbarPlaylist.getValue();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
-        }else {
-            Label newLabel = new Label(selectedTitle);
-            newLabel.setPrefWidth(650);
-            newLabel.setPrefHeight(30);
-            newLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: orange;");
-            newLabel.setAlignment(Pos.CENTER_LEFT);
-            newLabel.setPadding(new Insets(0, 10, 0, 10));
-
-            songsInPlaylist.getChildren().add(newLabel);
         }
+        else {
+
+            addSongToVBox(findSongByTitle(selectedTitle));
+        }
+    }
+
+    public void openFileExplorer(ActionEvent event) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select a Folder");
+
+        //Shows the directory
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        File selectedFolder = directoryChooser.showDialog(stage);
+        //extracts the folder path.
+        if (selectedFolder != null) {
+            selectedPicFolderFilepath = selectedFolder.getAbsolutePath().trim();
+            System.out.println("Selected Folder Path: " + selectedPicFolderFilepath);
+            choosePictures.setValue(selectedPicFolderFilepath);
+        }
+    }
+    public void getGenreFromChoiceBox() {
+        if (choosePictures.getValue() != null) {
+            // Skip switch case if the value is already a custom folder path
+            if (selectedPicFolderFilepath != null && !selectedPicFolderFilepath.isEmpty()) {
+                return;}
+            switch (choosePictures.getValue().trim()) {
+                case "Rock":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catRockTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                case "Classical":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catClassicalTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                case "Dansk Top":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catDanskTopTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                default :
+                    selectedPicFolderFilepath = null;
+                    System.out.println("No folder was selected.");
+            }
+        }
+    }
+
+    private void addSongToVBox(Song song) {
+        ArrayList<String> trimmedArtists = new ArrayList<>();
+        for (String artist : song.getArtist()) {
+            trimmedArtists.add(artist.trim());
+        }
+        Label songLabel = new Label(song.getTitle().trim() + " by " + String.join(", ", trimmedArtists));
+        songLabel.setPrefWidth(650);
+        songLabel.setPrefHeight(30);
+        songLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
+        songLabel.setAlignment(Pos.CENTER_LEFT);
+        songLabel.setPadding(new Insets(0, 10, 0, 10));
+
+
+        //Delete Button
+        Button deleteSongButton = new Button();
+        deleteSongButton.setText("⎯");
+        deleteSongButton.setFont(new Font("Berlin Sans FB Demi",14));
+        deleteSongButton.setPrefWidth(25);
+        deleteSongButton.setPrefHeight(30);
+        deleteSongButton.setStyle("-fx-background-color: #000000;"+"-fx-text-fill: orange;"+"-fx-border-color: orange;");
+
+
+        //Make HBox and add buttons
+        HBox currentHBox = new HBox(songLabel, deleteSongButton);
+        currentHBox.setSpacing(0);
+        currentHBox.setPadding(new Insets(0, 0, 0, 0));
+        songsInPlaylist.getChildren().add(currentHBox);
+
+
+        deleteSongButton.setOnAction(actionEvent -> {
+
+            if(songsInPlaylist.getChildren().contains(currentHBox)) {
+                songsInPlaylist.getChildren().remove(currentHBox);
+            }
+        });
     }
 
 }

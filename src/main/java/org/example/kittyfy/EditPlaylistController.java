@@ -11,9 +11,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -38,6 +42,7 @@ public class EditPlaylistController {
     private ArrayList<Song> allSongs;
 
     private Playlist playlist;
+    private String selectedPicFolderFilepath = null;
 
     public void initialize() throws Exception {
         //adding a default picture
@@ -45,7 +50,7 @@ public class EditPlaylistController {
         editPlaylistImage.setImage(image);
 
         //filling the choicebox with options
-        choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Klassisk");
+        choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Classical");
         choosePictures.setValue("Choose Picture Album");
 
         //initialize Songs
@@ -54,6 +59,8 @@ public class EditPlaylistController {
 
         //initializing searchbar options
        initializeSongsInSearchbar();
+
+
 
     }
 
@@ -65,26 +72,15 @@ public class EditPlaylistController {
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
         System.out.println("Editing playlist: " + playlist.getName());
+        playlistNameTextfield.setText(playlist.getName());
 
         //initialize songs in playlist
         if(playlist != null) {
             for (Song song : playlist.getSongs()) {
-                ArrayList<String> trimmedArtists = new ArrayList<>();
-                for (String artist : song.getArtist()) {
-                    trimmedArtists.add(artist.trim());
-                }
-                Label newLabel = new Label(song.getTitle().trim() + " by " + String.join(",", trimmedArtists));
-                newLabel.setPrefWidth(650);
-                newLabel.setPrefHeight(30);
-                newLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
-                newLabel.setAlignment(Pos.CENTER_LEFT);
-                newLabel.setPadding(new Insets(0, 10, 0, 10));
-
-                songsInPlaylist.getChildren().add(newLabel);
-
-                playlistNameTextfield.setText(playlist.getName());
+                addSongToVBox(song);
             }
         }
+
 
 
     }
@@ -109,18 +105,22 @@ public class EditPlaylistController {
      * method to add song to playlist
      */
     public void addSongToPlaylist() {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String selectedTitle = searchbarPlaylist.getValue();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
+            return;
         }
-        Label newLabel = new Label (selectedTitle);
-        newLabel.setPrefWidth(650);
-        newLabel.setPrefHeight(30);
-        newLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
-        newLabel.setAlignment(Pos.CENTER_LEFT);
-        newLabel.setPadding(new Insets(0, 10, 0,10 ));
+        Song selectedSong = findSongByTitle(selectedTitle);
+        if (selectedSong != null && !playlist.getSongs().contains(selectedSong)) {
+            playlist.getSongs().add(selectedSong);
+            addSongToVBox(selectedSong);
+        } else {
+            System.out.println("Song is already in the playlist or not found.");
+        }
 
-        songsInPlaylist.getChildren().add(newLabel);
+
+
     }
 
     /**
@@ -129,6 +129,7 @@ public class EditPlaylistController {
      * @throws IOException
      */
     public void cancelButton(ActionEvent event) throws IOException {
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         shiftScene(event);
     }
 
@@ -139,7 +140,7 @@ public class EditPlaylistController {
      */
     private Song findSongByTitle (String title) {
         for (Song song : allSongs) {
-            if (title.contains(song.getTitle())) {
+            if (title.contains(song.getTitle().trim())) {
                 return song;
             }
         }
@@ -153,22 +154,32 @@ public class EditPlaylistController {
      * @throws Exception
      */
     public void saveChangesButton(ActionEvent event) throws Exception {
-
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String playlistName = this.playlistNameTextfield.getText();
         if (playlistName == null || playlistName.isEmpty()) {
             System.out.println("Playlist name cannot be empty");
             return;
         }
 
-
         ArrayList<Song> playlistSongs = new ArrayList<>();
         for (Node node : songsInPlaylist.getChildren()) {
-            if (node instanceof Label) {
-                String labelText = ((Label) node).getText();
-                Song song = findSongByTitle(labelText);
-                if (song != null) {
-                    playlistSongs.add(song);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                for(Node child: hbox.getChildren()){
+                    if(child instanceof Label){
+                        String labelText = ((Label) child).getText();
+                        Song song = findSongByTitle(labelText);
+                        if (song != null) {
+                            playlistSongs.add(song);
+
+                        }else{
+                            System.out.println("No Song found for label " + labelText);
+                        }
+                        break;
+                    }
                 }
+            }else{
+                System.out.println("Node in sonsplaylist in not an hbox");
             }
         }
         if (playlistSongs.isEmpty()) {
@@ -176,8 +187,11 @@ public class EditPlaylistController {
             return;
         }
 
+
+        getGenreFromChoiceBox1();
         playlist.setName(playlistName);
         playlist.setSongs(playlistSongs);
+        playlist.setFolderPath(selectedPicFolderFilepath);
 
         BridgePlaylistSong.updateSongsInPlaylist(playlist);
         Playlist.updatePlaylist(playlist);
@@ -199,6 +213,7 @@ public class EditPlaylistController {
         alert.setGraphic(imageView);
 
         if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            SoundEffects.play(SoundEffects.kittySounds.SELECT);
             BridgePlaylistSong.deleteSongsInPlaylist(playlist);
             Playlist.deletePlaylist(playlist);
             System.out.println("Playlist deleted: " + playlist.getName());
@@ -221,7 +236,78 @@ public class EditPlaylistController {
         stage.show();
     }
 
+    private void addSongToVBox(Song song) {
+            ArrayList<String> trimmedArtists = new ArrayList<>();
+            for (String artist : song.getArtist()) {
+                trimmedArtists.add(artist.trim());
+            }
+            Label songLabel = new Label(song.getTitle().trim() + " by " + String.join(", ", trimmedArtists));
+            songLabel.setPrefWidth(650);
+            songLabel.setPrefHeight(30);
+            songLabel.setStyle("-fx-background-color: #000000 " + "; -fx-text-fill: white;");
+            songLabel.setAlignment(Pos.CENTER_LEFT);
+            songLabel.setPadding(new Insets(0, 10, 0, 10));
 
+
+            //Delete Button
+            Button deleteSongButton = new Button();
+            deleteSongButton.setText("⎯");
+            deleteSongButton.setFont(new Font("Berlin Sans FB Demi",14));
+            deleteSongButton.setPrefWidth(25);
+            deleteSongButton.setPrefHeight(30);
+            deleteSongButton.setStyle("-fx-background-color: #000000;"+"-fx-text-fill: orange;"+"-fx-border-color: orange;");
+
+
+            //Make HBox and add buttons
+            HBox currentHBox = new HBox(songLabel, deleteSongButton);
+            currentHBox.setSpacing(0);
+            currentHBox.setPadding(new Insets(0, 0, 0, 0));
+            songsInPlaylist.getChildren().add(currentHBox);
+
+
+            deleteSongButton.setOnAction(actionEvent -> {
+
+                if(songsInPlaylist.getChildren().contains(currentHBox)) {
+                    songsInPlaylist.getChildren().remove(currentHBox);
+                }
+            });
+    }
+    public void openFileExplorer(ActionEvent event) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select a Folder");
+
+        //Shows the directory
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        File selectedFolder = directoryChooser.showDialog(stage);
+        //extracts the folder path.
+        if (selectedFolder != null) {
+            selectedPicFolderFilepath = selectedFolder.getAbsolutePath().trim();
+            System.out.println("Selected Folder Path: " + selectedPicFolderFilepath);
+            choosePictures.setValue(selectedPicFolderFilepath);
+        }
+    }
+    public void getGenreFromChoiceBox1() {
+        if (choosePictures.getValue() != null) {
+            switch (choosePictures.getValue()) {
+                case "Rock":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catRockTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                case "Classical":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catClassicalTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                case "Dansk Top":
+                    selectedPicFolderFilepath = "src/main/resources/Pictures/catDanskTopTheme";
+                    choosePictures.setValue(selectedPicFolderFilepath);
+                    break;
+                default:
+                    selectedPicFolderFilepath = null;
+                    System.out.println("No folder was selected.");
+            }
+        }
+
+    }
 }
 
 
