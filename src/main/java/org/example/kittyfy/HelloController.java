@@ -1,6 +1,5 @@
 package org.example.kittyfy;
 
-import com.almasb.fxgl.audio.Sound;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +18,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import javafx.scene.image.Image;
@@ -31,6 +31,7 @@ import javafx.scene.Scene;
 import javafx.util.Duration;
 
 import java.util.*;
+import java.util.Timer;
 
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.CENTER_LEFT;
@@ -120,18 +121,9 @@ public class HelloController {
 
         Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures/DefaultPlaylistPictures");
 
-        //initializing searchbar options
-        for (Song song : allSongs) {
-            ArrayList<String> trimmedArtists = new ArrayList<>();
-            for (String artist : song.getArtist()) {
-                trimmedArtists.add(artist.trim());
-            }
-            String artists = String.join(", ", trimmedArtists);
-            searchBar.getItems().add(song.getTitle().trim() + " by " + artists);
-        }
+        SearchableComboBox.initializeSearchBar(searchBar, allSongs);
 
         System.out.println(allSongs.size() + " songs initialized");
-
 
         //initializing playlists
         initzializePlaylists();
@@ -161,6 +153,9 @@ public class HelloController {
         updateSongList();
 
         createMediaPlayer();
+
+        if (timer == null){beginTimer();}
+        else {cancelTimer();}
 
         displayPlaylistTitleAndTotalPlaylistDuration();
         SongTitleLabel.setText("Welcome To Kittyfy");
@@ -256,10 +251,10 @@ public class HelloController {
 
     /**
      * Connecting the musicfile to the label, calls the display Artist, Title and Duration methods, and begins the timer.
-     * @param song
-     * @throws Exception
+     * @param song song to be played
+     * @param fromPlaylist is the song from the currentPlaylist or is it singular.
      */
-    public void playSong(Song song, Boolean fromPlaylist) throws Exception {
+    public void playSong(Song song, Boolean fromPlaylist) {
         stopMusic();
 
         try {
@@ -298,7 +293,7 @@ public class HelloController {
                 timer.cancel();
                 beginTimer();
             }
-
+            showRandomImage();
             SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
 
             //mediaPlayer.play();
@@ -307,8 +302,8 @@ public class HelloController {
 
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             System.out.println("Failed to play song");
-            e.printStackTrace();
         }
 
     }
@@ -367,7 +362,7 @@ public class HelloController {
      * plays the song the user clicks on in the combobox, and calls the playMusic method.
      * @throws Exception
      */
-    public void playSongOnClick() throws Exception {
+    public void playSongOnClick() {
 
         String selectedTitle = searchBar.getValue();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
@@ -498,8 +493,7 @@ public class HelloController {
                     // forces it to update in the JavaFX thread
                     Platform.runLater(() -> {
                         // Updates progress bar
-                        System.out.println("Progress: " + currentSeconds + "/" + end);
-                        progressBar.setProgress(currentSeconds * 1.33 / end);
+                        progressBar.setProgress(currentSeconds / end);
 
                         // Math to display current song duration
                         int currentMinutesMath = (int) (currentSeconds / 60);
@@ -522,7 +516,7 @@ public class HelloController {
                 }
             }
         };
-        timer.schedule(timerTask, 0, 500);
+        timer.schedule(timerTask, 0, 100);
     }
 
     /**
