@@ -114,6 +114,7 @@ public class HelloController {
 
         // initialize Songs
         allSongs = Reader.readAllSongs();
+
         // initialize sound effects
         SoundEffects.readAllEffects();
 
@@ -259,7 +260,6 @@ public class HelloController {
      * @throws Exception
      */
     public void playSong(Song song, Boolean fromPlaylist) throws Exception {
-        allSongs = Reader.readAllSongs();
         stopMusic();
 
         try {
@@ -287,15 +287,11 @@ public class HelloController {
             if (timer == null){beginTimer();}
             else {cancelTimer();}
 
-            //SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
+
             isRunning = true;
 
             mediaPlayer.dispose();
             createMediaPlayer();
-
-            mediaPlayer.play();
-
-            checkIcon();
 
             //displays total duration based on media.
             if (timer != null) {
@@ -303,7 +299,14 @@ public class HelloController {
                 beginTimer();
             }
 
-        } catch (Exception e) {
+            SoundEffects.play(SoundEffects.kittySounds.PLAY); // mediaPlayer.play() is called in here
+
+            //mediaPlayer.play();
+
+            checkIcon();
+
+        }
+        catch (Exception e) {
             System.out.println("Failed to play song");
             e.printStackTrace();
         }

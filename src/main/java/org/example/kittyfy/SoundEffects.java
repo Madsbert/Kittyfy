@@ -29,28 +29,25 @@ public class SoundEffects {
 
     public static void play(kittySounds soundEffect) {
         try {
-            //Media media = new Media(new File("src/main/resources/sound effects/" + soundEffectArray.get(soundEffect.ordinal())).toURI().toString());
-            //mediaPlayer = new MediaPlayer(media);
+            Media media = new Media(new File("src/main/resources/sound effects/" + soundEffectArray.get(soundEffect.ordinal())).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
         }
         catch (Exception e) {
             System.out.println("Sound effect could not be found");
         }
 
         if (soundEffect.equals(kittySounds.PAUSE)) {
-            //mediaPlayer.setVolume(0.1);
+            mediaPlayer.setVolume(0.1);
         }
-        //mediaPlayer.play();
-        /*
+        mediaPlayer.play();
+
         mediaPlayer.setOnEndOfMedia(new Runnable() {
             public void run() {
                 mediaPlayer.stop();
                 if (soundEffect.equals(kittySounds.PLAY)) {
                     HelloController.mediaPlayer.play();
                 }
-
             }
         });
-
-         */
     }
 }
