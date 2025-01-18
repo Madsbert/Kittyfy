@@ -62,6 +62,9 @@ public class CreatePlaylistController {
         //initialize Songs
         allSongs = Reader.readAllSongs();
 
+        //initialize searchable searchbar
+        SearchableComboBox.initializeSearchBar(searchbarPlaylist, allSongs);
+
 
         //initializing searchbar options
         for (Song song : allSongs) {

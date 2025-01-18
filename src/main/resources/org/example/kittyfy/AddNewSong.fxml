@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.AddNewSongController">
+    <center>
+        <VBox prefHeight="616.0" prefWidth="581.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" BorderPane.alignment="CENTER">
+            <children>
+                <TextField fx:id="songTitleTextField" maxHeight="45.0" maxWidth="343.0" prefHeight="45.0" prefWidth="325.0" promptText="Type Song title" VBox.vgrow="ALWAYS">
+                    <VBox.margin>
+                        <Insets left="130.0" top="30.0" />
+                    </VBox.margin>
+                </TextField>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="Artist1Textfield" prefHeight="40.0" prefWidth="343.0" promptText="Type Artist #1">
+                     <HBox.margin>
+                        <Insets left="130.0" top="30.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+                </HBox>
+            <TextField fx:id="Artist2Textfield" maxHeight="43.0" maxWidth="343.0" prefHeight="43.0" prefWidth="230.0" promptText="Type Artist #2">
+               <VBox.margin>
+                  <Insets left="130.0" />
+               </VBox.margin>
+            </TextField>
+            <TextField fx:id="GenreTextfield" maxHeight="48.0" maxWidth="343.0" prefHeight="42.0" prefWidth="343.0" promptText="Type Genre">
+               <VBox.margin>
+                  <Insets left="130.0" top="30.0" />
+               </VBox.margin>
+            </TextField>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <HBox prefHeight="97.0" prefWidth="837.0">
+                            <children>
+                        <TextField fx:id="FolderSelectionTextfield" maxHeight="40.0" maxWidth="343.0" prefHeight="40.0" prefWidth="470.0" promptText="Select a .mp3 or .Wav File">
+                           <HBox.margin>
+                              <Insets left="130.0" top="30.0" />
+                           </HBox.margin>
+                        </TextField>
+                                <Button mnemonicParsing="false" onAction="#openFileExplorer" prefHeight="40.0" prefWidth="63.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" text="📁">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                           <HBox.margin>
+                              <Insets top="30.0" />
+                           </HBox.margin>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+                <HBox prefHeight="56.0" prefWidth="898.0">
+                    <children>
+                        <Button minHeight="40.0" mnemonicParsing="false" onAction="#cancelButton" prefHeight="40.0" prefWidth="95.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" text="Cancel ">
+                            <font>
+                                <Font name="Berlin Sans FB Demi Bold" size="16.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="130.0" />
+                            </HBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#addSongToAllSongs" prefHeight="40.0" prefWidth="152.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" styleClass="ba" text="Add Song">
+                            <HBox.margin>
+                                <Insets left="95.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font name="Berlin Sans FB Demi Bold" size="16.0" />
+                            </font>
+                        </Button>
+                    </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+                </HBox>
+                <ImageView fx:id="editPlaylistImage" fitHeight="188.0" fitWidth="353.0" pickOnBounds="true" preserveRatio="true">
+                    <VBox.margin>
+                        <Insets left="130.0" />
+                    </VBox.margin>
+                </ImageView>
+            </children></VBox>
+    </center>
+</BorderPane>

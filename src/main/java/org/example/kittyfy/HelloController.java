@@ -652,6 +652,16 @@ public class HelloController {
         stage.setScene(new Scene(root));
         stage.show();
     }
+    public void NewSongSceneClick(ActionEvent actionEvent) throws IOException {
+        mediaPlayer.stop();
+        SoundEffects.play(SoundEffects.kittySounds.SELECT);
+        FXMLLoader fxmlLoader = new FXMLLoader(CreatePlaylistController.class.getResource("AddNewSong.fxml"));
+        Parent root = fxmlLoader.load();
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Create Playlist");
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 
 
     public void shuffle()
