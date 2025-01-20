@@ -10,12 +10,11 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import java.util.Objects;
 
-public class HelloApplication extends Application {
+public class KittyfyApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(KittyfyApplication.class.getResource("Main-View.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Kittyfy");
 
@@ -30,7 +29,7 @@ public class HelloApplication extends Application {
             public void handle(WindowEvent windowEvent) {
                 Platform.exit();
                 System.exit(0);
-                HelloController.onClose();
+                MainController.onClose();
             }
         });
 

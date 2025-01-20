@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.AddNewSongController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.AddNewSongController">
     <center>
         <VBox prefHeight="616.0" prefWidth="581.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" BorderPane.alignment="CENTER">
             <children>
@@ -43,7 +46,7 @@
                               <Insets left="130.0" top="30.0" />
                            </HBox.margin>
                         </TextField>
-                                <Button mnemonicParsing="false" onAction="#openFileExplorer" prefHeight="40.0" prefWidth="63.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" text="📁">
+                                <Button mnemonicParsing="false" onAction="#openFileExplorer" prefHeight="38.0" prefWidth="50.0" style="-fx-background-color: #000000; -fx-text-fill: ORANGE; -fx-background-radius: 8;" text="..." textAlignment="CENTER">
                                     <font>
                                         <Font size="18.0" />
                                     </font>

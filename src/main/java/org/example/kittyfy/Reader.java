@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Reader {
-    public static ArrayList<Song> readAllSongs() throws Exception {
+    public static ArrayList<Song> readAllSongs() {
 
         File directory = new File("src/main/resources/music");
 

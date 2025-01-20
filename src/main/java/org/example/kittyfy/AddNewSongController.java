@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -67,7 +66,7 @@ public class AddNewSongController  {
 
     public void cancelButton(ActionEvent actionEvent) throws IOException {
         {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloController.class.getResource("hello-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("Main-View.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("KittyFy");
@@ -80,10 +79,10 @@ public class AddNewSongController  {
     public void addSongToAllSongs(ActionEvent actionEvent) throws IOException {
         File songFile = new File(selectedFilePath);
         System.out.println(songFile.getAbsolutePath());
-         songTitle = songTitleTextField.getText();
-         Artist1 = Artist1Textfield.getText();
-         Artist2 = ", " + Artist2Textfield.getText();
-         Genre = GenreTextfield.getText();
+        songTitle = songTitleTextField.getText();
+        Artist1 = Artist1Textfield.getText();
+        Artist2 = ", " + Artist2Textfield.getText();
+        Genre = GenreTextfield.getText();
 
 
         File renamedFile;
@@ -113,7 +112,6 @@ public class AddNewSongController  {
                 }
             } catch (Exception e) {
                 System.err.println("Error while adding file to Git: " + e.getMessage());
-                e.printStackTrace();
             }
         } else {
             System.out.println("File renaming failed.");

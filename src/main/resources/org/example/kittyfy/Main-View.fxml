@@ -16,13 +16,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="950.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="950.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.MainController">
     <center>
         <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <children>
                 <HBox alignment="CENTER" prefHeight="42.0" prefWidth="674.0">
                     <children>
-                  <Button layoutX="554.0" layoutY="10.0" mnemonicParsing="false" onAction="#NewSongSceneClick" prefHeight="40.0" prefWidth="50.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="+🎵">
+                  <Button layoutX="554.0" layoutY="10.0" mnemonicParsing="false" onAction="#NewSongSceneClick" prefHeight="40.0" prefWidth="60.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="+🎶">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -38,7 +38,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                         </ComboBox>
-                        <Button fx:id="addSong" mnemonicParsing="false" onAction="#addSongClick" prefHeight="40.0" prefWidth="50.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="+">
+                        <Button fx:id="addSong" mnemonicParsing="false" onAction="#addSongClick" prefHeight="40.0" prefWidth="60.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="+">
                             <font>
                                 <Font size="20.0" />
                             </font>
