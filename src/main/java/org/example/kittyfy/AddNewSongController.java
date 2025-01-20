@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class AddNewSongController  {
     @FXML
@@ -36,13 +37,19 @@ public class AddNewSongController  {
     String Genre ;
     String selectedFilePath;
 
-
+    /**
+     * Initializes aspects of the program: Picture.
+     */
     public void initialize(){
 
-        Image defaultImage = new Image(getClass().getResource("/Pictures/MusicCat2.png").toExternalForm());
+        Image defaultImage = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/MusicCat2.png")).toExternalForm());
         editPlaylistImage.setImage(defaultImage);
     }
 
+    /**
+     * Makes FileChooser, sets filter to WAV files, opens fileExplorer pushing the folder button, imports the valid chosen file.
+     * @param event needs an event to happen.
+     */
     public void openFileExplorer(ActionEvent event) {
         // Initialize fileChooser
         FileChooser fileChooser = new FileChooser();
@@ -64,19 +71,33 @@ public class AddNewSongController  {
         }
     }
 
-    public void cancelButton(ActionEvent actionEvent) throws IOException {
+    /**
+     * Changes scene on cancel button back to MainController
+     * @param actionEvent needs an event to happen.
+     */
+    public void cancelButton(ActionEvent actionEvent) {
         {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("Main-View.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setTitle("KittyFy");
-            stage.setScene(new Scene(root));
-            stage.show();
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("Main-View.fxml"));
+                Parent root = fxmlLoader.load();
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.setTitle("KittyFy");
+                stage.setScene(new Scene(root));
+                stage.show();
+            }
+            catch (IOException ex){
+                System.out.println(ex.getMessage());
+
+            }
+
         }
     }
 
-
-    public void addSongToAllSongs(ActionEvent actionEvent) throws IOException {
+    /**
+     * Takes the inputs from text fields and the file and adds the song to all songs and database.
+     * @param actionEvent needs an event to happen.
+     */
+    public void addSongToAllSongs(ActionEvent actionEvent){
         File songFile = new File(selectedFilePath);
         System.out.println(songFile.getAbsolutePath());
         songTitle = songTitleTextField.getText();
@@ -88,18 +109,18 @@ public class AddNewSongController  {
         File renamedFile;
         if (Artist2Textfield.getText().isEmpty()) {
             renamedFile = new File("src/main/resources/music/" + songTitle + " - " + Artist1 + " - " + Genre + ".wav");
-            //cancelButton(null);
+
         }
         else {
             renamedFile = new File("src/main/resources/music/" + songTitle + " - " + Artist1 + Artist2+ " - " + Genre + ".wav");
-            //cancelButton(null);
+
         }
         // Rename the file
         if (songFile.renameTo(renamedFile)) {
             System.out.println("Renamed File Path: " + renamedFile.getAbsolutePath());
 
             // Add the renamed file to Git
-            String gitCommand = "git add \"" + renamedFile.getAbsolutePath() + "\"";
+            String[] gitCommand = {"git add \"" + renamedFile.getAbsolutePath() + "\""};
             try {
                 Process process = Runtime.getRuntime().exec(gitCommand);
 
