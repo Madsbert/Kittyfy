@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -26,6 +28,8 @@ public class AddNewSongController  {
     private TextField GenreTextfield;
     @FXML
     private TextField FolderSelectionTextfield;
+    @FXML
+    private ImageView editPlaylistImage;
 
     String songTitle;
     String Artist1;
@@ -35,6 +39,9 @@ public class AddNewSongController  {
 
 
     public void initialize(){
+
+        Image defaultImage = new Image(getClass().getResource("/Pictures/MusicCat2.png").toExternalForm());
+        editPlaylistImage.setImage(defaultImage);
     }
 
     public void openFileExplorer(ActionEvent event) {
