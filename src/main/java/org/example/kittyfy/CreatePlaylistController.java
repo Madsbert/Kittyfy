@@ -44,45 +44,48 @@ public class CreatePlaylistController {
     private VBox songsInPlaylist;
 
     private ArrayList<Song> allSongs;
+
     private String selectedPicFolderFilepath = "";
 
 
-    public void initialize() throws Exception {
-        //adding a default picture
-        Image playlistImage = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/CatMakingMusic.png")).toExternalForm());
-        createPlaylistImage.setImage(playlistImage);
+    /**
+     * initializing everything that is needed to start the program
+     */
+    public void initialize()  {
+        try {
+            //adding a default picture
+            Image playlistImage = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/CatMakingMusic.png")).toExternalForm());
+            createPlaylistImage.setImage(playlistImage);
 
-        //filling the choicebox with options from database.
-        ArrayList<String> genres = new ArrayList<>(Song.getAllGenreNames());
-        for (String genre : genres){
-            choosePictures.getItems().add(genre);
-        }
-        choosePictures.setValue("Choose Picture Album");
-
-        //initialize Songs
-        allSongs = Reader.readAllSongs();
-
-        //initialize searchable searchbar
-        SearchableComboBox.initializeSearchBar(searchbarPlaylist, allSongs);
-
-
-        //initializing searchbar options
-        for (Song song : allSongs) {
-            ArrayList<String> trimmedArtists = new ArrayList<>();
-            for (String artist : song.getArtist()) {
-                trimmedArtists.add(artist.trim());
+            //filling the choicebox with options from database.
+            ArrayList<String> genres = new ArrayList<>(Song.getAllGenreNames());
+            for (String genre : genres) {
+                choosePictures.getItems().add(genre);
             }
-            String artists = String.join(", ", trimmedArtists);
-            searchbarPlaylist.getItems().add(song.getTitle().trim() + " by " + artists);
+            choosePictures.setValue("Choose Picture Album");
+
+            //initialize Songs
+            allSongs = Reader.readAllSongs();
+
+            //initialize searchable searchbar
+            SearchableComboBox.initializeSearchBar(searchbarPlaylist, allSongs);
+
+
+            //initializing searchbar
+            SearchableComboBox.initializeSearchBar(searchbarPlaylist, allSongs);
+
+            System.out.println(allSongs.size() + " songs initialized");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
-        System.out.println(allSongs.size() + " songs initialized");
+
     }
 
     /**
      * Finds a song by searching the title.
-     * @param title
-     * @return
+     * @param title song title
+     * @return a song
      */
     private Song findSongByTitle (String title) {
         for (Song song : allSongs) {
@@ -94,11 +97,10 @@ public class CreatePlaylistController {
     }
 
     /**
-     * Creates playlist and puts it in the database.
-     * @param event
-     * @throws Exception
+     * Creates playlist by reading the songs in the vbox and puts it in the database.
+     * @param event needs an event to happen
      */
-    public void createPlaylist(ActionEvent event) throws Exception {
+    public void createPlaylist(ActionEvent event) {
         SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String playlistName = this.playlistName.getText();
         if (playlistName == null || playlistName.isEmpty()) {
@@ -107,8 +109,7 @@ public class CreatePlaylistController {
         }
         ArrayList<Song> playlistSongs = new ArrayList<>();
         for (Node node : songsInPlaylist.getChildren()) {
-            if (node instanceof HBox) {
-                HBox hbox = (HBox) node;
+            if (node instanceof HBox hbox) {
                 for(Node child: hbox.getChildren()){
                     if(child instanceof Label){
                         String labelText = ((Label) child).getText();
@@ -123,11 +124,10 @@ public class CreatePlaylistController {
                     }
                 }
             }else{
-                System.out.println("Node in sonsplaylist in not an hbox");
+                System.out.println("Node in sonsplaylist not in an hbox");
             }
         }
         if (playlistSongs.isEmpty()) {
-            System.out.println("No songs found. You must add at least one song.");
             return;
         }
 
@@ -144,23 +144,41 @@ public class CreatePlaylistController {
         shiftScene(event);
     }
 
-    public void cancel(ActionEvent event) throws IOException {
-        SoundEffects.play(SoundEffects.kittySounds.SELECT);
-        shiftScene(event);
+    /**
+     * cancels any changes made in the playlist and shifts scene
+     * @param event needs an event to happen
+     */
+    public void cancel(ActionEvent event) {
+       try {
+           SoundEffects.play(SoundEffects.kittySounds.SELECT);
+           shiftScene(event);
+       }catch (Exception e){
+           System.out.println(e.getMessage());
+       }
     }
 
 
-    //method to shift scenes
-    private void shiftScene(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("Main-View.fxml"));
-        Parent root = fxmlLoader.load();
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("KittyFy");
-        stage.setScene(new Scene(root));
-        stage.show();
+    /**
+     * shifts scene to main scene
+     * @param actionEvent needs an event to happen
+     */
+    private void shiftScene(ActionEvent actionEvent) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloController.class.getResource("hello-view.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setTitle("KittyFy");
+            stage.setScene(new Scene(root));
+            stage.show();
+        }catch (IOException e){
+            System.out.println("failed to ´shift scene" + e.getMessage());
+        }
     }
 
-    public void addSongPlaylist() throws Exception {
+    /**
+     * Add songs to the VBox from the search
+     */
+    public void addSongPlaylist() {
         SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String selectedTitle = searchbarPlaylist.getValue();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
@@ -168,10 +186,15 @@ public class CreatePlaylistController {
         }
         else {
 
-            addSongToVBox(findSongByTitle(selectedTitle));
+            addSongToVBox(Objects.requireNonNull(findSongByTitle(selectedTitle)));
         }
     }
 
+
+    /**
+     * Opens the file explorer in users computer so the user can choose a picture folder
+     * @param event if the file explorer button is pushed an event has happend
+     */
     public void openFileExplorer(ActionEvent event) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select a Folder");
@@ -186,6 +209,12 @@ public class CreatePlaylistController {
             choosePictures.setValue(selectedPicFolderFilepath);
         }
     }
+
+
+    /**
+     * The user can choose which genre the music is
+     * and select a picture folder which the developer has created
+     */
     public void getGenreFromChoiceBox() {
         if (choosePictures.getValue() != null) {
             // Skip switch case if the value is already a custom folder path
@@ -211,6 +240,11 @@ public class CreatePlaylistController {
         }
     }
 
+
+    /**
+     * method to add songs to the Vbox and a delete Button
+     * @param song a song object
+     */
     private void addSongToVBox(Song song) {
         ArrayList<String> trimmedArtists = new ArrayList<>();
         for (String artist : song.getArtist()) {
@@ -240,12 +274,7 @@ public class CreatePlaylistController {
         songsInPlaylist.getChildren().add(currentHBox);
 
 
-        deleteSongButton.setOnAction(actionEvent -> {
-
-            if(songsInPlaylist.getChildren().contains(currentHBox)) {
-                songsInPlaylist.getChildren().remove(currentHBox);
-            }
-        });
+        deleteSongButton.setOnAction(_ -> songsInPlaylist.getChildren().remove(currentHBox));
     }
 
 }
