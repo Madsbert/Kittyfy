@@ -79,9 +79,9 @@ public class Playlist {
     }
 
     /**
-     * ???
-     * @param playlistName
-     * @return
+     * gets the path for the playlist pictures.
+     * @param playlistName name of playlist.
+     * @return String containing the picture directory path.
      */
     public static String getFolderPath(String playlistName) {
         String sql = "SELECT fldPictureFilepath FROM dbo.TblPlaylist Where fldPlaylistName = ?";

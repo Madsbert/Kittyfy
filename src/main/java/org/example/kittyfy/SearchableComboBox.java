@@ -31,7 +31,7 @@ public class SearchableComboBox {
 
         // Add a listener to the editor's textProperty for filtering
         TextField editor = searchBar.getEditor();
-        editor.textProperty().addListener((obs, oldText, newText) -> {
+        editor.textProperty().addListener((_, _, newText) -> {
             if (newText.isEmpty()) {
                 // Reset to the original list when the search field is empty
                 searchBar.setItems(FXCollections.observableArrayList(originalItems));
@@ -47,7 +47,7 @@ public class SearchableComboBox {
         });
 
         // Ensure the editor and selected item are synchronized
-        searchBar.valueProperty().addListener((obs, oldVal, newVal) -> {
+        searchBar.valueProperty().addListener((_, _, newVal) -> {
             if (newVal != null && !newVal.equals(editor.getText())) {
                 editor.setText(newVal);
             }
