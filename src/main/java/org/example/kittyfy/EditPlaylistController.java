@@ -114,8 +114,6 @@ public class EditPlaylistController {
             System.out.println("Song is already in the playlist or not found.");
         }
 
-
-
     }
 
     /**

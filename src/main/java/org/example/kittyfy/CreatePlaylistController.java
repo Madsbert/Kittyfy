@@ -58,7 +58,7 @@ public class CreatePlaylistController {
             createPlaylistImage.setImage(playlistImage);
 
             //filling the choicebox with options from database.
-            ArrayList<String> genres = new ArrayList<>(Song.getAllGenreNames());
+            ArrayList<String> genres = new ArrayList<>(Objects.requireNonNull(Song.getAllGenreNames()));
             for (String genre : genres) {
                 choosePictures.getItems().add(genre);
             }
@@ -78,8 +78,6 @@ public class CreatePlaylistController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     /**
