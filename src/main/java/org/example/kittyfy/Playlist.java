@@ -100,15 +100,13 @@ public class Playlist {
      */
     public static String getFolderPath(String playlistName) {
         String sql = "SELECT fldPictureFilepath FROM dbo.TblPlaylist Where fldPlaylistName = ?";
-        Connection conn = DB.getConnection();
-        try
-        {
+        try {
+            Connection conn = DB.getConnection();
             ResultSet resultSet;
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            {
-                pstmt.setString(1, playlistName);
-                resultSet = pstmt.executeQuery();
-            }
+            pstmt.setString(1, playlistName);
+            resultSet = pstmt.executeQuery();
+
             if (resultSet.next()) {
                 System.out.println(resultSet.getString("fldPictureFilepath"));
                 return resultSet.getString("fldPictureFilepath").trim();
