@@ -1,49 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.AddNewSongController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.AddNewSongController">
     <center>
         <VBox prefHeight="616.0" prefWidth="581.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" BorderPane.alignment="CENTER">
             <children>
-                <TextField fx:id="songTitleTextField" maxHeight="45.0" maxWidth="343.0" prefHeight="42.0" prefWidth="391.0" promptText="Type Song title" VBox.vgrow="ALWAYS">
+            <TextField fx:id="Artist1Textfield" maxHeight="40.0" maxWidth="343.0" prefHeight="40.0" prefWidth="334.0" promptText="Type Artist #1">
+               <VBox.margin>
+                  <Insets left="50.0" top="40.0" />
+               </VBox.margin>
+            </TextField>
+                <TextField fx:id="songTitleTextField" maxHeight="40.0" maxWidth="343.0" prefHeight="40.0" prefWidth="158.0" promptText="Type Song title" VBox.vgrow="ALWAYS">
                     <VBox.margin>
-                        <Insets left="130.0" top="30.0" />
+                        <Insets left="50.0" top="40.0" />
                     </VBox.margin>
                 </TextField>
-                <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <TextField fx:id="Artist1Textfield" prefHeight="40.0" prefWidth="343.0" promptText="Type Artist #1">
-                     <HBox.margin>
-                        <Insets left="130.0" top="30.0" />
-                     </HBox.margin>
-                  </TextField>
-               </children>
-                </HBox>
-            <TextField fx:id="Artist2Textfield" maxHeight="43.0" maxWidth="343.0" prefHeight="43.0" prefWidth="230.0" promptText="Type Artist #2">
+            <TextField fx:id="Artist2Textfield" maxHeight="40.0" maxWidth="343.0" prefHeight="43.0" prefWidth="230.0" promptText="Type Artist #2">
                <VBox.margin>
-                  <Insets left="130.0" />
+                  <Insets left="50.0" top="40.0" />
                </VBox.margin>
             </TextField>
-            <TextField fx:id="GenreTextfield" maxHeight="48.0" maxWidth="343.0" prefHeight="42.0" prefWidth="343.0" promptText="Type Genre">
+            <TextField fx:id="GenreTextfield" maxHeight="40.0" maxWidth="343.0" prefHeight="40.0" prefWidth="343.0" promptText="Type Genre">
                <VBox.margin>
-                  <Insets left="130.0" top="30.0" />
+                  <Insets left="50.0" top="40.0" />
                </VBox.margin>
             </TextField>
-                <HBox prefHeight="100.0" prefWidth="200.0">
+                <HBox prefHeight="100.0" prefWidth="654.0">
                     <children>
-                        <HBox prefHeight="97.0" prefWidth="837.0">
+                        <HBox prefHeight="64.0" prefWidth="476.0">
                             <children>
                         <TextField fx:id="FolderSelectionTextfield" maxHeight="40.0" maxWidth="343.0" prefHeight="40.0" prefWidth="470.0" promptText="Select a .mp3 or .Wav File">
                            <HBox.margin>
-                              <Insets left="130.0" top="30.0" />
+                              <Insets left="50.0" top="40.0" />
                            </HBox.margin>
                         </TextField>
                                 <Button mnemonicParsing="false" onAction="#openFileExplorer" prefHeight="38.0" prefWidth="50.0" style="-fx-background-color: #000000; -fx-text-fill: ORANGE; -fx-background-radius: 8;" text="..." textAlignment="CENTER">
@@ -51,7 +44,7 @@
                                         <Font size="18.0" />
                                     </font>
                            <HBox.margin>
-                              <Insets top="30.0" />
+                              <Insets top="40.0" />
                            </HBox.margin>
                                 </Button>
                             </children>
@@ -65,12 +58,12 @@
                                 <Font name="Berlin Sans FB Demi Bold" size="16.0" />
                             </font>
                             <HBox.margin>
-                                <Insets left="130.0" />
+                                <Insets left="50.0" top="40.0" />
                             </HBox.margin>
                         </Button>
                         <Button mnemonicParsing="false" onAction="#addSongToAllSongs" prefHeight="40.0" prefWidth="152.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" styleClass="ba" text="Add Song">
                             <HBox.margin>
-                                <Insets left="95.0" />
+                                <Insets left="20.0" top="40.0" />
                             </HBox.margin>
                             <font>
                                 <Font name="Berlin Sans FB Demi Bold" size="16.0" />
@@ -81,11 +74,22 @@
                   <Insets />
                </VBox.margin>
                 </HBox>
-                <ImageView fx:id="editPlaylistImage" fitHeight="157.0" fitWidth="229.0" pickOnBounds="true" preserveRatio="true">
-                    <VBox.margin>
-                        <Insets left="130.0" />
-                    </VBox.margin>
-                </ImageView>
             </children></VBox>
     </center>
+   <right>
+      <VBox prefHeight="616.0" prefWidth="422.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fx:id="image" fitHeight="280.0" fitWidth="420.0" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets left="40.0" top="20.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView fx:id="image2" fitHeight="280.0" fitWidth="420.0" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets bottom="20.0" left="40.0" top="10.0" />
+               </VBox.margin>
+            </ImageView>
+         </children>
+      </VBox>
+   </right>
 </BorderPane>

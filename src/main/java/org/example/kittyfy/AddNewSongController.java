@@ -29,7 +29,10 @@ public class AddNewSongController  {
     @FXML
     private TextField FolderSelectionTextfield;
     @FXML
-    private ImageView editPlaylistImage;
+    private ImageView image2;
+    @FXML
+    private ImageView image;
+
 
     String songTitle;
     String Artist1;
@@ -42,8 +45,14 @@ public class AddNewSongController  {
      */
     public void initialize(){
 
-        Image defaultImage = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/MusicCat2.png")).toExternalForm());
-        editPlaylistImage.setImage(defaultImage);
+
+
+        Image defaultImage2 = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/MusicCat2.png")).toExternalForm());
+        image2.setImage(defaultImage2);
+
+        Image defaultImage3 = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/MusicCat2.png")).toExternalForm());
+        image.setImage(defaultImage3);
+
     }
 
     /**
