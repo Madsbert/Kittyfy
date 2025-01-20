@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class Song {
 
-    private String title;
+    private final String title;
     private ArrayList<String> artist;
-    private String genre;
-    private String filePath;
+    private final String genre;
+    private final String filePath;
     private int songID;
 
     public Song(String title, String genre, String filePath) {
@@ -27,14 +27,8 @@ public class Song {
         this.filePath = filePath;
     }
 
-
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public ArrayList<String> getArtist() {
@@ -49,16 +43,8 @@ public class Song {
         return genre;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
     public String getFilePath() {
         return filePath.trim();
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
 
     public int getSongID() {
@@ -72,6 +58,7 @@ public class Song {
     /**
      * Creates a song in the database.
      * @param song Instance of song to add to the database.
+     * @return song ID with an Int.
      */
     public static int createSong(Song song) {
         String sql = "INSERT INTO dbo.TblSong (fldSongName, fldGenreID, fldFilepath) VALUES (?, ?, ?)";
@@ -159,7 +146,7 @@ public class Song {
                 curSong.setArtist(artists);
                 curSong.setSongID(songID);
             }
-
+            resultSet.close();
             return curSong;
         }
         catch (Exception e)
@@ -251,7 +238,7 @@ public class Song {
                 curSong.setArtist(artistNames);
                 curSong.setSongID (resultSet.getInt("fldSongID"));
             }
-
+            resultSet.close();
             return curSong;
         }
         catch (Exception e) {
@@ -284,7 +271,6 @@ public class Song {
         }
     }
 
-
     /**
      * Reads genre name by genre ID.
      * @param genreID ID of genre to find name of.
@@ -312,18 +298,24 @@ public class Song {
     /**
      * Gets all genres from the database and returns them as an arraylist.
      * @return an array named "genreNames".
-     * @throws Exception
      */
-    public static ArrayList<String> getAllGenreNames() throws Exception {
+    public static ArrayList<String> getAllGenreNames() {
         String sql = "SELECT fldGenreName FROM dbo.tblGenre";
         Connection conn = DB.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        ResultSet resultSet = pstmt.executeQuery();
-        ArrayList<String> genreNames = new ArrayList<>();
-        while (resultSet.next()) {
-            genreNames.add(resultSet.getString("fldGenreName"));
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet resultSet = pstmt.executeQuery();
+            ArrayList<String> genreNames = new ArrayList<>();
+            while (resultSet.next()) {
+                genreNames.add(resultSet.getString("fldGenreName"));
+            }
+            return genreNames;
         }
-        return genreNames;
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get the genre names.");
+        }
+        return null;
     }
 
     /**

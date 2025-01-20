@@ -6,6 +6,7 @@ import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import java.util.ArrayList;
 
+//Adds sound effects to the specific buttons.
 public class SoundEffects {
     public enum kittySounds {
         PAUSE,
@@ -16,9 +17,11 @@ public class SoundEffects {
     public static MediaPlayer mediaPlayer;
 
     private static ArrayList<String> soundEffectArray;
-    private static int arraySize = 0;
 
-    public static void readAllEffects() throws Exception {
+    /**
+     * Arraylist with all the different sound effects.
+     */
+    public static void readAllEffects() {
         soundEffectArray = new ArrayList<>();
 
         soundEffectArray.add("pauseKitty.wav");
@@ -26,7 +29,11 @@ public class SoundEffects {
         soundEffectArray.add("selectKitty.wav");
     }
 
-
+    /**
+     * Plays sound effect when using the buttons in the media player, sets volume of the sound effect to be the same.
+     * Sets delay on the music file so the sound effect does not play over the music.
+     * @param soundEffect adds sound effects to the specific buttons.
+     */
     public static void play(kittySounds soundEffect) {
         try {
             Media media = new Media(new File("src/main/resources/sound effects/" + soundEffectArray.get(soundEffect.ordinal())).toURI().toString());
@@ -41,12 +48,10 @@ public class SoundEffects {
         }
         mediaPlayer.play();
 
-        mediaPlayer.setOnEndOfMedia(new Runnable() {
-            public void run() {
-                mediaPlayer.stop();
-                if (soundEffect.equals(kittySounds.PLAY)) {
-                    HelloController.mediaPlayer.play();
-                }
+        mediaPlayer.setOnEndOfMedia(() -> {
+            mediaPlayer.stop();
+            if (soundEffect.equals(kittySounds.PLAY)) {
+                HelloController.mediaPlayer.play();
             }
         });
     }
