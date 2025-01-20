@@ -45,7 +45,7 @@ public class SoundEffects {
             public void run() {
                 mediaPlayer.stop();
                 if (soundEffect.equals(kittySounds.PLAY)) {
-                    HelloController.mediaPlayer.play();
+                    MainController.mediaPlayer.play();
                 }
             }
         });

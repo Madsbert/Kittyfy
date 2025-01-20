@@ -139,6 +139,6 @@ public class BridgePlaylistSong {
             System.out.println("Failed to retrieve all songs from the playlist.");
         }
 
-        return HelloController.allSongs;
+        return MainController.allSongs;
     }
 }

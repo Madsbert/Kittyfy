@@ -18,7 +18,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import javafx.scene.image.Image;
@@ -37,7 +36,7 @@ import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.CENTER_LEFT;
 
 
-public class HelloController {
+public class MainController {
 
     @FXML
     private ImageView pictures;
@@ -129,7 +128,7 @@ public class HelloController {
         initzializePlaylists();
 
         //initializing playlists options
-       initzializePlaylistOptions();
+        initzializePlaylistOptions();
 
 
         if (!allPlaylists.isEmpty())
@@ -341,7 +340,7 @@ public class HelloController {
 
     private Song findSongByTitle (String title) {
         for (Song song : allSongs) {
-            if (title.contains(song.getTitle().trim())) {
+            if (title != null && title.contains(song.getTitle().trim())) {
                 return song;
             }
         }
@@ -360,7 +359,6 @@ public class HelloController {
 
     /**
      * plays the song the user clicks on in the combobox, and calls the playMusic method.
-     * @throws Exception
      */
     public void playSongOnClick() {
 
