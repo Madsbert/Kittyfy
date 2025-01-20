@@ -45,13 +45,11 @@ public class AddNewSongController  {
      */
     public void initialize(){
 
+        Image defaultImage = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/CatAddingMusic.png")).toExternalForm());
+        image2.setImage(defaultImage);
 
-
-        Image defaultImage2 = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/MusicCat2.png")).toExternalForm());
-        image2.setImage(defaultImage2);
-
-        Image defaultImage3 = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/MusicCat2.png")).toExternalForm());
-        image.setImage(defaultImage3);
+        Image defaultImage2 = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/CatAddingMusic2.png")).toExternalForm());
+        image.setImage(defaultImage2);
 
     }
 
