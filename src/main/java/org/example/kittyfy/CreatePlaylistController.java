@@ -162,7 +162,7 @@ public class CreatePlaylistController {
      */
     private void shiftScene(ActionEvent actionEvent) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("hello-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("Main-View.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("KittyFy");
