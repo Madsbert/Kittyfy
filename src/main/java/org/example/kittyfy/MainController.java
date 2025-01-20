@@ -694,11 +694,17 @@ public class MainController {
         }
     }
 
+    /**
+     * Loads and sets up all playlists
+     */
     public void initializePlaylists() {
         //initializing playlists
         allPlaylists = Playlist.getAllPlaylists();
         assert allPlaylists != null;
         System.out.println(allPlaylists.size()+" playlists initialized");
+
+        Comparator<Object> comparator = new Playlist.SortByLastPlayed();
+        allPlaylists.sort(comparator);
 
         if(!allPlaylists.isEmpty()) {
             currentPlaylist = allPlaylists.getFirst();
@@ -711,6 +717,10 @@ public class MainController {
 
     public void initializePlaylistOptions() {
         HBox currentHBox;
+        vBoxPlaylists.getChildren().clear();
+
+        Comparator<Object> comparer = new Playlist.SortByLastPlayed();
+        allPlaylists.sort(comparer);
 
         //Playlist buttons
         for(Playlist playlist : allPlaylists){
@@ -721,6 +731,18 @@ public class MainController {
             playlistButton.setAlignment(CENTER_LEFT);
             playlistButton.setPadding(new Insets(0, 0, 0, 5));
             playlist.playlistButton = playlistButton;
+
+            if (currentPlaylist == playlist)
+            {
+                if(!playlist.getName().equals(currentPlaylist.getName())){
+                    playlist.playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: orange;");
+                    playlist.playlistButton.setUnderline(false);
+                }
+                else {
+                    playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: white;");
+                    playlist.playlistButton.setUnderline(true);
+                }
+            }
 
             //Edit Button
             Button editButton = new Button();
@@ -739,6 +761,7 @@ public class MainController {
 
             playlistButton.setOnAction(_ -> {
                 currentPlaylist = playlist;
+                currentPlaylist.updateLastPlayed();
                 if (isShuffleMode) {
                     currentSongNumber = new Random().nextInt(currentPlaylist.getSongs().size());
                 }
@@ -755,6 +778,9 @@ public class MainController {
                 {
                     currentSong = allSongs.getFirst();
                 }
+
+                initializePlaylistOptions();
+
                 try {
                     displayPlaylistTitleAndTotalPlaylistDuration();
                     String folderPath;

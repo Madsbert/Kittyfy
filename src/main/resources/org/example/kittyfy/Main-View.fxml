@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="950.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="950.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kittyfy.MainController">
     <center>
-        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+        <VBox prefHeight="616.0" prefWidth="736.0" BorderPane.alignment="CENTER">
             <children>
                 <HBox alignment="CENTER" prefHeight="42.0" prefWidth="674.0">
                     <children>
@@ -58,9 +49,9 @@
                <VBox.margin>
                   <Insets left="26.0" />
                </VBox.margin></Label>
-                <ScrollPane fx:id="songsPane" prefHeight="258.0" prefWidth="658.0" style="-fx-background-color: #FF8000; -fx-background-radius: 15;">
+                <ScrollPane fx:id="songsPane" prefHeight="258.0" prefWidth="699.0" style="-fx-background-color: #FF8000; -fx-background-radius: 15;">
                <VBox.margin>
-                  <Insets left="26.0" right="60.0" />
+                  <Insets left="26.0" right="48.0" />
                </VBox.margin>
                <content>
                   <VBox fx:id="songsVbox" prefHeight="304.0" prefWidth="642.0" />
@@ -70,7 +61,7 @@
                     <children>
                         <ImageView fx:id="pictures" fitHeight="232.0" fitWidth="316.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" top="10.0" />
                      </HBox.margin>
                   </ImageView>
                   <VBox prefHeight="253.0" prefWidth="371.0">
@@ -188,9 +179,9 @@
         </VBox>
     </center>
     <right>
-        <VBox prefHeight="616.0" prefWidth="207.0" BorderPane.alignment="CENTER">
+        <VBox prefHeight="616.0" prefWidth="219.0" BorderPane.alignment="CENTER">
             <children>
-                <Label alignment="CENTER" prefHeight="51.0" prefWidth="181.0" style="-fx-text-fill: black; -fx-font-size: 24px; -fx-font-weight: bold; -fx-font-family: 'Berlin Sans FB Demi';" text="Purrlists" textAlignment="CENTER">
+                <Label alignment="CENTER" prefHeight="51.0" prefWidth="193.0" style="-fx-text-fill: black; -fx-font-size: 24px; -fx-font-weight: bold; -fx-font-family: 'Berlin Sans FB Demi';" text="Purrlists" textAlignment="CENTER">
                <font>
                   <Font name="Berlin Sans FB Demi Bold" size="18.0" />
                </font></Label>
@@ -199,7 +190,7 @@
                   <Insets right="26.0" />
                </VBox.margin>
                <content>
-                  <VBox fx:id="vBoxPlaylists" prefHeight="532.0" prefWidth="165.0">
+                  <VBox fx:id="vBoxPlaylists" prefHeight="532.0" prefWidth="177.0">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets></VBox>
@@ -208,7 +199,7 @@
                   <Insets />
                </opaqueInsets>
                 </ScrollPane>
-                <Button mnemonicParsing="false" onAction="#createPlaylist" prefHeight="40.0" prefWidth="188.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="Create Purrlist" textAlignment="CENTER" textFill="WHITE">
+                <Button mnemonicParsing="false" onAction="#createPlaylist" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="Create Purrlist" textAlignment="CENTER" textFill="WHITE">
                     <font>
                         <Font name="Berlin Sans FB Demi Bold" size="18.0" />
                     </font>
