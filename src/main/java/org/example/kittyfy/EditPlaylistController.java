@@ -44,12 +44,12 @@ public class EditPlaylistController {
     private Playlist playlist;
     private String selectedPicFolderFilepath = null;
 
-    public void initialize() throws Exception {
+    public void initialize() {
         //adding a default picture
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/CatMakingMusic.png")).toExternalForm());
         editPlaylistImage.setImage(image);
 
-        //filling the choicebox with options
+        //filling the choice box with options
         choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Classical");
         choosePictures.setValue("Choose Picture Album");
 
@@ -66,8 +66,8 @@ public class EditPlaylistController {
 
 
     /**
-     * setting the playlist and initializing the songlabels
-     * @param playlist
+     * setting the playlist and initializing the song labels
+     * @param playlist playlist instance to set.
      */
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
@@ -75,14 +75,9 @@ public class EditPlaylistController {
         playlistNameTextfield.setText(playlist.getName());
 
         //initialize songs in playlist
-        if(playlist != null) {
-            for (Song song : playlist.getSongs()) {
-                addSongToVBox(song);
-            }
+        for (Song song : playlist.getSongs()) {
+            addSongToVBox(song);
         }
-
-
-
     }
 
     /**
@@ -125,18 +120,17 @@ public class EditPlaylistController {
 
     /**
      * shifts scene and doesn't add to database
-     * @param event
-     * @throws IOException
+     * @param event caller event.
      */
-    public void cancelButton(ActionEvent event) throws IOException {
+    public void cancelButton(ActionEvent event) {
         SoundEffects.play(SoundEffects.kittySounds.SELECT);
         shiftScene(event);
     }
 
     /**
-     * Finds the songs by titel
-     * @param title
-     * @return
+     * Finds the songs by Title
+     * @param title title of song to find.
+     * @return Song instance.
      */
     private Song findSongByTitle (String title) {
         for (Song song : allSongs) {
@@ -147,13 +141,11 @@ public class EditPlaylistController {
         return null;
     }
 
-
     /**
-     * Saves the changes made to either the playlistname or songs added or deleted
-     * @param event
-     * @throws Exception
+     * Saves the changes made to either the playlist name or songs added or deleted
+     * @param event caller event.
      */
-    public void saveChangesButton(ActionEvent event) throws Exception {
+    public void saveChangesButton(ActionEvent event) {
         SoundEffects.play(SoundEffects.kittySounds.SELECT);
         String playlistName = this.playlistNameTextfield.getText();
         if (playlistName == null || playlistName.isEmpty()) {
@@ -163,8 +155,7 @@ public class EditPlaylistController {
 
         ArrayList<Song> playlistSongs = new ArrayList<>();
         for (Node node : songsInPlaylist.getChildren()) {
-            if (node instanceof HBox) {
-                HBox hbox = (HBox) node;
+            if (node instanceof HBox hbox) {
                 for(Node child: hbox.getChildren()){
                     if(child instanceof Label){
                         String labelText = ((Label) child).getText();
@@ -179,7 +170,7 @@ public class EditPlaylistController {
                     }
                 }
             }else{
-                System.out.println("Node in sonsplaylist in not an hbox");
+                System.out.println("Node in songs playlist is not an hbox");
             }
         }
         if (playlistSongs.isEmpty()) {
@@ -201,12 +192,11 @@ public class EditPlaylistController {
 
     /**
      * deletes the playlist
-     * @param event
-     * @throws Exception
+     * @param event caller event.
      */
-    public void deletePlaylistButton(ActionEvent event) throws Exception {
+    public void deletePlaylistButton(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        ImageView imageView = new ImageView(getClass().getResource("/Pictures/StopSignCat.png").toExternalForm());
+        ImageView imageView = new ImageView(Objects.requireNonNull(getClass().getResource("/Pictures/StopSignCat.png")).toExternalForm());
         alert.setTitle("Delete Playlist");
         alert.setHeaderText("Are you sure you want to delete this playlist?");
         alert.setContentText("This action cannot be undone.");
@@ -224,15 +214,21 @@ public class EditPlaylistController {
 
     /**
      * method to shift scenes
-     * @param actionEvent
-     * @throws IOException
+     * @param actionEvent event that called method.
      */
-    private void shiftScene(ActionEvent actionEvent) throws IOException {
+    private void shiftScene(ActionEvent actionEvent) {
         FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("Main-View.fxml"));
-        Parent root = fxmlLoader.load();
+        Parent root;
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("KittyFy");
-        stage.setScene(new Scene(root));
+        try {
+            root = fxmlLoader.load();
+            stage.setTitle("KittyFy");
+            stage.setScene(new Scene(root));
+        }
+        catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+
         stage.show();
     }
 
@@ -265,12 +261,7 @@ public class EditPlaylistController {
             songsInPlaylist.getChildren().add(currentHBox);
 
 
-            deleteSongButton.setOnAction(actionEvent -> {
-
-                if(songsInPlaylist.getChildren().contains(currentHBox)) {
-                    songsInPlaylist.getChildren().remove(currentHBox);
-                }
-            });
+            deleteSongButton.setOnAction(_ -> songsInPlaylist.getChildren().remove(currentHBox));
     }
     public void openFileExplorer(ActionEvent event) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
