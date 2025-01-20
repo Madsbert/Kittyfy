@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Playlist {
 
@@ -31,6 +32,7 @@ public class Playlist {
 
     public void setLastPlayed(long lastPlayed) {
         this.lastPlayed = lastPlayed;
+        updatePlaylist(this);
     }
 
     public Playlist(String name, ArrayList<Song> songs, String selectedPicFolderFilepath) {
@@ -76,6 +78,19 @@ public class Playlist {
 
     public void addSong(Song song) {
         songs.add(song);
+    }
+
+    /**
+     * Compares playlists by their lastPlayed time.
+     */
+    static class SortByLastPlayed implements Comparator<Object> {
+        public int compare(Object o1, Object o2) {
+            Playlist playlist1 = (Playlist) o1;
+            Playlist playlist2 = (Playlist) o2;
+
+            // compares the objects
+            return Long.compare(playlist2.getLastPlayed(), playlist1.getLastPlayed());
+        }
     }
 
     /**
