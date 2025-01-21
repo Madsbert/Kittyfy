@@ -291,11 +291,11 @@ public class EditPlaylistController {
                     choosePictures.setValue(selectedPicFolderFilepath);
                     break;
                 default:
-                    selectedPicFolderFilepath = null;
-                    System.out.println("No folder was selected.");
+                    selectedPicFolderFilepath = choosePictures.getValue();
             }
+            return;
         }
-
+        System.out.println("No folder was selected.");
     }
 }
 
