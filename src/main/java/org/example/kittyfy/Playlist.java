@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -30,9 +31,27 @@ public class Playlist {
         setLastPlayed(Instant.now().getEpochSecond());
     }
 
+    /**
+     * Updates the last played field in the Database.
+     * @param lastPlayed unix time of last playtime.
+     */
     public void setLastPlayed(long lastPlayed) {
         this.lastPlayed = lastPlayed;
-        updatePlaylist(this);
+
+        Connection conn = DB.getConnection();
+        String sql = "UPDATE TblPlaylist SET fldLastPlayed = ? WHERE fldPlaylistID = ?";
+        try
+        {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, lastPlayed);
+            pstmt.setInt(2, playlistId);
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(e.getErrorCode());
+        }
     }
 
     public Playlist(String name, ArrayList<Song> songs, String selectedPicFolderFilepath) {

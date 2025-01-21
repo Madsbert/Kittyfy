@@ -217,6 +217,7 @@ public class MainController {
             else
             {
                 // uses default folder if no folder is declared in the database.
+                System.out.println("Warning Using Default folder in showRandomImage()");
                 folder = new File("src/main/resources/Pictures/DefaultPlaylistPictures");
             }
 
@@ -779,8 +780,6 @@ public class MainController {
                     currentSong = allSongs.getFirst();
                 }
 
-                initializePlaylistOptions();
-
                 try {
                     displayPlaylistTitleAndTotalPlaylistDuration();
                     String folderPath;
@@ -806,12 +805,7 @@ public class MainController {
                 playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: white;");
                 playlistButton.setUnderline(true);
 
-                for(Playlist curPlaylist: allPlaylists){
-                    if(!curPlaylist.getName().equals(currentPlaylist.getName())){
-                        curPlaylist.playlistButton.setStyle("-fx-background-color: #000000; " +"-fx-text-fill: orange;");
-                        curPlaylist.playlistButton.setUnderline(false);
-                    }
-                }
+                initializePlaylistOptions();
             });
 
             editButton.setOnAction(event -> {
