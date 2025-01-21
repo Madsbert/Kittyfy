@@ -1,5 +1,6 @@
 package org.example.kittyfy;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
@@ -8,7 +9,16 @@ import javafx.scene.control.TextField;
 import java.util.ArrayList;
 
 public class SearchableComboBox {
+
+    public static boolean paused = false;
+
     public static void initializeSearchBar(ComboBox<String> searchBar, ArrayList<Song> allSongs) {
+        if (paused)
+        {
+            return;
+        }
+        paused = true;
+
         // Original list to preserve all items
         ObservableList<String> originalItems = FXCollections.observableArrayList();
 
@@ -52,5 +62,8 @@ public class SearchableComboBox {
                 editor.setText(newVal);
             }
         });
+
+        searchBar.setValue(" ");
+        Platform.runLater(() -> paused = false);
     }
 }

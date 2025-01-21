@@ -113,7 +113,17 @@ public class MainController {
 
         Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures/DefaultPlaylistPictures");
 
-        SearchableComboBox.initializeSearchBar(searchBar, allSongs);
+        for (Song song : allSongs) {
+            ArrayList<String> trimmedArtists = new ArrayList<>();
+            for (String artist : song.getArtist()) {
+                trimmedArtists.add(artist.trim());
+            }
+            String artists = String.join(", ", trimmedArtists);
+            String item = song.getTitle().trim() + " by " + artists;
+            searchBar.getItems().add(item);
+        }
+
+        //SearchableComboBox.initializeSearchBar(searchBar, allSongs);
 
         System.out.println(allSongs.size() + " songs initialized");
 

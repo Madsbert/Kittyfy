@@ -58,7 +58,15 @@ public class EditPlaylistController {
 
 
         //initializing searchbar options
-       initializeSongsInSearchbar();
+        for (Song song : allSongs) {
+            ArrayList<String> trimmedArtists = new ArrayList<>();
+            for (String artist : song.getArtist()) {
+                trimmedArtists.add(artist.trim());
+            }
+            String artists = String.join(", ", trimmedArtists);
+            String item = song.getTitle().trim() + " by " + artists;
+            searchbarPlaylist.getItems().add(item);
+        }
     }
 
 

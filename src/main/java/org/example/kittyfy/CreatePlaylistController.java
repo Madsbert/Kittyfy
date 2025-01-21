@@ -67,12 +67,16 @@ public class CreatePlaylistController {
             //initialize Songs
             allSongs = Reader.readAllSongs();
 
-            //initialize searchable searchbar
-            SearchableComboBox.initializeSearchBar(searchbarPlaylist, allSongs);
-
-
-            //initializing searchbar
-            SearchableComboBox.initializeSearchBar(searchbarPlaylist, allSongs);
+            //initializing searchbar options
+            for (Song song : allSongs) {
+                ArrayList<String> trimmedArtists = new ArrayList<>();
+                for (String artist : song.getArtist()) {
+                    trimmedArtists.add(artist.trim());
+                }
+                String artists = String.join(", ", trimmedArtists);
+                String item = song.getTitle().trim() + " by " + artists;
+                searchbarPlaylist.getItems().add(item);
+            }
 
             System.out.println(allSongs.size() + " songs initialized");
         } catch (Exception e) {
