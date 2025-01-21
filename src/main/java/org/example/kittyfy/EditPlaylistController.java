@@ -1,5 +1,6 @@
 package org.example.kittyfy;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,7 +52,6 @@ public class EditPlaylistController {
 
         //filling the choice box with options
         choosePictures.getItems().addAll("Choose Picture Album", "Dansk Top", "Rock", "Classical");
-        choosePictures.setValue("Choose Picture Album");
 
         //initialize Songs
         allSongs = Reader.readAllSongs();
@@ -59,9 +59,6 @@ public class EditPlaylistController {
 
         //initializing searchbar options
        initializeSongsInSearchbar();
-
-
-
     }
 
 
@@ -77,6 +74,33 @@ public class EditPlaylistController {
         //initialize songs in playlist
         for (Song song : playlist.getSongs()) {
             addSongToVBox(song);
+        }
+    }
+
+    public void setChoosePictures() {
+        System.out.println("Filepath: " + playlist.getFolderPath());
+        if (playlist.getFolderPath() != null) {
+            switch (playlist.getFolderPath()) {
+                case "src/main/resources/Pictures/catDanskTopTheme":
+                    choosePictures.setValue("Dansk Top");
+                    break;
+
+                case "src/main/resources/Pictures/catRockTheme":
+                    choosePictures.setValue("Rock");
+                    break;
+
+                case "src/main/resources/Pictures/catClassicalTheme":
+                    choosePictures.setValue("Classical");
+                    break;
+
+                default:
+                    choosePictures.setValue(playlist.getFolderPath());
+                    break;
+            }
+        }
+        else
+        {
+            choosePictures.setValue("Choose Picture Album");
         }
     }
 

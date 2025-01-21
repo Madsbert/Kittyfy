@@ -289,10 +289,12 @@ public class Playlist {
                 String playlistName = resultSet.getString("fldPlaylistName").trim();
                 long lastPlayed = resultSet.getLong("fldLastPlayed");
                 int playlistID = resultSet.getInt("fldPlaylistID");
+                String playlistFolderPath = resultSet.getString("fldPictureFilepath").trim();
 
                 Playlist newPlaylist = new Playlist(playlistName, BridgePlaylistSong.getAllSongsInPlaylist(playlistID));
                 newPlaylist.setLastPlayed(lastPlayed);
                 newPlaylist.setPlaylistId(playlistID);
+                newPlaylist.setFolderPath(playlistFolderPath);
                 allPlaylists.add(newPlaylist);
             }
             return allPlaylists;
@@ -302,7 +304,10 @@ public class Playlist {
             System.out.println(e.getMessage());
             System.out.println("Failed to get all playlists.");
         }
-        return null;
+
+        ArrayList<Playlist> ap = new ArrayList<>();
+        ap.add(new Playlist("Error getting all playlists", MainController.allSongs));
+        return ap;
     }
 
     /**

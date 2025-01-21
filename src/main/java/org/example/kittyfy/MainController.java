@@ -701,7 +701,10 @@ public class MainController {
     public void initializePlaylists() {
         //initializing playlists
         allPlaylists = Playlist.getAllPlaylists();
-        assert allPlaylists != null;
+        if (allPlaylists == null || allPlaylists.isEmpty())
+        {
+            return;
+        }
         System.out.println(allPlaylists.size()+" playlists initialized");
 
         Comparator<Object> comparator = new Playlist.SortByLastPlayed();
@@ -719,6 +722,7 @@ public class MainController {
     public void initializePlaylistOptions() {
         HBox currentHBox;
         vBoxPlaylists.getChildren().clear();
+        if (allPlaylists.isEmpty()) { return; }
 
         Comparator<Object> comparer = new Playlist.SortByLastPlayed();
         allPlaylists.sort(comparer);
@@ -817,6 +821,8 @@ public class MainController {
 
                 EditPlaylistController controller = fxmlLoader.getController();
                 controller.setPlaylist(playlist);
+                Platform.runLater(controller::setChoosePictures);
+
 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setTitle("Edit Playlist");
