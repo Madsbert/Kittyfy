@@ -286,10 +286,12 @@ public class Playlist {
             ArrayList<Playlist> allPlaylists = new ArrayList<>();
 
             while (resultSet.next()) {
-                String playlistName = resultSet.getString("fldPlaylistName").trim();
+                String playlistName = resultSet.getString("fldPlaylistName");
+                if (playlistName != null) { playlistName = playlistName.trim(); }
                 long lastPlayed = resultSet.getLong("fldLastPlayed");
                 int playlistID = resultSet.getInt("fldPlaylistID");
-                String playlistFolderPath = resultSet.getString("fldPictureFilepath").trim();
+                String playlistFolderPath = resultSet.getString("fldPictureFilepath");
+                if (playlistFolderPath != null) { playlistFolderPath = playlistFolderPath.trim(); }
 
                 Playlist newPlaylist = new Playlist(playlistName, BridgePlaylistSong.getAllSongsInPlaylist(playlistID));
                 newPlaylist.setLastPlayed(lastPlayed);
