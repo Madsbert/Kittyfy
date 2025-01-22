@@ -42,7 +42,13 @@ public class MainController {
     private ImageView pictures;
 
     @FXML
-    private ComboBox<String> searchBar;
+    private VBox searchBox;
+
+    @FXML
+    private TextField searchBar;
+
+    @FXML
+    private ListView<String> listView;
 
     @FXML
     private Button playButton;
@@ -115,17 +121,7 @@ public class MainController {
 
         Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures/DefaultPlaylistPictures");
 
-        for (Song song : allSongs) {
-            ArrayList<String> trimmedArtists = new ArrayList<>();
-            for (String artist : song.getArtist()) {
-                trimmedArtists.add(artist.trim());
-            }
-            String artists = String.join(", ", trimmedArtists);
-            String item = song.getTitle().trim() + " by " + artists;
-            searchBar.getItems().add(item);
-        }
-
-        //SearchableComboBox.initializeSearchBar(searchBar, allSongs);
+        SearchableTextfield.initializeSearchBar(searchBar,listView,allSongs);
 
         System.out.println(allSongs.size() + " songs initialized");
 
@@ -352,7 +348,7 @@ public class MainController {
      * @throws Exception
      */
     public void addSongClick() throws Exception {
-        String selectedSongTitle = searchBar.getValue();
+        String selectedSongTitle = searchBar.getText();
         Song songToAdd = findSongByTitle(selectedSongTitle);
 
         if (songToAdd != null) {
@@ -366,7 +362,7 @@ public class MainController {
      */
     public void playSongOnClick() {
 
-        String selectedTitle = searchBar.getValue();
+        String selectedTitle = searchBar.getText();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
             return;

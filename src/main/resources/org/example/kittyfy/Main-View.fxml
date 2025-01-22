@@ -11,32 +11,38 @@
     <center>
         <VBox prefHeight="616.0" prefWidth="736.0" BorderPane.alignment="CENTER">
             <children>
-                <HBox alignment="CENTER" prefHeight="42.0" prefWidth="674.0">
+                <HBox alignment="CENTER" prefHeight="97.0" prefWidth="731.0">
                     <children>
-                  <Button layoutX="554.0" layoutY="10.0" mnemonicParsing="false" onAction="#NewSongSceneClick" prefHeight="40.0" prefWidth="60.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="+🎶">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                        <ComboBox fx:id="searchBar" onAction="#playSongOnClick" prefHeight="40.0" prefWidth="394.0" promptText="Song/Artist" style="-fx-text-fill: white;">
-                            <opaqueInsets>
-                                <Insets />
-                            </opaqueInsets>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                        </ComboBox>
-                        <Button fx:id="addSong" mnemonicParsing="false" onAction="#addSongClick" prefHeight="40.0" prefWidth="60.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="+">
-                            <font>
-                                <Font size="20.0" />
-                            </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
+                  <VBox prefHeight="69.0" prefWidth="60.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#NewSongSceneClick" prefHeight="38.0" prefWidth="60.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="+🎶">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="searchBox" prefHeight="70.0" prefWidth="300.0">
+                     <children>
+                        <TextField fx:id="searchBar" onAction="#playSongOnClick" prefHeight="38.0" prefWidth="300.0" />
+                        <ListView fx:id="listView" prefHeight="40.0" prefWidth="300.0" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="69.0" prefWidth="60.0">
+                     <children>
+                              <Button fx:id="addSong" mnemonicParsing="false" onAction="#addSongClick" prefHeight="38.0" prefWidth="60.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15; -fx-text-fill: orange;" text="+">
+                                  <font>
+                                      <Font size="19.0" />
+                                  </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                              </Button>
+                     </children>
+                  </VBox>
                     </children>
                     <VBox.margin>
                         <Insets top="20.0" />
