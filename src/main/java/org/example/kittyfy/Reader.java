@@ -22,7 +22,7 @@ public class Reader {
 
 
         for (String fileName : songsFileNames) {
-            if (!fileName.endsWith(".wav\"") || !fileName.endsWith(".mp3\"")) { continue; }
+            if (!fileName.endsWith(".wav\"") && !fileName.endsWith(".mp3\"")) { continue; } // If the file doesn't end on either .wav or mp3 it is skipped.
             String[] rows = fileName.split(" - ");
             String songName = rows[0].substring(1);
 
