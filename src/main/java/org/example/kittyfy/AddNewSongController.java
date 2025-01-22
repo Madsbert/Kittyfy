@@ -60,10 +60,10 @@ public class AddNewSongController  {
     public void openFileExplorer(ActionEvent event) {
         // Initialize fileChooser
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select a .wav file");
+        fileChooser.setTitle("Select a .wav file or .MP3 file");
 
         // Set filter
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("WAV Files", "*.wav");
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3");
         fileChooser.getExtensionFilters().add(filter);
 
         // Open fileExplorer
@@ -113,13 +113,20 @@ public class AddNewSongController  {
         Genre = GenreTextfield.getText();
 
 
+        String fileExtension = getFileExtension(songFile);
+        if (fileExtension == null || (!fileExtension.equalsIgnoreCase("wav") && !fileExtension.equalsIgnoreCase("mp3"))) {
+            System.out.println("Unsupported file type.");
+            return;
+        }
+
+
         File renamedFile;
         if (Artist2Textfield.getText().isEmpty()) {
-            renamedFile = new File("src/main/resources/music/" + songTitle + " - " + Artist1 + " - " + Genre + ".wav");
+            renamedFile = new File("src/main/resources/music/" + songTitle + " - " + Artist1 + " - " + Genre + "."+fileExtension);
 
         }
         else {
-            renamedFile = new File("src/main/resources/music/" + songTitle + " - " + Artist1 + Artist2+ " - " + Genre + ".wav");
+            renamedFile = new File("src/main/resources/music/" + songTitle + " - " + Artist1 + Artist2+ " - " + Genre + "."+fileExtension);
 
         }
         // Rename the file
@@ -145,5 +152,14 @@ public class AddNewSongController  {
             System.out.println("File renaming failed.");
         }
 
+    }
+
+    private String getFileExtension(File file) {
+        String name = file.getName();
+        int lastIndex = name.lastIndexOf('.');
+        if (lastIndex > 0 && lastIndex < name.length() - 1) {
+            return name.substring(lastIndex + 1).toLowerCase();
+        }
+        return null;
     }
 }
