@@ -711,7 +711,7 @@ public class MainController {
     public void initializePlaylists() {
         //initializing playlists
         allPlaylists = Playlist.getAllPlaylists();
-        if (allPlaylists == null || allPlaylists.isEmpty())
+        if (allPlaylists.isEmpty())
         {
             return;
         }

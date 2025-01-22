@@ -1,6 +1,5 @@
 package org.example.kittyfy;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -58,15 +57,7 @@ public class EditPlaylistController {
 
 
         //initializing searchbar options
-        for (Song song : allSongs) {
-            ArrayList<String> trimmedArtists = new ArrayList<>();
-            for (String artist : song.getArtist()) {
-                trimmedArtists.add(artist.trim());
-            }
-            String artists = String.join(", ", trimmedArtists);
-            String item = song.getTitle().trim() + " by " + artists;
-            searchbarPlaylist.getItems().add(item);
-        }
+        initializeSongsInSearchbar();
     }
 
 
