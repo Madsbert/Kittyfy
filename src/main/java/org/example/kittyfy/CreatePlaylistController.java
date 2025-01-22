@@ -23,8 +23,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-//Class which controls the Create playlist fxml
-
+/**
+ * Controls the CreatePlaylistFXML file
+ */
 public class CreatePlaylistController {
 
     //Annotations

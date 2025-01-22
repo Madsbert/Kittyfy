@@ -11,6 +11,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * class which gets and sets playlist in database and creates a Playlist Object
+ */
+
 public class Playlist {
 
     private int playlistId;

@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+/**
+ * class which gets and sets songs from database and creates a Song Object
+ */
 public class Song {
 
     private final String title;

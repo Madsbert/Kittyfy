@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+/**
+ * class for getting and setting songs and artists together in databse
+ */
 public class BridgeSongArtist {
 
     /**

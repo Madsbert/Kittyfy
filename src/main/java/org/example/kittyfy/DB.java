@@ -3,6 +3,9 @@ package org.example.kittyfy;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * class to connect to Database
+ */
 public class DB {
 
     private static final String URL = "jdbc:sqlserver://localhost;databaseName=KittyfyDB";

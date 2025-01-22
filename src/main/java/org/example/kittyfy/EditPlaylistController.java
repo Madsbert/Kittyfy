@@ -22,6 +22,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+
+/**
+ * class to control EditPLaylistFXML file.
+ */
 public class EditPlaylistController {
 
     @FXML
@@ -44,6 +48,9 @@ public class EditPlaylistController {
     private Playlist playlist;
     private String selectedPicFolderFilepath = null;
 
+    /**
+     * method to initialize scene
+     */
     public void initialize() {
         //adding a default picture
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/CatMakingMusic.png")).toExternalForm());
@@ -76,6 +83,9 @@ public class EditPlaylistController {
         }
     }
 
+    /**
+     * method to choose pictures
+     */
     public void setChoosePictures() {
         System.out.println("Filepath: " + playlist.getFolderPath());
         if (playlist.getFolderPath() != null) {
@@ -253,6 +263,10 @@ public class EditPlaylistController {
         stage.show();
     }
 
+    /**
+     * Method to add a song button and a delete button in vbox
+     * @param song a song object
+     */
     private void addSongToVBox(Song song) {
             ArrayList<String> trimmedArtists = new ArrayList<>();
             for (String artist : song.getArtist()) {
@@ -284,6 +298,11 @@ public class EditPlaylistController {
 
             deleteSongButton.setOnAction(_ -> songsInPlaylist.getChildren().remove(currentHBox));
     }
+
+    /**
+     * method to open file explorer in user laptop and choosing pictures.
+     * @param event
+     */
     public void openFileExplorer(ActionEvent event) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select a Folder");
@@ -298,6 +317,10 @@ public class EditPlaylistController {
             choosePictures.setValue(selectedPicFolderFilepath);
         }
     }
+
+    /**
+     * Method to choose genre pictures. which will be displayed in main application
+     */
     public void getGenreFromChoiceBox1() {
         if (choosePictures.getValue() != null) {
             switch (choosePictures.getValue()) {

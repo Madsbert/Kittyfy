@@ -33,7 +33,9 @@ import java.util.Timer;
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.CENTER_LEFT;
 
-
+/**
+ * Class which controlls Main-View.FXML file
+ */
 public class MainController {
 
     @FXML
@@ -345,6 +347,10 @@ public class MainController {
         return null;
     }
 
+    /**
+     * Adds a song to current playlist
+     * @throws Exception
+     */
     public void addSongClick() throws Exception {
         String selectedSongTitle = searchBar.getValue();
         Song songToAdd = findSongByTitle(selectedSongTitle);
@@ -604,6 +610,9 @@ public class MainController {
         ArtistNameLabel.setText(artistNames.toString());
     }
 
+    /**
+     * method to display Playlist title and total playlist Duration
+     */
     public void displayPlaylistTitleAndTotalPlaylistDuration() {
         double TotalPlaylistDuration = 0;
         for (Song song : currentPlaylist.getSongs()) {
@@ -688,7 +697,9 @@ public class MainController {
         stage.show();
     }
 
-
+    /**
+     * method to play songs in random order
+     */
     public void shuffle()
     {
         SoundEffects.play(SoundEffects.kittySounds.SELECT);
@@ -729,6 +740,9 @@ public class MainController {
         }
     }
 
+    /**
+     * method to initialize Playlist options
+     */
     public void initializePlaylistOptions() {
         HBox currentHBox;
         vBoxPlaylists.getChildren().clear();

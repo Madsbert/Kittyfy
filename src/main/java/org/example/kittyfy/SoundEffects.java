@@ -6,7 +6,9 @@ import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import java.util.ArrayList;
 
-//Adds sound effects to the specific buttons.
+/**
+ * Adds sound effects to the specific buttons.
+ */
 public class SoundEffects {
     public enum kittySounds {
         PAUSE,

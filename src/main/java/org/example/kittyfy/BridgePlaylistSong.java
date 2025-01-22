@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+/**
+ * class for getting and setting songs in a playlist in Database
+ */
 public class BridgePlaylistSong {
 
     /**

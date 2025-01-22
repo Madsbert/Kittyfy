@@ -4,7 +4,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * a class which reads the song object into the database
+ */
 public class Reader {
+
+    /**
+     * Method to read all songs from the song file to the database
+     * @return
+     */
     public static ArrayList<Song> readAllSongs() {
 
         File directory = new File("src/main/resources/music");

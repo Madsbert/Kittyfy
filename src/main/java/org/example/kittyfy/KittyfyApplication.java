@@ -11,27 +11,38 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Class to open application
+ */
 public class KittyfyApplication extends Application {
+
+    /**
+     * method to open application
+     * @param stage a stage
+     */
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(KittyfyApplication.class.getResource("Main-View.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Kittyfy");
+    public void start(Stage stage) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(KittyfyApplication.class.getResource("Main-View.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            stage.setTitle("Kittyfy");
 
-        Image icon = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/Icon.png")).toExternalForm());
-        stage.getIcons().add(icon);
+            Image icon = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/Icon.png")).toExternalForm());
+            stage.getIcons().add(icon);
 
-        stage.setScene(scene);
-        stage.show();
+            stage.setScene(scene);
+            stage.show();
 
-        stage.setOnCloseRequest (_ -> {
-            Platform.exit();
-            System.exit(0);
-            MainController.onClose();
-        });
+            stage.setOnCloseRequest(_ -> {
+                Platform.exit();
+                System.exit(0);
+                MainController.onClose();
+            });
 
 
-        DB.getConnection();
+            DB.getConnection();
+        } catch (IOException e) {
+        System.out.println("Error: " + e.getMessage());}
     }
 
     public static void main(String[] args) {

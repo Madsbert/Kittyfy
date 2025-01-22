@@ -17,6 +17,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * class which controls AddNewSong fxml file
+ */
 public class AddNewSongController  {
     @FXML
     private TextField songTitleTextField;
@@ -150,6 +153,10 @@ public class AddNewSongController  {
         return null;
     }
 
+    /**
+     * method to shift scene
+     * @param actionEvent needs an event to happen
+     */
     private void shiftScene(ActionEvent actionEvent) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("Main-View.fxml"));
