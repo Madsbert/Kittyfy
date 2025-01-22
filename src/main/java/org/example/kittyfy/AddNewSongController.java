@@ -83,21 +83,7 @@ public class AddNewSongController  {
      * @param actionEvent needs an event to happen.
      */
     public void cancelButton(ActionEvent actionEvent) {
-        {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("Main-View.fxml"));
-                Parent root = fxmlLoader.load();
-                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                stage.setTitle("KittyFy");
-                stage.setScene(new Scene(root));
-                stage.show();
-            }
-            catch (IOException ex){
-                System.out.println(ex.getMessage());
-
-            }
-
-        }
+        shiftScene(actionEvent);
     }
 
     /**
@@ -152,6 +138,7 @@ public class AddNewSongController  {
             System.out.println("File renaming failed.");
         }
 
+        shiftScene(actionEvent);
     }
 
     private String getFileExtension(File file) {
@@ -161,5 +148,19 @@ public class AddNewSongController  {
             return name.substring(lastIndex + 1).toLowerCase();
         }
         return null;
+    }
+
+    private void shiftScene(ActionEvent actionEvent) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("Main-View.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setTitle("KittyFy");
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
+        catch (IOException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 }
