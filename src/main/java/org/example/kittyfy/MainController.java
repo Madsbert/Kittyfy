@@ -677,7 +677,7 @@ public class MainController {
         try {
             root = fxmlLoader.load();
 
-            stage.setTitle("Create Playlist");
+            stage.setTitle("Add Song");
             stage.setScene(new Scene(root));
         }
         catch (Exception e)
