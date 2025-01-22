@@ -17,7 +17,7 @@
             </TextField>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <ComboBox fx:id="searchbarPlaylist" editable="true" prefHeight="40.0" prefWidth="343.0" promptText="Song/Artist">
+                  <ComboBox fx:id="searchbarPlaylist" prefHeight="40.0" prefWidth="343.0" promptText="Song/Artist">
                      <HBox.margin>
                         <Insets bottom="30.0" left="130.0" top="30.0" />
                      </HBox.margin></ComboBox>

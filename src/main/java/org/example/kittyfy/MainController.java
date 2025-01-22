@@ -802,7 +802,6 @@ public class MainController {
                     } else {folderPath = "src/main/resources/Pictures/DefaultPlaylistPictures";}
 
                     System.out.println("pictureFolderPath for selected Playlist: " + folderPath);
-
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
