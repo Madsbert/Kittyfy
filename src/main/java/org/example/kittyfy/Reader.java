@@ -22,7 +22,7 @@ public class Reader {
 
 
         for (String fileName : songsFileNames) {
-            if (!fileName.endsWith(".wav\"")) { continue; }
+            if (!fileName.endsWith(".wav\"") || !fileName.endsWith(".mp3\"")) { continue; }
             String[] rows = fileName.split(" - ");
             String songName = rows[0].substring(1);
 
