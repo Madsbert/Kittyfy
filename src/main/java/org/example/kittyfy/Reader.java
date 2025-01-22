@@ -1,7 +1,6 @@
 package org.example.kittyfy;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -13,6 +12,7 @@ public class Reader {
         File[] files = directory.listFiles();
         ArrayList<String> songsFileNames = new ArrayList<>(20);
 
+        assert files != null;
         for (File file : files) {
             songsFileNames.add("\"" + file.getName().trim() + "\"");
             songsFileNames.add(file.getName());
