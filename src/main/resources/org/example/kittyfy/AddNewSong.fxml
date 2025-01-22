@@ -10,16 +10,16 @@
     <center>
         <VBox prefHeight="616.0" prefWidth="581.0" style="-fx-background-color: linear-gradient(to bottom, #FF8000, #FFB366);" BorderPane.alignment="CENTER">
             <children>
-            <TextField fx:id="Artist1Textfield" maxHeight="40.0" maxWidth="343.0" prefHeight="40.0" prefWidth="334.0" promptText="Type Artist #1">
-               <VBox.margin>
-                  <Insets left="50.0" top="40.0" />
-               </VBox.margin>
-            </TextField>
                 <TextField fx:id="songTitleTextField" maxHeight="40.0" maxWidth="343.0" prefHeight="40.0" prefWidth="158.0" promptText="Type Song title" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets left="50.0" top="40.0" />
                     </VBox.margin>
                 </TextField>
+            <TextField fx:id="Artist1Textfield" maxHeight="40.0" maxWidth="343.0" prefHeight="40.0" prefWidth="334.0" promptText="Type Artist #1">
+               <VBox.margin>
+                  <Insets left="50.0" top="40.0" />
+               </VBox.margin>
+            </TextField>
             <TextField fx:id="Artist2Textfield" maxHeight="40.0" maxWidth="343.0" prefHeight="43.0" prefWidth="230.0" promptText="Type Artist #2">
                <VBox.margin>
                   <Insets left="50.0" top="40.0" />
