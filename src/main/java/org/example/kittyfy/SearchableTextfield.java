@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
@@ -61,13 +60,13 @@ public class SearchableTextfield {
 
         // Handle selection from the suggestion list
         listView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 1) {
+            if (event.getClickCount() == 0) {
                 String selectedItem = listView.getSelectionModel().getSelectedItem();
                 System.out.println("Selected item: " + selectedItem);
                 System.out.println("Mouse event: " + event);
                 if (selectedItem != null) {
                     searchBar.clear();
-                    searchBar.appendText(selectedItem);
+                    searchBar.setText(selectedItem);
                     listView.setVisible(false);
                 }
             }

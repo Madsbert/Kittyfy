@@ -28,7 +28,7 @@
                   <VBox fx:id="searchBox" prefHeight="70.0" prefWidth="300.0">
                      <children>
                         <TextField fx:id="searchBar" onAction="#playSongOnClick" prefHeight="38.0" prefWidth="300.0" />
-                        <ListView fx:id="listView" prefHeight="40.0" prefWidth="300.0" />
+                        <ListView fx:id="listView" prefHeight="40.0" prefWidth="300.0" style="-fx-background-radius: 5;" />
                      </children>
                   </VBox>
                   <VBox prefHeight="69.0" prefWidth="60.0">

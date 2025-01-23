@@ -36,7 +36,10 @@ public class CreatePlaylistController {
     private TextField playlistName;
 
     @FXML
-    private ComboBox<String> searchbarPlaylist;
+    private TextField searchbarPlaylist;
+
+    @FXML
+    private ListView<String> listView;
 
     @FXML
     private ChoiceBox<String> choosePictures;
@@ -68,16 +71,7 @@ public class CreatePlaylistController {
             //initialize Songs
             allSongs = Reader.readAllSongs();
 
-            //initializing searchbar options
-            for (Song song : allSongs) {
-                ArrayList<String> trimmedArtists = new ArrayList<>();
-                for (String artist : song.getArtist()) {
-                    trimmedArtists.add(artist.trim());
-                }
-                String artists = String.join(", ", trimmedArtists);
-                String item = song.getTitle().trim() + " by " + artists;
-                searchbarPlaylist.getItems().add(item);
-            }
+            SearchableTextfield.initializeSearchBar(searchbarPlaylist,listView,allSongs);
 
             System.out.println(allSongs.size() + " songs initialized");
         } catch (Exception e) {
@@ -183,7 +177,7 @@ public class CreatePlaylistController {
      */
     public void addSongPlaylist() {
         SoundEffects.play(SoundEffects.kittySounds.SELECT);
-        String selectedTitle = searchbarPlaylist.getValue();
+        String selectedTitle = searchbarPlaylist.getSelectedText();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
         }

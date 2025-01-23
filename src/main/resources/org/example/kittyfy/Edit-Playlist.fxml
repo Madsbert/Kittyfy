@@ -15,15 +15,24 @@
                         <Insets left="130.0" right="114.0" top="30.0" />
                     </VBox.margin>
                 </TextField>
-                <HBox prefHeight="100.0" prefWidth="200.0">
+                <HBox prefHeight="114.0" prefWidth="588.0">
                     <children>
-                        <ComboBox fx:id="searchbarPlaylist" prefHeight="40.0" prefWidth="343.0" promptText="Song/Artist">
-                            <HBox.margin>
-                                <Insets bottom="30.0" left="130.0" top="30.0" />
-                            </HBox.margin></ComboBox>
+                  <VBox prefHeight="97.0" prefWidth="343.0">
+                     <children>
+                        <TextField fx:id="searchbarPlaylist" minHeight="40.0" prefHeight="40.0" promptText="Song/Artist">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <ListView fx:id="listView" prefWidth="95.0" />
+                     </children>
+                     <HBox.margin>
+                        <Insets left="130.0" />
+                     </HBox.margin>
+                  </VBox>
                         <Button mnemonicParsing="false" onAction="#addSongToPlaylist" prefHeight="40.0" prefWidth="63.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" text="+">
                             <HBox.margin>
-                                <Insets top="30.0" />
+                                <Insets top="10.0" />
                             </HBox.margin>
                             <font>
                                 <Font size="18.0" />
@@ -33,7 +42,7 @@
                 </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <HBox prefHeight="97.0" prefWidth="837.0">
+                  <HBox prefHeight="96.0" prefWidth="588.0">
                      <children>
                         <ChoiceBox fx:id="choosePictures" prefHeight="40.0" prefWidth="343.0">
                            <HBox.margin>
@@ -46,10 +55,16 @@
                            </font>
                         </Button>
                      </children>
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
                   </HBox>
                </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </HBox>
-                <HBox prefHeight="71.0" prefWidth="650.0">
+                <HBox prefHeight="46.0" prefWidth="588.0">
                     <children>
                         <Button minHeight="40.0" mnemonicParsing="false" onAction="#cancelButton" prefHeight="40.0" prefWidth="95.0" style="-fx-background-color: #000000; -fx-text-fill: orange; -fx-background-radius: 15;" text="Cancel ">
                             <font>
@@ -72,7 +87,7 @@
                                 <Font name="Berlin Sans FB Demi Bold" size="16.0" />
                             </font>
                             <HBox.margin>
-                                <Insets bottom="30.0" left="20.0" />
+                                <Insets left="20.0" />
                             </HBox.margin>
                         </Button>
                     </children>

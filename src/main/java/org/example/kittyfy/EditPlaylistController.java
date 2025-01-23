@@ -32,10 +32,12 @@ public class EditPlaylistController {
     ImageView editPlaylistImage;
 
     @FXML
+    ListView<String> listView;
+    @FXML
     ChoiceBox<String> choosePictures;
 
     @FXML
-    ComboBox<String> searchbarPlaylist;
+    TextField searchbarPlaylist;
 
     @FXML
     VBox songsInPlaylist;
@@ -63,8 +65,7 @@ public class EditPlaylistController {
         allSongs = Reader.readAllSongs();
 
 
-        //initializing searchbar options
-        initializeSongsInSearchbar();
+        SearchableTextfield.initializeSearchBar(searchbarPlaylist,listView,allSongs);
     }
 
 
@@ -114,27 +115,11 @@ public class EditPlaylistController {
     }
 
     /**
-     * Initialize Songs in Searchbar
-     */
-    public void initializeSongsInSearchbar(){
-        for (Song song : allSongs) {
-            ArrayList<String> trimmedArtists = new ArrayList<>();
-            for (String artist : song.getArtist()) {
-                trimmedArtists.add(artist.trim());
-            }
-            String artists = String.join(", ", trimmedArtists);
-            searchbarPlaylist.getItems().add(song.getTitle().trim() + " by " + artists);
-        }
-
-        System.out.println(allSongs.size() + " songs initialized");
-    }
-
-    /**
      * method to add song to playlist
      */
     public void addSongToPlaylist() {
         SoundEffects.play(SoundEffects.kittySounds.SELECT);
-        String selectedTitle = searchbarPlaylist.getValue();
+        String selectedTitle = searchbarPlaylist.getSelectedText();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
             return;
