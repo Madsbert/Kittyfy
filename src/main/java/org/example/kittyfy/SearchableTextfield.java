@@ -20,7 +20,7 @@ public class SearchableTextfield {
      * @param listView listview to contain matches and suggestions.
      * @param allSongs all song that are available to search for.
      */
-    public static void initializeSearchBar(TextField searchBar, ListView<String> listView, ArrayList<Song> allSongs) {
+    public static void initializeSearchBar(TextField searchBar, ListView<String> listView, ArrayList<Song> allSongs, Boolean playOnSelect) {
         // Original list to preserve all items
         ObservableList<String> originalItems = FXCollections.observableArrayList();
         HashMap<String, Song> songHashMap = new HashMap<>();
@@ -65,7 +65,9 @@ public class SearchableTextfield {
                     Matcher matcher = pattern.matcher(event.getTarget().toString());
                     if (matcher.find()) {
                         searchBar.setText(matcher.group(1));
-                        MainController.getInstance().playSong(songHashMap.get(searchBar.getText()), false);
+                        if(playOnSelect) {
+                            MainController.getInstance().playSong(songHashMap.get(searchBar.getText()), false);
+                        }
                     }
                     else
                     {

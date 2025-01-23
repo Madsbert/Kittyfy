@@ -130,7 +130,7 @@ public class MainController {
 
         Playlist allSongsPlaylist = new Playlist("All songs", allSongs, "src/main/resources/Pictures/DefaultPlaylistPictures");
 
-        SearchableTextfield.initializeSearchBar(searchBar,listView,allSongs);
+        SearchableTextfield.initializeSearchBar(searchBar,listView,allSongs, true);
 
         System.out.println(allSongs.size() + " songs initialized");
 

@@ -65,7 +65,7 @@ public class EditPlaylistController {
         allSongs = Reader.readAllSongs();
 
 
-        SearchableTextfield.initializeSearchBar(searchbarPlaylist,listView,allSongs);
+        SearchableTextfield.initializeSearchBar(searchbarPlaylist,listView,allSongs, false);
     }
 
 
@@ -119,7 +119,7 @@ public class EditPlaylistController {
      */
     public void addSongToPlaylist() {
         SoundEffects.play(SoundEffects.kittySounds.SELECT);
-        String selectedTitle = searchbarPlaylist.getSelectedText();
+        String selectedTitle = searchbarPlaylist.getText();
         if (selectedTitle == null || selectedTitle.isEmpty()) {
             System.out.println("No song selected!");
             return;
