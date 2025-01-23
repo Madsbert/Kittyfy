@@ -92,13 +92,22 @@ public class MainController {
     private Playlist currentPlaylist;
     private Song currentSong;
     private boolean isShuffleMode = false;
+    private static MainController instance;
+
+    public static MainController getInstance() {
+        if (instance != null)
+        {
+            return instance;
+        }
+        return new MainController();
+    }
 
     /**
      * Initializes different aspects of the program, including: Pictures, songs from database, searchbar, buttons
      * and welcome messages
      */
     public void initialize() {
-
+        instance = this;
         //Adding a default picture
         Image defaultImage = new Image(Objects.requireNonNull(getClass().getResource("/Pictures/MusicCat.png")).toExternalForm());
 
@@ -345,9 +354,8 @@ public class MainController {
 
     /**
      * Adds a song to current playlist
-     * @throws Exception
      */
-    public void addSongClick() throws Exception {
+    public void addSongClick() {
         String selectedSongTitle = searchBar.getText();
         Song songToAdd = findSongByTitle(selectedSongTitle);
 

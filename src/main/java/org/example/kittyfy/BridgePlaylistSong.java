@@ -100,19 +100,30 @@ public class BridgePlaylistSong {
         }
     }
 
-    public static void addSongToPlaylist(Playlist playlist, Song song) throws Exception {
+    /**
+     * Adds a single song to a playlist.
+     * @param playlist playlist to add a song to
+     * @param song song to be added
+     */
+    public static void addSongToPlaylist(Playlist playlist, Song song) {
         String sql ="INSERT INTO dbo.TblPlaylistSong (fldPlaylistID, fldSongID) VALUES (?, ?)";
         Connection conn = DB.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1, playlist.getPlaylistId());
-        pstmt.setInt(2, song.getSongID());
-        playlist.addSong(song);
-        int affectedRows = pstmt.executeUpdate();
-        if (affectedRows > 0) {
-            System.out.println("Song added to the playlist.");
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, playlist.getPlaylistId());
+            pstmt.setInt(2, song.getSongID());
+            playlist.addSong(song);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Song added to the playlist.");
+            }
+            else {
+                System.out.println("Failed to add song to playlist.");
+            }
         }
-        else {
-            System.out.println("Failed to add song to playlist.");
+        catch (Exception e) {
+            System.out.println(e.getMessage() + "\n Error occurred in BridgePlaylistSong in the method addSongToPlaylist\n With the values\n" +
+                    playlist.toString() + "\n" + song.toString());
         }
     }
 
