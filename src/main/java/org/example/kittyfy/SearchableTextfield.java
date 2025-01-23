@@ -8,12 +8,22 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SearchableTextfield {
 
+    /**
+     * Initializes a searchbar to allow for searching for songs and getting suggestions and matches.
+     * @param searchBar the searchbar that contains the search text.
+     * @param listView listview to contain matches and suggestions.
+     * @param allSongs all song that are available to search for.
+     */
     public static void initializeSearchBar(TextField searchBar, ListView<String> listView, ArrayList<Song> allSongs) {
         // Original list to preserve all items
         ObservableList<String> originalItems = FXCollections.observableArrayList();
+        HashMap<String, Song> songHashMap = new HashMap<>();
 
         // Populate the original list
         for (Song song : allSongs) {
@@ -24,24 +34,12 @@ public class SearchableTextfield {
             String artists = String.join(", ", trimmedArtists);
             String item = song.getTitle().trim() + " by " + artists;
             originalItems.add(item);
+            songHashMap.put(item, song);
         }
 
         // Create a ListView for displaying suggestions
-
         listView.setItems(originalItems);
         listView.setVisible(false);
-/*
-        // Set the ListView size and style
-        suggestionList.setPrefHeight(32);
-        suggestionList.setPrefWidth(searchBar.getPrefWidth());
-        suggestionList.setStyle("-fx-background-color: white; -fx-border-color: lightgray;");
-
-
-        // Add the ListView to the parent pane (VBox)
-        parentPane.getChildren().add(suggestionList);
-
- */
-
 
         // Add a listener to the textProperty of the TextField
         searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -60,26 +58,25 @@ public class SearchableTextfield {
         });
 
         // Handle selection from the suggestion list
-        listView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 1) {
-                String selectedItem = listView.getSelectionModel().getSelectedItem();
-                System.out.println("Selected item: " + selectedItem);
-                System.out.println("Mouse event: " + event);
-                if (selectedItem != null) {
-                    searchBar.clear();
-                    searchBar.appendText(selectedItem);
-                    listView.setVisible(false);
+        listView.setOnMousePressed(event -> {
+            if (event.isPrimaryButtonDown()) {
+                try {
+                    // Regex search to find the song title from the event target
+                    Pattern pattern = Pattern.compile("\"([^\"]+)\"");
+                    Matcher matcher = pattern.matcher(event.getTarget().toString());
+                    if (matcher.find()) {
+                        searchBar.setText(matcher.group(1));
+                        MainController.getInstance().playSong(songHashMap.get(searchBar.getText()), false);
+                    }
+                    else
+                    {
+                        System.out.println("No match found from listview : initializeSearchBar onMousePressed");
+                    }
                 }
-            }
-        });
-
-        listView.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                String selectedItem = listView.getSelectionModel().getSelectedItem();
-                if (selectedItem != null) {
-                    searchBar.setText(selectedItem);
-                    listView.setVisible(false);
+                catch (Exception e) {
+                    System.out.println("Error with RegexPattern in initializeSearchBar : onMousePressed");
                 }
+                listView.setVisible(false);
             }
         });
 
