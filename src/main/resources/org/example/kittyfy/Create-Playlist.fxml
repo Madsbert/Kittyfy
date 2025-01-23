@@ -20,7 +20,7 @@
                   <VBox prefHeight="200.0" prefWidth="343.0">
                      <children>
                         <TextField fx:id="searchbarPlaylist" minHeight="40.0" promptText="Song/Artist" />
-                        <ListView prefHeight="98.0" prefWidth="344.0">
+                        <ListView fx:id="listView" prefHeight="98.0" prefWidth="344.0">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
