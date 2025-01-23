@@ -46,7 +46,6 @@ public class SearchableTextfield {
             if (newValue.isEmpty()) {
                 // Hide the suggestion list when the search field is empty
                 listView.setVisible(false);
-                listView.getItems().clear();
             } else {
                 // Filter the items based on user input
                 ObservableList<String> filteredItems = originalItems.filtered(item ->
